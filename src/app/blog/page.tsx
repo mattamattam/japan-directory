@@ -6,7 +6,7 @@ export default async function Blog() {
   return (
     <div>
       <h1>Japan Travel Blog</h1>
-      {posts.map((post: any) => (
+      {posts.map((post: { _id: string; title: string; excerpt: string }) => (
         <article key={post._id}>
           <h2>{post.title}</h2>
           <p>{post.excerpt}</p>

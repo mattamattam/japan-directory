@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  const githubToken = process.env.GH_TOKEN;
+  const githubToken = process.env.NEXT_PUBLIC_GH_TOKEN;
 
   if (!githubToken) {
     return NextResponse.json(

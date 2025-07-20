@@ -1,5 +1,7 @@
 import { sanity } from "@/lib/sanity";
 
+export const revalidate = 0; // or use dynamic = 'force-dynamic'
+
 export default async function Blog() {
   const posts = await sanity.fetch(`*[_type == "post"]{_id, title, excerpt}`);
 

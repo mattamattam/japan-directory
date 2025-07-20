@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <div>
-      <h1>Japan Travel Directory Test1</h1>
+      <h1>Japan Travel Directory</h1>
       <ul>
         {places?.map((place) => (
           <li key={place.id}>

@@ -7,16 +7,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Trigger Vercel Deployment
-        run: curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_${{ secrets.VERCEL_PROJECT_ID }}/${{ secrets.VERCEL_DEPLOY_HOOK_ID }}"
-        env:
-          NEXT_PUBLIC_GH_TOKEN: ${{ secrets.NEXT_PUBLIC_GH_TOKEN }}
-        secrets:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          NEXT_PUBLIC_GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          VERCEL_DEPLOY_HOOK_ID: ${{ secrets.VERCEL_DEPLOY_HOOK_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          echo "Triggering deploy hook for project ${{ secrets.VERCEL_PROJECT_ID }}"
+          curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_${{ secrets.VERCEL_PROJECT_ID }}/${{ secrets.VERCEL_DEPLOY_HOOK_ID }}"

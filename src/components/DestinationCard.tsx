@@ -1,9 +1,20 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { StarIcon, MapPinIcon, CurrencyYenIcon } from "@heroicons/react/24/solid";
+import {
+  StarIcon,
+  MapPinIcon,
+  CurrencyYenIcon,
+} from "@heroicons/react/24/solid";
 import { formatPrice } from "@/lib/utils";
+import Image from "next/image";
 
 interface DestinationCardProps {
   destination: {
@@ -17,26 +28,39 @@ interface DestinationCardProps {
     price: number;
     highlights?: string[];
     bestTime?: string;
-    slug?: {
-      current: string;
-    } | string;
+    slug?:
+      | {
+          current: string;
+        }
+      | string;
   };
 }
 
 export default function DestinationCard({ destination }: DestinationCardProps) {
   const handleExplore = () => {
-    const slug = typeof destination.slug === 'string' ? destination.slug : destination.slug?.current;
-    window.open(`/destinations/${slug}`, '_blank');
+    const slug =
+      typeof destination.slug === "string"
+        ? destination.slug
+        : destination.slug?.current;
+    window.open(`/destinations/${slug}`, "_blank");
   };
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <div className="relative">
-        <img
-          src={destination.image}
-          alt={destination.name}
-          className="aspect-[16/9] w-full object-cover"
-        />
+        {destination.image ? (
+          <Image
+            src={destination.image}
+            alt={destination.name}
+            width={800}
+            height={600}
+            className="aspect-[16/9] w-full object-cover"
+          />
+        ) : (
+          <div className="aspect-[16/9] w-full bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-500">No image available</span>
+          </div>
+        )}
         <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded-full text-sm font-semibold text-gray-900">
           {formatPrice(destination.price)}
         </div>
@@ -74,14 +98,18 @@ export default function DestinationCard({ destination }: DestinationCardProps) {
           <div className="text-sm text-gray-600">
             <strong>Highlights:</strong>
             <ul className="mt-1 list-disc list-inside">
-              {destination.highlights.slice(0, 3).map((highlight: string, index: number) => (
-                <li key={index}>{highlight}</li>
-              ))}
+              {destination.highlights
+                .slice(0, 3)
+                .map((highlight: string, index: number) => (
+                  <li key={index}>{highlight}</li>
+                ))}
             </ul>
           </div>
         )}
         <div className="flex items-center justify-between pt-4">
-          <span className="text-sm text-gray-500">({destination.reviewCount} reviews)</span>
+          <span className="text-sm text-gray-500">
+            ({destination.reviewCount} reviews)
+          </span>
           <Button size="sm" onClick={handleExplore}>
             Explore {destination.name}
           </Button>
@@ -89,4 +117,4 @@ export default function DestinationCard({ destination }: DestinationCardProps) {
       </CardContent>
     </Card>
   );
-} 
+}

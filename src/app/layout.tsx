@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +16,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Japan Travel Directory - Discover the Best of Japan Tourism",
-  description: "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips for Tokyo, Kyoto, Osaka, and beyond. Plan your perfect Japan vacation with our comprehensive directory.",
-  keywords: "Japan travel, Japan tourism, Tokyo travel, Kyoto travel, Osaka travel, Japan hotels, Japan attractions, Japan restaurants, Japan vacation, Japan guide",
+  description:
+    "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips for Tokyo, Kyoto, Osaka, and beyond. Plan your perfect Japan vacation with our comprehensive directory.",
+  keywords:
+    "Japan travel, Japan tourism, Tokyo travel, Kyoto travel, Osaka travel, Japan hotels, Japan attractions, Japan restaurants, Japan vacation, Japan guide",
   authors: [{ name: "Japan Travel Directory" }],
   creator: "Japan Travel Directory",
   publisher: "Japan Travel Directory",
@@ -25,31 +28,33 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://japan-directory.com'),
+  metadataBase: new URL("https://japan-directory.com"),
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   openGraph: {
     title: "Japan Travel Directory - Discover the Best of Japan Tourism",
-    description: "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips for Tokyo, Kyoto, Osaka, and beyond.",
-    url: 'https://japan-directory.com',
-    siteName: 'Japan Travel Directory',
+    description:
+      "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips for Tokyo, Kyoto, Osaka, and beyond.",
+    url: "https://japan-directory.com",
+    siteName: "Japan Travel Directory",
     images: [
       {
-        url: '/og-image.jpg',
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: 'Japan Travel Directory',
+        alt: "Japan Travel Directory",
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "en_US",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "Japan Travel Directory - Discover the Best of Japan Tourism",
-    description: "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips.",
-    images: ['/og-image.jpg'],
+    description:
+      "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips.",
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -57,13 +62,13 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: "your-google-verification-code",
   },
 };
 
@@ -76,21 +81,26 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Google AdSense */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID" crossOrigin="anonymous"></script>
-        
-        {/* Google Analytics */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
         <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'GA_MEASUREMENT_ID');
-            `,
-          }}
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
+          crossOrigin="anonymous"
+        ></script>
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+          strategy="afterInteractive"
         />
-        
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+                      window.dataLayer = window.dataLayer || [];
+                      function gtag(){dataLayer.push(arguments);}
+                      gtag('js', new Date());
+                      gtag('config', 'GA_MEASUREMENT_ID');
+                    `}
+        </Script>
+
         {/* Structured Data for SEO */}
         <script
           type="application/ld+json"
@@ -98,20 +108,20 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "TravelAgency",
-              "name": "Japan Travel Directory",
-              "description": "Your ultimate guide to Japan tourism",
-              "url": "https://japan-directory.com",
-              "logo": "https://japan-directory.com/logo.png",
-              "address": {
+              name: "Japan Travel Directory",
+              description: "Your ultimate guide to Japan tourism",
+              url: "https://japan-directory.com",
+              logo: "https://japan-directory.com/logo.png",
+              address: {
                 "@type": "PostalAddress",
-                "addressCountry": "US"
+                addressCountry: "US",
               },
-              "sameAs": [
+              sameAs: [
                 "https://facebook.com/japantraveldirectory",
                 "https://twitter.com/japantraveldir",
-                "https://instagram.com/japantraveldirectory"
-              ]
-            })
+                "https://instagram.com/japantraveldirectory",
+              ],
+            }),
           }}
         />
       </head>

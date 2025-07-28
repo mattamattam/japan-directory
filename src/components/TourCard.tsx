@@ -7,29 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
 import { StarIcon, CalendarIcon } from "@heroicons/react/24/solid";
-import { getAffiliateLink, formatPrice } from "@/lib/utils";
 import Image from "next/image";
+import type { Tour } from "@/types";
 
 interface TourCardProps {
-  tour: {
-    id: string;
-    name: string;
-    duration: string;
-    image: string;
-    rating: number;
-    reviewCount: number;
-    price: number;
-    affiliateId: string;
-  };
+  tour: Tour;
 }
 
 export default function TourCard({ tour }: TourCardProps) {
-  const handleBookTour = () => {
-    window.open(getAffiliateLink("tour", tour.affiliateId), "_blank");
-  };
-
   return (
     <Card className="overflow-hidden">
       <div className="relative">
@@ -47,7 +33,7 @@ export default function TourCard({ tour }: TourCardProps) {
           </div>
         )}
         <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded-full text-sm font-semibold text-gray-900">
-          {formatPrice(tour.price)}
+          ${tour.price}
         </div>
       </div>
       <CardHeader>
@@ -68,9 +54,7 @@ export default function TourCard({ tour }: TourCardProps) {
           <span className="text-sm text-gray-500">
             ({tour.reviewCount} reviews)
           </span>
-          <Button size="sm" onClick={handleBookTour}>
-            Book Tour
-          </Button>
+          <span className="text-sm text-gray-600">{tour.category}</span>
         </div>
       </CardContent>
     </Card>

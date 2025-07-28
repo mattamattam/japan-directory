@@ -8,20 +8,7 @@ import {
   MapPinIcon,
   CurrencyYenIcon,
 } from "@heroicons/react/24/solid";
-
-interface Destination {
-  _id: string;
-  name: string;
-  region: string;
-  description: string;
-  image: string;
-  rating: number;
-  reviewCount: number;
-  price: number;
-  highlights?: string[];
-  bestTime?: string;
-  slug?: { current: string } | string;
-}
+import type { Destination } from "@/types";
 
 export const metadata: Metadata = {
   title: "Japan Destinations - Explore Cities, Regions & Attractions",

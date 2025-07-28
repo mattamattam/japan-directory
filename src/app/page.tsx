@@ -1,4 +1,5 @@
 // app/page.tsx
+import { Metadata } from "next";
 import {
   getFeaturedDestinations,
   getFeaturedHotels,
@@ -9,43 +10,23 @@ import { Button } from "@/components/ui/Button";
 import HotelCard from "@/components/HotelCard";
 import DestinationCard from "@/components/DestinationCard";
 import TourCard from "@/components/TourCard";
+import HeroMontage from "./components/HeroMontage";
+import ExchangeRate from "./components/ExchangeRate";
+import type { Destination, Hotel } from "@/types";
 
-interface Destination {
-  _id: string;
-  name: string;
-  region: string;
-  description: string;
-  image: string;
-  rating: number;
-  reviewCount: number;
-  price: number;
-  highlights?: string[];
-  bestTime?: string;
-  slug?: { current: string } | string;
-}
-
-interface Hotel {
-  _id: string;
-  name: string;
-  location: string;
-  image: string;
-  rating: number;
-  reviewCount: number;
-  price: number;
-  priceRange?: string;
-  category?: string;
-  description?: string;
-  amenities?: string[];
-  affiliateLinks?: {
-    bookingCom?: string;
-  };
-}
+export const metadata: Metadata = {
+  title: "Japan Directory - Your Complete Guide to Japan Travel",
+  description:
+    "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
+  keywords:
+    "Japan travel, Japan tourism, Tokyo, Kyoto, Osaka, Japan hotels, Japan tours, Japan destinations",
+};
 
 export const revalidate = 3600; // Revalidate every hour
 
 const featuredTours = [
   {
-    id: "tour-1",
+    _id: "tour-1",
     name: "Tokyo Food & Culture Tour",
     duration: "4 hours",
     image:
@@ -53,10 +34,14 @@ const featuredTours = [
     rating: 4.8,
     reviewCount: 567,
     price: 89,
-    affiliateId: "tokyo-food-tour",
+    slug: { current: "tokyo-food-tour" },
+    category: "Food & Culture",
+    location: "Tokyo",
+    description:
+      "Explore Tokyo's culinary scene with local guides and authentic experiences",
   },
   {
-    id: "tour-2",
+    _id: "tour-2",
     name: "Kyoto Temple & Garden Tour",
     duration: "8 hours",
     image:
@@ -64,10 +49,14 @@ const featuredTours = [
     rating: 4.9,
     reviewCount: 423,
     price: 125,
-    affiliateId: "kyoto-temple-tour",
+    slug: { current: "kyoto-temple-tour" },
+    category: "Cultural",
+    location: "Kyoto",
+    description:
+      "Visit Kyoto's most beautiful temples and gardens with expert guides",
   },
   {
-    id: "tour-3",
+    _id: "tour-3",
     name: "Osaka Street Food Adventure",
     duration: "3 hours",
     image:
@@ -75,7 +64,10 @@ const featuredTours = [
     rating: 4.7,
     reviewCount: 298,
     price: 65,
-    affiliateId: "osaka-food-adventure",
+    slug: { current: "osaka-food-adventure" },
+    category: "Food & Culture",
+    location: "Osaka",
+    description: "Discover Osaka's famous street food scene in Dotonbori",
   },
 ];
 
@@ -143,6 +135,7 @@ export default async function Home() {
             reviewCount: 2341,
             price: 450,
             affiliateLinks: { bookingCom: "park-hyatt-tokyo" },
+            slug: { current: "park-hyatt-tokyo" },
           },
           {
             _id: "hotel-2",
@@ -154,6 +147,7 @@ export default async function Home() {
             reviewCount: 1892,
             price: 1200,
             affiliateLinks: { bookingCom: "aman-tokyo" },
+            slug: { current: "aman-tokyo" },
           },
           {
             _id: "hotel-3",
@@ -165,6 +159,7 @@ export default async function Home() {
             reviewCount: 1456,
             price: 800,
             affiliateLinks: { bookingCom: "ritz-carlton-kyoto" },
+            slug: { current: "ritz-carlton-kyoto" },
           },
         ];
 
@@ -173,36 +168,31 @@ export default async function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-red-600 to-red-800 text-white">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-              Discover the Magic of Japan
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-red-100">
-              Your ultimate guide to Japan tourism. Find the best hotels,
-              attractions, restaurants, and travel tips for an unforgettable
-              Japanese adventure.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button
-                size="lg"
-                className="bg-white text-red-600 hover:bg-gray-100"
-              >
-                Start Planning
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-white text-white hover:bg-white hover:text-red-600"
-              >
-                View Destinations
-              </Button>
-            </div>
-          </div>
+      <HeroMontage>
+        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+          Discover the Magic of Japan
+        </h1>
+        <p className="mt-6 text-lg leading-8 text-red-100">
+          Your ultimate guide to Japan tourism. Find the best hotels,
+          attractions, restaurants, and travel tips for an unforgettable
+          Japanese adventure.
+        </p>
+        <div className="mt-10 flex items-center justify-center gap-x-6">
+          <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100">
+            Start Planning
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            className="border-white text-white hover:bg-white hover:text-red-600"
+          >
+            View Destinations
+          </Button>
         </div>
-      </section>
+      </HeroMontage>
+
+      {/* Exchange Rate Widget */}
+      <ExchangeRate />
 
       {/* Google AdSense Banner */}
       <section className="bg-white py-8">
@@ -278,7 +268,7 @@ export default async function Home() {
           </div>
           <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             {featuredTours.map((tour) => (
-              <TourCard key={tour.id} tour={tour} />
+              <TourCard key={tour._id} tour={tour} />
             ))}
           </div>
         </div>

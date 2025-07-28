@@ -279,6 +279,39 @@ export async function getHotelsByCategory(category: string) {
   }
 }
 
+// Fetch hotels by destination
+export async function getHotelsByDestination(destinationSlug: string) {
+  const query = `*[_type == "hotel" && destination->slug.current == $destinationSlug] {
+    _id,
+    name,
+    slug,
+    location,
+    city,
+    region,
+    description,
+    image,
+    rating,
+    reviewCount,
+    price,
+    priceRange,
+    amenities,
+    category,
+    starRating,
+    affiliateLinks
+  }`;
+
+  try {
+    const hotels = await sanity.fetch(query, { destinationSlug });
+    return hotels.map((hotel: SanityHotel) => ({
+      ...hotel,
+      image: imageUrlBuilder(hotel.image, 800, 600),
+    }));
+  } catch (error) {
+    console.error("Error fetching hotels by destination:", error);
+    return [];
+  }
+}
+
 // Fetch single hotel by slug
 export async function getHotelBySlug(slug: string) {
   const query = `*[_type == "hotel" && slug.current == $slug][0] {

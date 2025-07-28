@@ -5,23 +5,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/Button";
 import HotelCard from "@/components/HotelCard";
 import { WifiIcon, CalendarIcon, MapPinIcon } from "@heroicons/react/24/solid";
-
-interface Hotel {
-  _id: string;
-  name: string;
-  location: string;
-  image: string;
-  rating: number;
-  reviewCount: number;
-  price: number;
-  priceRange?: string;
-  category?: string;
-  description?: string;
-  amenities?: string[];
-  affiliateLinks?: {
-    bookingCom?: string;
-  };
-}
+import type { Hotel } from "@/types";
 
 export const metadata: Metadata = {
   title: "Japan Hotels - Best Accommodations & Luxury Stays",
@@ -56,6 +40,7 @@ export default async function HotelsPage() {
       category: "Hotel",
       description:
         "Iconic luxury hotel featured in 'Lost in Translation' with stunning city views and world-class service.",
+      slug: { current: "park-hyatt-tokyo" },
     },
     {
       _id: "hotel-2",
@@ -79,6 +64,7 @@ export default async function HotelsPage() {
       category: "Hotel",
       description:
         "Ultra-luxurious urban resort with minimalist design and exceptional attention to detail.",
+      slug: { current: "aman-tokyo" },
     },
     {
       _id: "hotel-3",
@@ -101,7 +87,8 @@ export default async function HotelsPage() {
       ],
       category: "Hotel",
       description:
-        "Elegant luxury hotel overlooking the Kamogawa River with traditional Japanese aesthetics.",
+        "Luxury hotel overlooking the Kamogawa River with traditional Japanese aesthetics.",
+      slug: { current: "ritz-carlton-kyoto" },
     },
     {
       _id: "hotel-4",
@@ -118,6 +105,7 @@ export default async function HotelsPage() {
       category: "Hotel",
       description:
         "Modern hotel in the heart of Shinjuku with easy access to shopping and entertainment.",
+      slug: { current: "hotel-gracery-shinjuku" },
     },
     {
       _id: "hotel-5",
@@ -140,6 +128,7 @@ export default async function HotelsPage() {
       category: "Ryokan",
       description:
         "Exclusive ryokan-style luxury hotel on the banks of the Oi River in Arashiyama.",
+      slug: { current: "hoshinoya-kyoto" },
     },
     {
       _id: "hotel-6",
@@ -156,6 +145,7 @@ export default async function HotelsPage() {
       category: "Hotel",
       description:
         "High-rise luxury hotel with spectacular city views and direct access to Tennoji Station.",
+      slug: { current: "osaka-marriott-miyako" },
     },
   ];
 

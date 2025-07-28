@@ -21,13 +21,13 @@ declare global {
   interface Window {
     google: {
       maps: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line
         Map: any;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line
         LatLng: any;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line
         MapTypeId: any;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line
         Marker: any;
       };
     };
@@ -58,7 +58,7 @@ export default function DestinationPageClient({
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const mapInstanceRef = useRef<any>(null);
 
   // Extract the slug from the params promise or object

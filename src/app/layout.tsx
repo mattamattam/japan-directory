@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// TODO: Add metadata
 export const metadata: Metadata = {
   title: "Japan Travel Directory - Discover the Best of Japan Tourism",
   description:

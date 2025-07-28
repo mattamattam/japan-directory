@@ -5,6 +5,5 @@
       "destination": "https://japan-directory-api.vercel.app/api/:path*"
     }
   ],
-  "output": "export",
   "trailingSlash": true
 }

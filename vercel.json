@@ -4,6 +4,5 @@
       "source": "/api/:path*",
       "destination": "https://japan-directory-api.vercel.app/api/:path*"
     }
-  ],
-  "trailingSlash": true
+  ]
 }

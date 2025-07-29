@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { getDistrictBySlug, getDestinationBySlug } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/Button";
@@ -11,10 +12,10 @@ import {
 } from "@heroicons/react/24/solid";
 
 interface DistrictPageProps {
-  params: {
+  params: Promise<{
     slug: string;
     district: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({
@@ -56,18 +57,18 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
             <nav className="mb-8 text-sm">
               <ol className="flex items-center space-x-2">
                 <li>
-                  <a href="/" className="hover:text-red-200">
+                  <Link href="/" className="hover:text-red-200">
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li>/</li>
                 <li>
-                  <a
+                  <Link
                     href={`/destinations/${destination.slug.current}`}
                     className="hover:text-red-200"
                   >
                     {destination.name}
-                  </a>
+                  </Link>
                 </li>
                 <li>/</li>
                 <li>{district.name}</li>
@@ -164,30 +165,30 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold mb-4">Explore More</h3>
                 <div className="space-y-3">
-                  <a
+                  <Link
                     href={`/destinations/${destination.slug.current}/hotels`}
                     className="block text-red-600 hover:text-red-800"
                   >
                     Hotels in {destination.name}
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href={`/destinations/${destination.slug.current}/restaurants`}
                     className="block text-red-600 hover:text-red-800"
                   >
                     Restaurants in {destination.name}
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href={`/destinations/${destination.slug.current}/tours`}
                     className="block text-red-600 hover:text-red-800"
                   >
                     Tours in {destination.name}
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href={`/destinations/${destination.slug.current}/shopping`}
                     className="block text-red-600 hover:text-red-800"
                   >
                     Shopping in {destination.name}
-                  </a>
+                  </Link>
                 </div>
               </div>
 

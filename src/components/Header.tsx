@@ -9,43 +9,35 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
+// Types for navigation data
+interface NavigationDestination {
+  _id: string;
+  name: string;
+  slug: { current: string };
+  region: string;
+  districts: NavigationDistrict[];
+}
+
+interface NavigationDistrict {
+  _id: string;
+  name: string;
+  slug: { current: string };
+  description: string;
+}
+
+interface HeaderProps {
+  navigationData?: {
+    destinations: NavigationDestination[];
+  };
+}
+
 const navigation = [
-  { name: "Destinations", href: "/destinations" },
+  { name: "Tips", href: "/tips" },
   { name: "Blog", href: "/blog" },
   { name: "About", href: "/about" },
 ];
 
-const destinationDropdownItems = {
-  tokyo: [
-    { name: "Shibuya", href: "/destinations/tokyo/districts/shibuya" },
-    { name: "Shinjuku", href: "/destinations/tokyo/districts/shinjuku" },
-    { name: "Harajuku", href: "/destinations/tokyo/districts/harajuku" },
-    { name: "Akihabara", href: "/destinations/tokyo/districts/akihabara" },
-    { name: "Asakusa", href: "/destinations/tokyo/districts/asakusa" },
-    { name: "View All Tokyo", href: "/destinations/tokyo" },
-  ],
-  kyoto: [
-    { name: "Gion", href: "/destinations/kyoto/districts/gion" },
-    { name: "Arashiyama", href: "/destinations/kyoto/districts/arashiyama" },
-    { name: "Higashiyama", href: "/destinations/kyoto/districts/higashiyama" },
-    { name: "View All Kyoto", href: "/destinations/kyoto" },
-  ],
-  osaka: [
-    { name: "Dotonbori", href: "/destinations/osaka/districts/dotonbori" },
-    { name: "Namba", href: "/destinations/osaka/districts/namba" },
-    {
-      name: "Shinsaibashi",
-      href: "/destinations/osaka/districts/shinsaibashi",
-    },
-    { name: "View All Osaka", href: "/destinations/osaka" },
-  ],
-  hiroshima: [
-    { name: "Miyajima", href: "/destinations/hiroshima/districts/miyajima" },
-    { name: "View All Hiroshima", href: "/destinations/hiroshima" },
-  ],
-};
-
-export default function Header() {
+export default function Header({ navigationData }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -70,6 +62,9 @@ export default function Header() {
       }
     };
   }, []);
+
+  // Fallback data if no navigation data is provided
+  const destinations = navigationData?.destinations || [];
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -125,80 +120,54 @@ export default function Header() {
                 />
               </svg>
             </button>
-            {activeDropdown === "destinations" && (
+            {activeDropdown === "destinations" && destinations.length > 0 && (
               <div className="absolute top-full left-0 mt-0 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-2">
                 <div className="grid grid-cols-2 gap-4 p-4">
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                      Tokyo
-                    </h3>
-                    <div className="space-y-1">
-                      {destinationDropdownItems.tokyo.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className="block text-sm text-gray-700 hover:text-red-600"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
+                  {destinations.map((destination) => (
+                    <div key={destination._id}>
+                      <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                        {destination.name}
+                      </h3>
+                      <div className="space-y-1">
+                        {destination.districts &&
+                        destination.districts.length > 0 ? (
+                          <>
+                            {destination.districts
+                              .slice(0, 5)
+                              .map((district) => (
+                                <Link
+                                  key={district._id}
+                                  href={`/destinations/${destination.slug.current}/districts/${district.slug.current}`}
+                                  className="block text-sm text-gray-700 hover:text-red-600"
+                                >
+                                  {district.name}
+                                </Link>
+                              ))}
+                            <Link
+                              href={`/destinations/${destination.slug.current}`}
+                              className="block text-sm text-gray-700 hover:text-red-600 font-medium"
+                            >
+                              View All {destination.name}
+                            </Link>
+                          </>
+                        ) : (
+                          <Link
+                            href={`/destinations/${destination.slug.current}`}
+                            className="block text-sm text-gray-700 hover:text-red-600 font-medium"
+                          >
+                            View {destination.name}
+                          </Link>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                      Kyoto
-                    </h3>
-                    <div className="space-y-1">
-                      {destinationDropdownItems.kyoto.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className="block text-sm text-gray-700 hover:text-red-600"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                      Osaka
-                    </h3>
-                    <div className="space-y-1">
-                      {destinationDropdownItems.osaka.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className="block text-sm text-gray-700 hover:text-red-600"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                      Hiroshima
-                    </h3>
-                    <div className="space-y-1">
-                      {destinationDropdownItems.hiroshima.map((item) => (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          className="block text-sm text-gray-700 hover:text-red-600"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             )}
           </div>
 
           {/* Other Navigation Items */}
-          {navigation.slice(1).map((item) => (
+          {navigation.map((item) => (
             <Link
               key={item.name}
               href={item.href}
@@ -250,72 +219,46 @@ export default function Header() {
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
                   {/* Mobile Destinations */}
-                  <div className="space-y-1">
-                    <div className="text-base font-semibold text-gray-900">
-                      Tokyo
+                  {destinations.map((destination) => (
+                    <div key={destination._id} className="space-y-1">
+                      <div className="text-base font-semibold text-gray-900">
+                        {destination.name}
+                      </div>
+                      {destination.districts &&
+                      destination.districts.length > 0 ? (
+                        <>
+                          {destination.districts.slice(0, 5).map((district) => (
+                            <Link
+                              key={district._id}
+                              href={`/destinations/${destination.slug.current}/districts/${district.slug.current}`}
+                              className="-mx-3 block rounded-lg px-3 py-2 text-sm leading-7 text-gray-900 hover:bg-gray-50"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {district.name}
+                            </Link>
+                          ))}
+                          <Link
+                            href={`/destinations/${destination.slug.current}`}
+                            className="-mx-3 block rounded-lg px-3 py-2 text-sm leading-7 text-gray-900 hover:bg-gray-50 font-medium"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            View All {destination.name}
+                          </Link>
+                        </>
+                      ) : (
+                        <Link
+                          href={`/destinations/${destination.slug.current}`}
+                          className="-mx-3 block rounded-lg px-3 py-2 text-sm leading-7 text-gray-900 hover:bg-gray-50 font-medium"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          View {destination.name}
+                        </Link>
+                      )}
                     </div>
-                    {destinationDropdownItems.tokyo.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg px-3 py-2 text-sm leading-7 text-gray-900 hover:bg-gray-50"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-
-                  <div className="space-y-1">
-                    <div className="text-base font-semibold text-gray-900">
-                      Kyoto
-                    </div>
-                    {destinationDropdownItems.kyoto.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg px-3 py-2 text-sm leading-7 text-gray-900 hover:bg-gray-50"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-
-                  <div className="space-y-1">
-                    <div className="text-base font-semibold text-gray-900">
-                      Osaka
-                    </div>
-                    {destinationDropdownItems.osaka.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg px-3 py-2 text-sm leading-7 text-gray-900 hover:bg-gray-50"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-
-                  <div className="space-y-1">
-                    <div className="text-base font-semibold text-gray-900">
-                      Hiroshima
-                    </div>
-                    {destinationDropdownItems.hiroshima.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg px-3 py-2 text-sm leading-7 text-gray-900 hover:bg-gray-50"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
+                  ))}
 
                   {/* Other Mobile Navigation */}
-                  {navigation.slice(1).map((item) => (
+                  {navigation.map((item) => (
                     <Link
                       key={item.name}
                       href={item.href}

@@ -4,8 +4,7 @@ import {
   getFeaturedDestinations,
   getFeaturedHotels,
 } from "@/lib/sanity-queries";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/Button";
 import HotelCard from "@/components/HotelCard";
 import DestinationCard from "@/components/DestinationCard";
@@ -164,9 +163,7 @@ export default async function Home() {
         ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-
+    <Layout>
       {/* Hero Section */}
       <HeroMontage>
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
@@ -298,8 +295,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </Layout>
   );
 }

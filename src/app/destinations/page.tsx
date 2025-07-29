@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { getDestinations } from "@/lib/sanity-queries";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import DestinationCard from "@/components/DestinationCard";
 import {
   CalendarIcon,
@@ -152,9 +151,7 @@ export default async function DestinationsPage() {
     destinations.length > 0 ? destinations : fallbackDestinations;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-
+    <Layout>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-red-600 to-red-800 text-white py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -254,8 +251,6 @@ export default async function DestinationsPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </Layout>
   );
 }

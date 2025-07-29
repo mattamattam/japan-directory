@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import HotelCard from "@/components/HotelCard";
 import {
   MapPinIcon,
@@ -189,8 +188,7 @@ export default function DestinationPageClient({
   }, [isMapModalOpen, selectedDistrict]);
 
   return (
-    <>
-      <Header />
+    <Layout>
       <main className="min-h-screen bg-gray-50">
         {/* Hero Section */}
         <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white">
@@ -259,9 +257,10 @@ export default function DestinationPageClient({
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {districts.map((district) => (
-                    <div
+                    <Link
                       key={district.name}
-                      className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-lg transition-shadow duration-200 overflow-hidden"
+                      href={district.href}
+                      className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-lg transition-shadow duration-200 overflow-hidden block"
                     >
                       {/* District Image */}
                       <div className="relative h-48 bg-gray-200">
@@ -312,15 +311,12 @@ export default function DestinationPageClient({
                         {/* District Info */}
                         <div className="flex items-center justify-between text-sm text-gray-500">
                           <span>Subway accessible</span>
-                          <button
-                            onClick={() => openMapModal(district.name)}
-                            className="text-red-600 hover:text-red-700 font-medium"
-                          >
-                            View map
-                          </button>
+                          <span className="text-red-600 hover:text-red-700 font-medium">
+                            Explore district →
+                          </span>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </section>
@@ -434,8 +430,6 @@ export default function DestinationPageClient({
           </div>
         </div>
       )}
-
-      <Footer />
-    </>
+    </Layout>
   );
 }

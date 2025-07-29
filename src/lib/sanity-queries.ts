@@ -63,6 +63,38 @@ interface SanityHotel {
   seoKeywords?: string[];
 }
 
+interface SanityTip {
+  _id: string;
+  title: string;
+  slug: { current: string } | string;
+  category: string;
+  description: string;
+  content?: unknown;
+  image: SanityImage;
+  featured?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+}
+
+interface SanityDistrict {
+  _id: string;
+  name: string;
+  slug: { current: string } | string;
+  destination: {
+    _id: string;
+    name: string;
+    slug: { current: string } | string;
+  };
+  description: string;
+  image: SanityImage;
+  highlights?: string[];
+  featured?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+}
+
 // Helper function to build image URLs
 function imageUrlBuilder(
   image: SanityImage | null,
@@ -354,6 +386,189 @@ export async function getHotelBySlug(slug: string) {
     };
   } catch (error) {
     console.error("Error fetching hotel:", error);
+    return null;
+  }
+}
+
+// Fetch all tips
+export async function getTips() {
+  const query = `*[_type == "tip"] | order(featured desc, title asc) {
+    _id,
+    title,
+    slug,
+    category,
+    description,
+    image,
+    featured
+  }`;
+
+  try {
+    const tips = await sanity.fetch(query);
+    return tips.map((tip: SanityTip) => ({
+      ...tip,
+      image: imageUrlBuilder(tip.image, 800, 600),
+    }));
+  } catch (error) {
+    console.error("Error fetching tips:", error);
+    return [];
+  }
+}
+
+// Fetch tips by category
+export async function getTipsByCategory(category: string) {
+  const query = `*[_type == "tip" && category == $category] | order(featured desc, title asc) {
+    _id,
+    title,
+    slug,
+    category,
+    description,
+    image,
+    featured
+  }`;
+
+  try {
+    const tips = await sanity.fetch(query, { category });
+    return tips.map((tip: SanityTip) => ({
+      ...tip,
+      image: imageUrlBuilder(tip.image, 800, 600),
+    }));
+  } catch (error) {
+    console.error("Error fetching tips by category:", error);
+    return [];
+  }
+}
+
+// Fetch single tip by slug
+export async function getTipBySlug(slug: string) {
+  const query = `*[_type == "tip" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    category,
+    description,
+    content,
+    image,
+    seoTitle,
+    seoDescription,
+    seoKeywords
+  }`;
+
+  try {
+    const tip = await sanity.fetch(query, { slug });
+    if (!tip) return null;
+
+    return {
+      ...tip,
+      image: imageUrlBuilder(tip.image, 1200, 800),
+    };
+  } catch (error) {
+    console.error("Error fetching tip:", error);
+    return null;
+  }
+}
+
+// Fetch featured tips
+export async function getFeaturedTips(limit: number = 3) {
+  const query = `*[_type == "tip" && featured == true] | order(title asc)[0...${limit}] {
+    _id,
+    title,
+    slug,
+    category,
+    description,
+    image
+  }`;
+
+  try {
+    const tips = await sanity.fetch(query);
+    return tips.map((tip: SanityTip) => ({
+      ...tip,
+      image: imageUrlBuilder(tip.image, 800, 600),
+    }));
+  } catch (error) {
+    console.error("Error fetching featured tips:", error);
+    return [];
+  }
+}
+
+// Fetch navigation data for header
+export async function getNavigationData() {
+  const query = `{
+    "destinations": *[_type == "destination"] | order(name asc) {
+      _id,
+      name,
+      slug,
+      region,
+      "districts": *[_type == "district" && destination._ref == ^._id && featured == true] | order(name asc)[0...5] {
+        _id,
+        name,
+        slug,
+        description
+      }
+    }
+  }`;
+
+  try {
+    const data = await sanity.fetch(query);
+    return data;
+  } catch (error) {
+    console.error("Error fetching navigation data:", error);
+    return { destinations: [] };
+  }
+}
+
+// Fetch districts by destination
+export async function getDistrictsByDestination(destinationSlug: string) {
+  const query = `*[_type == "district" && destination->slug.current == $destinationSlug] | order(name asc) {
+    _id,
+    name,
+    slug,
+    description,
+    image,
+    highlights,
+    featured
+  }`;
+
+  try {
+    const districts = await sanity.fetch(query, { destinationSlug });
+    return districts.map((district: SanityDistrict) => ({
+      ...district,
+      image: imageUrlBuilder(district.image, 800, 600),
+    }));
+  } catch (error) {
+    console.error("Error fetching districts:", error);
+    return [];
+  }
+}
+
+// Fetch single district by slug
+export async function getDistrictBySlug(slug: string) {
+  const query = `*[_type == "district" && slug.current == $slug][0] {
+    _id,
+    name,
+    slug,
+    description,
+    image,
+    highlights,
+    destination->{
+      _id,
+      name,
+      slug
+    },
+    seoTitle,
+    seoDescription,
+    seoKeywords
+  }`;
+
+  try {
+    const district = await sanity.fetch(query, { slug });
+    if (!district) return null;
+
+    return {
+      ...district,
+      image: imageUrlBuilder(district.image, 1200, 800),
+    };
+  } catch (error) {
+    console.error("Error fetching district:", error);
     return null;
   }
 }

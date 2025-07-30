@@ -6,6 +6,7 @@ import {
   getDistrictsByDestination,
 } from "@/lib/sanity-queries";
 import DestinationPageClient from "@/components/DestinationPageClient";
+import Layout from "@/components/Layout";
 import type { Hotel } from "@/types";
 
 interface DestinationPageProps {
@@ -114,11 +115,13 @@ export default async function DestinationPage({
   const displayHotels = hotels.length > 0 ? hotels : fallbackHotels;
 
   return (
-    <DestinationPageClient
-      destination={destination}
-      districts={districtsWithProps}
-      params={resolvedParams}
-      displayHotels={displayHotels}
-    />
+    <Layout>
+      <DestinationPageClient
+        destination={destination}
+        districts={districtsWithProps}
+        params={resolvedParams}
+        displayHotels={displayHotels}
+      />
+    </Layout>
   );
 }

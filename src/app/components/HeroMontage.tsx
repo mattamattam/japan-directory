@@ -51,15 +51,6 @@ export default function HeroMontage({
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-center text-white">
         {children}
       </div>
-      <style>{`
-        @keyframes scroll-montage {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-${animationDistance}px); }
-        }
-        .animate-scroll-montage {
-          animation: scroll-montage 200s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }

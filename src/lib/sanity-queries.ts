@@ -492,24 +492,41 @@ export async function getFeaturedTips(limit: number = 3) {
 
 // Fetch navigation data for header
 export async function getNavigationData() {
-  const query = `{
-    "destinations": *[_type == "destination"] | order(name asc) {
+  try {
+    // Get destinations
+    const destinationsQuery = `*[_type == "destination"] | order(name asc) {
       _id,
       name,
       slug,
-      region,
-      "districts": *[_type == "district" && destination._ref == ^._id && featured == true] | order(name asc)[0...5] {
-        _id,
-        name,
-        slug,
-        description
-      }
-    }
-  }`;
+      region
+    }`;
 
-  try {
-    const data = await sanity.fetch(query);
-    return data;
+    const destinations = await sanity.fetch(destinationsQuery);
+
+    // Get districts with a simpler query
+    const districtsQuery = `*[_type == "district" && featured == true] {
+      _id,
+      name,
+      slug,
+      destination->{
+        _id
+      }
+    }`;
+
+    const districts = await sanity.fetch(districtsQuery);
+
+    // Group districts by destination
+    const destinationsWithDistricts = destinations.map((destination: any) => ({
+      ...destination,
+      districts: districts
+        .filter(
+          (district: any) =>
+            district.destination && district.destination._id === destination._id
+        )
+        .slice(0, 5),
+    }));
+
+    return { destinations: destinationsWithDistricts };
   } catch (error) {
     console.error("Error fetching navigation data:", error);
     return { destinations: [] };
@@ -518,21 +535,39 @@ export async function getNavigationData() {
 
 // Fetch districts by destination
 export async function getDistrictsByDestination(destinationSlug: string) {
-  const query = `*[_type == "district" && destination->slug.current == $destinationSlug] | order(name asc) {
-    _id,
-    name,
-    slug,
-    description,
-    image,
-    highlights,
-    featured
+  // First, get the destination ID
+  const destinationQuery = `*[_type == "destination" && slug.current == $destinationSlug][0] {
+    _id
   }`;
 
   try {
-    const districts = await sanity.fetch(query, { destinationSlug });
+    const destination = await sanity.fetch(destinationQuery, {
+      destinationSlug,
+    });
+
+    if (!destination) {
+      console.log(`No destination found for slug: ${destinationSlug}`);
+      return [];
+    }
+
+    // Then get districts for this destination
+    const districtsQuery = `*[_type == "district" && destination._ref == $destinationId] | order(name asc) {
+      _id,
+      name,
+      slug,
+      description,
+      image,
+      highlights,
+      featured
+    }`;
+
+    const districts = await sanity.fetch(districtsQuery, {
+      destinationId: destination._id,
+    });
+
     return districts.map((district: SanityDistrict) => ({
       ...district,
-      image: imageUrlBuilder(district.image, 800, 600),
+      image: district.image ? imageUrlBuilder(district.image, 800, 600) : null,
     }));
   } catch (error) {
     console.error("Error fetching districts:", error);

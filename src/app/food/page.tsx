@@ -28,8 +28,8 @@ export default async function FoodPage() {
                 Food Guides
               </h1>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                Discover Japan's incredible food culture with our comprehensive
-                guides
+                Discover Japan&apos;s incredible food culture with our
+                comprehensive guides
               </p>
               <div className="flex flex-wrap justify-center gap-6 text-sm">
                 <div className="flex items-center">

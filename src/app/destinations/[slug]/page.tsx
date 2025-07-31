@@ -1,13 +1,11 @@
 import { notFound } from "next/navigation";
 import {
   getDestinationBySlug,
-  getHotelsByDestination,
   getDestinations,
   getDistrictsByDestination,
 } from "@/lib/sanity-queries";
 import DestinationPageClient from "@/components/DestinationPageClient";
 import Layout from "@/components/Layout";
-import type { Hotel } from "@/types";
 
 interface DestinationPageProps {
   params: Promise<{ slug: string }>;
@@ -61,11 +59,8 @@ export default async function DestinationPage({
     notFound();
   }
 
-  // Fetch districts and hotels for this destination
-  const [districts, hotels] = await Promise.all([
-    getDistrictsByDestination(resolvedParams.slug),
-    getHotelsByDestination(destination.name),
-  ]);
+  // Fetch districts for this destination
+  const districts = await getDistrictsByDestination(resolvedParams.slug);
 
   // Transform districts data for the component
   const districtsWithProps = districts.map((district: any) => ({
@@ -78,49 +73,12 @@ export default async function DestinationPage({
     href: `/destinations/${resolvedParams.slug}/districts/${district.slug.current}`,
   }));
 
-  // Fallback hotels if none found
-  const fallbackHotels: Hotel[] = [
-    {
-      _id: "1",
-      name: "Luxury Hotel in " + destination.name,
-      location: destination.name,
-      image:
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
-      rating: 4.8,
-      reviewCount: 1247,
-      price: 250,
-      priceRange: "Luxury",
-      category: "Hotel",
-      description: "Premium accommodation in the heart of " + destination.name,
-      amenities: ["Free WiFi", "Spa", "Restaurant", "Gym"],
-      slug: { current: "luxury-hotel-" + destination.name.toLowerCase() },
-    },
-    {
-      _id: "2",
-      name: "Mid-Range Hotel in " + destination.name,
-      location: destination.name,
-      image:
-        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop",
-      rating: 4.2,
-      reviewCount: 856,
-      price: 150,
-      priceRange: "Mid-Range",
-      category: "Hotel",
-      description: "Comfortable accommodation with great value",
-      amenities: ["Free WiFi", "Restaurant", "Parking"],
-      slug: { current: "mid-range-hotel-" + destination.name.toLowerCase() },
-    },
-  ];
-
-  const displayHotels = hotels.length > 0 ? hotels : fallbackHotels;
-
   return (
     <Layout>
       <DestinationPageClient
         destination={destination}
         districts={districtsWithProps}
         params={resolvedParams}
-        displayHotels={displayHotels}
       />
     </Layout>
   );

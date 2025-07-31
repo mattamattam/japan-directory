@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import HotelCard from "@/components/HotelCard";
 import {
   MapPinIcon,
   CalendarIcon,
@@ -11,7 +10,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import type { Destination, Hotel } from "@/types";
+import type { Destination } from "@/types";
 import Link from "next/link";
 
 // Add Google Maps types
@@ -44,14 +43,12 @@ interface DestinationPageClientProps {
     href: string;
   }>;
   params: { slug: string };
-  displayHotels: Hotel[];
 }
 
 export default function DestinationPageClient({
   destination,
   districts,
   params,
-  displayHotels,
 }: DestinationPageClientProps) {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
@@ -292,26 +289,6 @@ export default function DestinationPageClient({
                       Google AdSense Banner
                     </p>
                   </div>
-                </div>
-              </section>
-
-              {/* Hotels Section */}
-              <section className="bg-white rounded-lg shadow-sm p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    Top Hotels in {destination.name}
-                  </h2>
-                  <Link
-                    href={`/destinations/${citySlug}/hotels`}
-                    className="text-red-600 hover:text-red-700 font-medium"
-                  >
-                    View all hotels
-                  </Link>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {displayHotels.slice(0, 4).map((hotel: Hotel) => (
-                    <HotelCard key={hotel._id} hotel={hotel} />
-                  ))}
                 </div>
               </section>
             </div>

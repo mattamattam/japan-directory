@@ -14,16 +14,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// TODO: Add metadata
 export const metadata: Metadata = {
-  title: "Japan Travel Directory - Discover the Best of Japan Tourism",
+  title: "Visit Japan - Your Complete Guide to Japan Travel",
   description:
-    "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips for Tokyo, Kyoto, Osaka, and beyond. Plan your perfect Japan vacation with our comprehensive directory.",
+    "Your ultimate guide to visiting Japan. Find the best destinations, experiences, lodging, food, and travel tips for Tokyo, Kyoto, Osaka, and beyond. Plan your perfect Japan trip with our comprehensive guide.",
   keywords:
-    "Japan travel, Japan tourism, Tokyo travel, Kyoto travel, Osaka travel, Japan hotels, Japan attractions, Japan restaurants, Japan vacation, Japan guide",
-  authors: [{ name: "Japan Travel Directory" }],
-  creator: "Japan Travel Directory",
-  publisher: "Japan Travel Directory",
+    "visit Japan, Japan travel, Japan tourism, Tokyo travel, Kyoto travel, Osaka travel, Japan destinations, Japan experiences, Japan lodging, Japan food, Japan vacation, Japan guide",
+  authors: [{ name: "Visit Japan" }],
+  creator: "Visit Japan",
+  publisher: "Visit Japan",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   formatDetection: {
     email: false,
     address: false,
@@ -34,17 +38,17 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Japan Travel Directory - Discover the Best of Japan Tourism",
+    title: "Visit Japan - Your Complete Guide to Japan Travel",
     description:
-      "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips for Tokyo, Kyoto, Osaka, and beyond.",
+      "Your ultimate guide to visiting Japan. Find the best destinations, experiences, lodging, food, and travel tips for Tokyo, Kyoto, Osaka, and beyond.",
     url: "https://japan-directory.com",
-    siteName: "Japan Travel Directory",
+    siteName: "Visit Japan",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Japan Travel Directory",
+        alt: "Visit Japan",
       },
     ],
     locale: "en_US",
@@ -52,9 +56,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Japan Travel Directory - Discover the Best of Japan Tourism",
+    title: "Visit Japan - Your Complete Guide to Japan Travel",
     description:
-      "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips.",
+      "Your ultimate guide to visiting Japan. Find the best destinations, experiences, lodging, food, and travel tips.",
     images: ["/og-image.jpg"],
   },
   robots: {

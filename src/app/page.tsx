@@ -1,17 +1,13 @@
 // app/page.tsx
 import { Metadata } from "next";
-import {
-  getFeaturedDestinations,
-  getFeaturedHotels,
-} from "@/lib/sanity-queries";
+import { getFeaturedDestinations } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/Button";
-import HotelCard from "@/components/HotelCard";
 import DestinationCard from "@/components/DestinationCard";
 import TourCard from "@/components/TourCard";
 import HeroMontage from "./components/HeroMontage";
 import ExchangeRate from "./components/ExchangeRate";
-import type { Destination, Hotel } from "@/types";
+import type { Destination } from "@/types";
 
 export const metadata: Metadata = {
   title: "Japan Directory - Your Complete Guide to Japan Travel",
@@ -72,10 +68,7 @@ const featuredTours = [
 
 export default async function Home() {
   // Fetch data from Sanity
-  const [featuredDestinations, featuredHotels] = await Promise.all([
-    getFeaturedDestinations(3),
-    getFeaturedHotels(3),
-  ]);
+  const featuredDestinations = await getFeaturedDestinations(3);
 
   // Fallback data if Sanity is not configured
   const destinations =
@@ -117,48 +110,6 @@ export default async function Home() {
             reviewCount: 756,
             price: 85,
             slug: { current: "osaka" },
-          },
-        ];
-
-  const hotels =
-    featuredHotels.length > 0
-      ? featuredHotels
-      : [
-          {
-            _id: "hotel-1",
-            name: "Park Hyatt Tokyo",
-            location: "Shinjuku, Tokyo",
-            image:
-              "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
-            rating: 4.9,
-            reviewCount: 2341,
-            price: 450,
-            affiliateLinks: { bookingCom: "park-hyatt-tokyo" },
-            slug: { current: "park-hyatt-tokyo" },
-          },
-          {
-            _id: "hotel-2",
-            name: "Aman Tokyo",
-            location: "Otemachi, Tokyo",
-            image:
-              "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop",
-            rating: 4.8,
-            reviewCount: 1892,
-            price: 1200,
-            affiliateLinks: { bookingCom: "aman-tokyo" },
-            slug: { current: "aman-tokyo" },
-          },
-          {
-            _id: "hotel-3",
-            name: "Ritz-Carlton Kyoto",
-            location: "Kamogawa, Kyoto",
-            image:
-              "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
-            rating: 4.9,
-            reviewCount: 1456,
-            price: 800,
-            affiliateLinks: { bookingCom: "ritz-carlton-kyoto" },
-            slug: { current: "ritz-carlton-kyoto" },
           },
         ];
 
@@ -218,26 +169,6 @@ export default async function Home() {
                 key={destination._id}
                 destination={destination}
               />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Hotels */}
-      <section className="py-16 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Top Hotels in Japan
-            </h2>
-            <p className="mt-4 text-lg leading-8 text-gray-600">
-              Experience luxury and comfort at Japan&apos;s finest
-              accommodations
-            </p>
-          </div>
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {hotels.map((hotel: Hotel) => (
-              <HotelCard key={hotel._id} hotel={hotel} />
             ))}
           </div>
         </div>

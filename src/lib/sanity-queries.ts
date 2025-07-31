@@ -141,6 +141,21 @@ interface SanityLanguage {
   seoKeywords?: string[];
 }
 
+interface SanitySectionPage {
+  _id: string;
+  title: string;
+  slug: { current: string } | string;
+  description: string;
+  longDescription?: unknown;
+  image: SanityImage;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  content?: unknown;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+}
+
 // Helper function to build image URLs
 function imageUrlBuilder(
   image: SanityImage | null,
@@ -733,5 +748,80 @@ export async function getBlogPostBySlug(slug: string) {
   } catch (error) {
     console.error("Error fetching blog post:", error);
     return null;
+  }
+}
+
+// Fetch section page by slug
+export async function getSectionPageBySlug(slug: string) {
+  const query = `*[_type == "sectionPage" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    description,
+    longDescription,
+    image,
+    heroTitle,
+    heroSubtitle,
+    content,
+    seoTitle,
+    seoDescription,
+    seoKeywords
+  }`;
+
+  try {
+    const sectionPage = await sanity.fetch(query, { slug });
+    if (!sectionPage) return null;
+
+    return {
+      ...sectionPage,
+      image: imageUrlBuilder(sectionPage.image, 1200, 800),
+    };
+  } catch (error) {
+    console.error("Error fetching section page:", error);
+    return null;
+  }
+}
+
+// Fetch all section pages
+export async function getSectionPages() {
+  const query = `*[_type == "sectionPage"] | order(title asc) {
+    _id,
+    title,
+    slug,
+    description,
+    image,
+    seoTitle,
+    seoDescription,
+    seoKeywords
+  }`;
+
+  try {
+    const sectionPages = await sanity.fetch(query);
+    return sectionPages.map((page: SanitySectionPage) => ({
+      ...page,
+      image: imageUrlBuilder(page.image, 800, 600),
+    }));
+  } catch (error) {
+    console.error("Error fetching section pages:", error);
+    return [];
+  }
+}
+
+// Fetch section pages for navigation (excluding destinations)
+export async function getSectionPagesForNavigation() {
+  const query = `*[_type == "sectionPage" && slug.current != "destinations"] | order(sortOrder asc, title asc) {
+    _id,
+    title,
+    slug,
+    description,
+    sortOrder
+  }`;
+
+  try {
+    const sectionPages = await sanity.fetch(query);
+    return sectionPages;
+  } catch (error) {
+    console.error("Error fetching section pages for navigation:", error);
+    return [];
   }
 }

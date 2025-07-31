@@ -176,6 +176,44 @@ export default async function DestinationsPage() {
         </div>
       </section>
 
+      {/* Long Description Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <div className="prose prose-lg mx-auto text-gray-700">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              Discover the Magic of Japan
+            </h2>
+            <p className="mb-6 leading-relaxed">
+              Japan is a country of contrasts, where ancient traditions
+              seamlessly blend with cutting-edge technology. From the neon-lit
+              streets of Tokyo to the serene temples of Kyoto, each destination
+              offers a unique glimpse into Japanese culture and history.
+            </p>
+            <p className="mb-6 leading-relaxed">
+              Whether you&apos;re drawn to the bustling energy of modern cities
+              or the peaceful tranquility of historic sites, Japan has something
+              to offer every type of traveler. Experience the world-famous
+              hospitality, sample incredible cuisine, and immerse yourself in a
+              culture that has been refined over thousands of years.
+            </p>
+            <p className="mb-6 leading-relaxed">
+              Our comprehensive guides help you explore the best destinations
+              across Japan, from the iconic landmarks of Tokyo and the cultural
+              treasures of Kyoto to the culinary delights of Osaka and the
+              historical significance of Hiroshima. Each city tells its own
+              story and contributes to the rich tapestry that makes Japan such a
+              fascinating country to visit.
+            </p>
+            <p className="leading-relaxed">
+              Start your journey by exploring our destination guides below,
+              where you&apos;ll find detailed information about attractions,
+              accommodations, dining options, and local experiences that will
+              make your Japan trip truly unforgettable.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Destinations Grid */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">

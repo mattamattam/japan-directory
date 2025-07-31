@@ -25,23 +25,42 @@ interface HeaderProps {
   navigationData?: {
     destinations: NavigationDestination[];
   };
+  sectionPages?: Array<{
+    _id: string;
+    title: string;
+    slug: { current: string };
+    description: string;
+  }>;
 }
 
-const navigation = [
-  { name: "Experiences", href: "/experiences" },
-  { name: "Lodging", href: "/lodging" },
-  { name: "Food", href: "/food" },
-  { name: "Essentials", href: "/essentials" },
-  { name: "Itineraries", href: "/itineraries" },
-  { name: "Blog", href: "/blog" },
-];
-
-export default function Header({ navigationData }: HeaderProps) {
+export default function Header({ navigationData, sectionPages }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   // Fallback data if no navigation data is provided
   const destinations = navigationData?.destinations || [];
+
+  // Convert section pages to navigation format
+  const navigation =
+    sectionPages?.map((page) => ({
+      name: page.title,
+      href: `/${page.slug.current}`,
+    })) || [];
+
+  // Fallback navigation if no section pages are found
+  const fallbackNavigation = [
+    { name: "Experiences", href: "/experiences" },
+    { name: "Lodging", href: "/lodging" },
+    { name: "Food", href: "/food" },
+    { name: "Essentials", href: "/essentials" },
+    { name: "Itineraries", href: "/itineraries" },
+    { name: "Blog", href: "/blog" },
+  ];
+
+  // Use section pages if available, otherwise use fallback
+  // The Sanity query already sorts by sortOrder, so we don't need client-side sorting
+  const finalNavigation =
+    navigation.length > 0 ? navigation : fallbackNavigation;
 
   // Helper function to check if a link is active
   const isActive = (href: string) => {
@@ -99,7 +118,7 @@ export default function Header({ navigationData }: HeaderProps) {
           </Link>
 
           {/* Other Navigation Items */}
-          {navigation.map((item) => (
+          {finalNavigation.map((item) => (
             <Link
               key={item.name}
               href={item.href}
@@ -161,7 +180,7 @@ export default function Header({ navigationData }: HeaderProps) {
                   </Link>
 
                   {/* Other Mobile Navigation */}
-                  {navigation.map((item) => (
+                  {finalNavigation.map((item) => (
                     <Link
                       key={item.name}
                       href={item.href}

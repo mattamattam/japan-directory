@@ -1,9 +1,15 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getDistrictBySlug, getDestinationBySlug } from "@/lib/sanity-queries";
+import {
+  getDistrictBySlug,
+  getDestinationBySlug,
+  getDestinations,
+  getDistrictsByDestination,
+} from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/Button";
+import PortableText from "@/components/PortableText";
 import {
   MapPinIcon,
   StarIcon,
@@ -35,6 +41,32 @@ export async function generateMetadata({
     description: district.seoDescription || district.description,
     keywords: district.seoKeywords?.join(", ") || "",
   };
+}
+
+export async function generateStaticParams() {
+  const destinations = await getDestinations();
+  const params: Array<{ slug: string; district: string }> = [];
+
+  for (const destination of destinations) {
+    const destinationSlug =
+      typeof destination.slug === "string"
+        ? destination.slug
+        : destination.slug.current;
+    const districts = await getDistrictsByDestination(destinationSlug);
+
+    for (const district of districts) {
+      const districtSlug =
+        typeof district.slug === "string"
+          ? district.slug
+          : district.slug.current;
+      params.push({
+        slug: destinationSlug,
+        district: districtSlug,
+      });
+    }
+  }
+
+  return params;
 }
 
 export default async function DistrictPage({ params }: DistrictPageProps) {
@@ -100,39 +132,44 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
             {/* Main Content */}
             <div className="lg:col-span-2">
               <div className="prose prose-lg max-w-none">
-                <h2>About {district.name}</h2>
-                <p>{district.description}</p>
+                {district.longDescription ? (
+                  <PortableText content={district.longDescription} />
+                ) : (
+                  <>
+                    <p>{district.description}</p>
 
-                {district.highlights && district.highlights.length > 0 && (
-                  <div className="mt-8">
-                    <h3>Highlights</h3>
-                    <ul>
-                      {district.highlights.map(
-                        (highlight: string, index: number) => (
-                          <li key={index}>{highlight}</li>
-                        )
-                      )}
-                    </ul>
-                  </div>
+                    {district.highlights && district.highlights.length > 0 && (
+                      <div className="mt-8">
+                        <h3>Highlights</h3>
+                        <ul>
+                          {district.highlights.map(
+                            (highlight: string, index: number) => (
+                              <li key={index}>{highlight}</li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+
+                    <div className="mt-8">
+                      <h3>Getting There</h3>
+                      <p>
+                        {district.name} is easily accessible from{" "}
+                        {destination.name} via public transportation. Consider
+                        using the Japan Rail Pass for convenient travel.
+                      </p>
+                    </div>
+
+                    <div className="mt-8">
+                      <h3>Best Time to Visit</h3>
+                      <p>
+                        The best time to visit {district.name} depends on your
+                        interests. Spring and autumn offer pleasant weather and
+                        beautiful scenery.
+                      </p>
+                    </div>
+                  </>
                 )}
-
-                <div className="mt-8">
-                  <h3>Getting There</h3>
-                  <p>
-                    {district.name} is easily accessible from {destination.name}{" "}
-                    via public transportation. Consider using the Japan Rail
-                    Pass for convenient travel.
-                  </p>
-                </div>
-
-                <div className="mt-8">
-                  <h3>Best Time to Visit</h3>
-                  <p>
-                    The best time to visit {district.name} depends on your
-                    interests. Spring and autumn offer pleasant weather and
-                    beautiful scenery.
-                  </p>
-                </div>
               </div>
             </div>
 

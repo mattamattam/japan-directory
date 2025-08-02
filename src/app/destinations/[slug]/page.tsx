@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: DestinationPageProps) {
 }
 
 export async function generateStaticParams() {
-  const destinations = await getDestinations("featured");
+  const destinations = await getDestinations();
   if (destinations.length === 0) {
     return [
       { slug: "tokyo" },
@@ -70,7 +70,7 @@ export default async function DestinationPage({
     rating: 4.5, // Default rating since it's not in the schema yet
     reviewCount: 100, // Default review count
     highlights: district.highlights || [],
-    href: `/destinations/${resolvedParams.slug}/districts/${district.slug.current}`,
+    href: `/destinations/${resolvedParams.slug}/districts/${typeof district.slug === "string" ? district.slug : district.slug.current}`,
   }));
 
   return (

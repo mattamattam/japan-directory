@@ -5,6 +5,7 @@ export interface Destination {
   name: string;
   region: string;
   description: string;
+  longDescription?: unknown;
   image: string;
   rating: number;
   reviewCount: number;

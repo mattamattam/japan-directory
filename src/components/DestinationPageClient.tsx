@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import type { Destination } from "@/types";
 import Link from "next/link";
+import PortableText from "./PortableText";
 
 // Add Google Maps types
 declare global {
@@ -188,20 +189,28 @@ export default function DestinationPageClient({
                   About {destination.name}
                 </h2>
                 <div className="prose prose-lg text-gray-600">
-                  <p className="mb-4">{destination.description}</p>
-                  <p className="mb-4">
-                    {destination.name} is one of Japan&apos;s most captivating
-                    destinations, offering a perfect blend of traditional
-                    culture and modern innovation. From ancient temples and
-                    shrines to cutting-edge technology and vibrant city life,
-                    there&apos;s something for every traveler to discover.
-                  </p>
-                  <p>
-                    Whether you&apos;re interested in exploring historic
-                    districts, sampling world-class cuisine, or experiencing the
-                    unique Japanese way of life, {destination.name} promises an
-                    unforgettable journey through the heart of Japan.
-                  </p>
+                  {destination.longDescription ? (
+                    <PortableText content={destination.longDescription} />
+                  ) : (
+                    <>
+                      <p className="mb-4">{destination.description}</p>
+                      <p className="mb-4">
+                        {destination.name} is one of Japan&apos;s most
+                        captivating destinations, offering a perfect blend of
+                        traditional culture and modern innovation. From ancient
+                        temples and shrines to cutting-edge technology and
+                        vibrant city life, there&apos;s something for every
+                        traveler to discover.
+                      </p>
+                      <p>
+                        Whether you&apos;re interested in exploring historic
+                        districts, sampling world-class cuisine, or experiencing
+                        the unique Japanese way of life, {destination.name}{" "}
+                        promises an unforgettable journey through the heart of
+                        Japan.
+                      </p>
+                    </>
+                  )}
                 </div>
               </section>
 

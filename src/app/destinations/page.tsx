@@ -19,143 +19,12 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600; // Revalidate every hour
 
-export default async function DestinationsPage({
-  searchParams,
-}: {
-  searchParams: { sort?: string };
-}) {
-  // Get sort parameter from URL, default to "featured"
-  const sortBy = searchParams.sort || "featured";
+export default async function DestinationsPage() {
+  // Fetch destinations from Sanity
+  const destinations = await getDestinations();
 
-  // Fetch destinations from Sanity with sorting
-  const destinations = await getDestinations(sortBy);
-
-  // Fallback data if Sanity is not configured
-  const fallbackDestinations = [
-    {
-      _id: 1,
-      name: "Tokyo",
-      region: "Kanto",
-      description:
-        "Japan's bustling capital city with modern skyscrapers, traditional temples, and endless entertainment options.",
-      image:
-        "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&h=600&fit=crop",
-      rating: 4.8,
-      reviewCount: 1247,
-      price: 120,
-      slug: { current: "tokyo" },
-      highlights: [
-        "Shibuya Crossing",
-        "Tokyo Skytree",
-        "Senso-ji Temple",
-        "Tsukiji Market",
-      ],
-      bestTime: "March-May, September-November",
-    },
-    {
-      _id: 2,
-      name: "Kyoto",
-      region: "Kansai",
-      description:
-        "Ancient capital with over 1,600 Buddhist temples, 400 Shinto shrines, and traditional Japanese culture.",
-      image:
-        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=600&fit=crop",
-      rating: 4.9,
-      reviewCount: 892,
-      price: 95,
-      slug: { current: "kyoto" },
-      highlights: [
-        "Fushimi Inari Shrine",
-        "Kinkaku-ji",
-        "Arashiyama Bamboo Grove",
-        "Gion District",
-      ],
-      bestTime: "March-May, October-November",
-    },
-    {
-      _id: 3,
-      name: "Osaka",
-      region: "Kansai",
-      description:
-        "Food lover's paradise with vibrant nightlife, historic castles, and the famous Osaka Castle.",
-      image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-      rating: 4.7,
-      reviewCount: 756,
-      price: 85,
-      slug: { current: "osaka" },
-      highlights: [
-        "Osaka Castle",
-        "Dotonbori",
-        "Universal Studios Japan",
-        "Osaka Aquarium",
-      ],
-      bestTime: "March-May, September-November",
-    },
-    {
-      _id: 4,
-      name: "Hiroshima",
-      region: "Chugoku",
-      description:
-        "Peaceful city known for its history, the Peace Memorial Park, and nearby Miyajima Island.",
-      image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-      rating: 4.6,
-      reviewCount: 543,
-      price: 75,
-      slug: { current: "hiroshima" },
-      highlights: [
-        "Peace Memorial Park",
-        "Miyajima Island",
-        "Hiroshima Castle",
-        "Atomic Bomb Dome",
-      ],
-      bestTime: "March-May, October-November",
-    },
-    {
-      _id: 5,
-      name: "Nara",
-      region: "Kansai",
-      description:
-        "First permanent capital of Japan, home to friendly deer and ancient temples.",
-      image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-      rating: 4.8,
-      reviewCount: 432,
-      price: 65,
-      slug: { current: "nara" },
-      highlights: [
-        "Todai-ji Temple",
-        "Nara Park Deer",
-        "Kasuga Taisha",
-        "Kofuku-ji",
-      ],
-      bestTime: "March-May, October-November",
-    },
-    {
-      _id: 6,
-      name: "Sapporo",
-      region: "Hokkaido",
-      description:
-        "Northern city famous for its beer, snow festival, and beautiful natural surroundings.",
-      image:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-      rating: 4.5,
-      reviewCount: 321,
-      price: 90,
-      slug: { current: "sapporo" },
-      highlights: [
-        "Sapporo Beer Museum",
-        "Sapporo Snow Festival",
-        "Odori Park",
-        "Mount Moiwa",
-      ],
-      bestTime: "December-March, June-August",
-    },
-  ];
-
-  const displayDestinations =
-    destinations.length > 0 ? destinations : fallbackDestinations;
+  // Only show destinations that exist in Sanity
+  const displayDestinations = destinations;
 
   return (
     <Layout>
@@ -224,70 +93,26 @@ export default async function DestinationsPage({
       {/* Destinations Grid */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          {/* Sort Selector */}
-          <div className="mb-8 flex justify-center">
-            <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
-              <a
-                href="/destinations?sort=featured"
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  sortBy === "featured"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Featured
-              </a>
-              <a
-                href="/destinations?sort=name"
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  sortBy === "name"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Name
-              </a>
-              <a
-                href="/destinations?sort=rating"
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  sortBy === "rating"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Rating
-              </a>
-              <a
-                href="/destinations?sort=price"
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  sortBy === "price"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Price
-              </a>
-              <a
-                href="/destinations?sort=region"
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  sortBy === "region"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Region
-              </a>
+          {displayDestinations.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {displayDestinations.map((destination: Destination) => (
+                <DestinationCard
+                  key={destination._id}
+                  destination={destination}
+                />
+              ))}
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {displayDestinations.map((destination: Destination) => (
-              <DestinationCard
-                key={destination._id}
-                destination={destination}
-              />
-            ))}
-          </div>
+          ) : (
+            <div className="text-center py-16">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+                No destinations found
+              </h2>
+              <p className="text-gray-600">
+                No destinations have been added to Sanity yet. Add some
+                destinations to see them here!
+              </p>
+            </div>
+          )}
         </div>
       </section>
 

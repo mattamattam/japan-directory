@@ -22,6 +22,7 @@ interface SanityDestination {
   weather?: string;
   transportation?: string;
   featured?: boolean;
+  sortOrder?: number;
   seoTitle?: string;
   seoDescription?: string;
   seoKeywords?: string[];
@@ -37,6 +38,7 @@ interface SanityDistrict {
     slug: { current: string } | string;
   };
   description: string;
+  longDescription?: unknown;
   image: SanityImage;
   highlights?: string[];
   featured?: boolean;
@@ -259,29 +261,8 @@ export async function getAllDocumentTypes() {
 }
 
 // Fetch all destinations
-export async function getDestinations(sortBy: string = "featured") {
-  let orderClause = "";
-
-  switch (sortBy) {
-    case "name":
-      orderClause = "| order(name asc)";
-      break;
-    case "rating":
-      orderClause = "| order(rating desc, name asc)";
-      break;
-    case "price":
-      orderClause = "| order(price asc, name asc)";
-      break;
-    case "region":
-      orderClause = "| order(region asc, name asc)";
-      break;
-    case "featured":
-    default:
-      orderClause = "| order(featured desc, name asc)";
-      break;
-  }
-
-  const query = `*[_type == "destination" && defined(publishedAt)] ${orderClause} {
+export async function getDestinations() {
+  const query = `*[_type == "destination"] | order(sortOrder asc, featured desc, name asc) {
     _id,
     name,
     slug,
@@ -293,7 +274,8 @@ export async function getDestinations(sortBy: string = "featured") {
     price,
     highlights,
     bestTime,
-    featured
+    featured,
+    sortOrder
   }`;
 
   try {
@@ -310,7 +292,7 @@ export async function getDestinations(sortBy: string = "featured") {
 
 // Fetch featured destinations
 export async function getFeaturedDestinations(limit: number = 3) {
-  const query = `*[_type == "destination" && featured == true && defined(publishedAt)] | order(name asc)[0...${limit}] {
+  const query = `*[_type == "destination" && featured == true] | order(name asc)[0...${limit}] {
     _id,
     name,
     slug,
@@ -444,6 +426,7 @@ export async function getDistrictsByDestination(destinationSlug: string) {
       name,
       slug,
       description,
+      longDescription,
       image,
       highlights,
       featured
@@ -470,6 +453,7 @@ export async function getDistrictBySlug(slug: string) {
     name,
     slug,
     description,
+    longDescription,
     image,
     highlights,
     destination->{

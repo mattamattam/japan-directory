@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { getDestinations } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import DestinationCard from "@/components/DestinationCard";
+import Breadcrumb from "@/components/Breadcrumb";
 import {
   CalendarIcon,
   MapPinIcon,
@@ -28,6 +29,15 @@ export default async function DestinationsPage() {
 
   return (
     <Layout>
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          {
+            label: "Destinations",
+          },
+        ]}
+      />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-red-600 to-red-800 text-white py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">

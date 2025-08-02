@@ -262,7 +262,7 @@ export async function getAllDocumentTypes() {
 
 // Fetch all destinations
 export async function getDestinations() {
-  const query = `*[_type == "destination"] | order(sortOrder asc, featured desc, name asc) {
+  const query = `*[_type == "destination" && !(_id in path("drafts.**"))] | order(sortOrder asc, featured desc, name asc) {
     _id,
     name,
     slug,
@@ -292,7 +292,7 @@ export async function getDestinations() {
 
 // Fetch featured destinations
 export async function getFeaturedDestinations(limit: number = 3) {
-  const query = `*[_type == "destination" && featured == true] | order(name asc)[0...${limit}] {
+  const query = `*[_type == "destination" && featured == true && !(_id in path("drafts.**"))] | order(name asc)[0...${limit}] {
     _id,
     name,
     slug,
@@ -320,7 +320,7 @@ export async function getFeaturedDestinations(limit: number = 3) {
 
 // Fetch single destination by slug
 export async function getDestinationBySlug(slug: string) {
-  const query = `*[_type == "destination" && slug.current == $slug][0] {
+  const query = `*[_type == "destination" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
     _id,
     name,
     slug,
@@ -364,7 +364,7 @@ export async function getDestinationBySlug(slug: string) {
 export async function getNavigationData() {
   try {
     // Get destinations
-    const destinationsQuery = `*[_type == "destination" && defined(publishedAt)] | order(name asc) {
+    const destinationsQuery = `*[_type == "destination" && !(_id in path("drafts.**"))] | order(name asc) {
       _id,
       name,
       slug,
@@ -374,7 +374,7 @@ export async function getNavigationData() {
     const destinations = await sanity.fetch(destinationsQuery);
 
     // Get districts with a simpler query
-    const districtsQuery = `*[_type == "district" && featured == true && defined(publishedAt)] {
+    const districtsQuery = `*[_type == "district" && featured == true && !(_id in path("drafts.**"))] {
       _id,
       name,
       slug,
@@ -406,7 +406,7 @@ export async function getNavigationData() {
 // Fetch districts by destination
 export async function getDistrictsByDestination(destinationSlug: string) {
   // First, get the destination ID
-  const destinationQuery = `*[_type == "destination" && slug.current == $destinationSlug][0] {
+  const destinationQuery = `*[_type == "destination" && slug.current == $destinationSlug && !(_id in path("drafts.**"))][0] {
     _id
   }`;
 
@@ -421,7 +421,7 @@ export async function getDistrictsByDestination(destinationSlug: string) {
     }
 
     // Then get districts for this destination
-    const districtsQuery = `*[_type == "district" && destination._ref == $destinationId] | order(name asc) {
+    const districtsQuery = `*[_type == "district" && destination._ref == $destinationId && !(_id in path("drafts.**"))] | order(name asc) {
       _id,
       name,
       slug,
@@ -482,7 +482,7 @@ export async function getDistrictBySlug(slug: string) {
 
 // Fetch all experiences
 export async function getExperiences() {
-  const query = `*[_type == "experience" && defined(publishedAt)] | order(featured desc, name asc) {
+  const query = `*[_type == "experience" && !(_id in path("drafts.**"))] | order(featured desc, name asc) {
     _id,
     name,
     slug,
@@ -514,7 +514,7 @@ export async function getExperiences() {
 
 // Fetch featured experiences
 export async function getFeaturedExperiences(limit: number = 6) {
-  const query = `*[_type == "experience" && featured == true && defined(publishedAt)] | order(name asc)[0...${limit}] {
+  const query = `*[_type == "experience" && featured == true && !(_id in path("drafts.**"))] | order(name asc)[0...${limit}] {
     _id,
     name,
     slug,
@@ -545,7 +545,7 @@ export async function getFeaturedExperiences(limit: number = 6) {
 
 // Fetch single experience by slug
 export async function getExperienceBySlug(slug: string) {
-  const query = `*[_type == "experience" && slug.current == $slug && defined(publishedAt)][0] {
+  const query = `*[_type == "experience" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
     _id,
     name,
     slug,
@@ -698,7 +698,7 @@ export async function getFoodBySlug(slug: string) {
 
 // Fetch all blog posts
 export async function getBlogPosts() {
-  const query = `*[_type == "blogPost" && defined(publishedAt)] | order(publishedAt desc) {
+  const query = `*[_type == "blogPost" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -726,7 +726,7 @@ export async function getBlogPosts() {
 
 // Fetch single blog post by slug
 export async function getBlogPostBySlug(slug: string) {
-  const query = `*[_type == "blogPost" && slug.current == $slug && defined(publishedAt)][0] {
+  const query = `*[_type == "blogPost" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
     _id,
     title,
     slug,
@@ -757,7 +757,7 @@ export async function getBlogPostBySlug(slug: string) {
 
 // Fetch section page by slug
 export async function getSectionPageBySlug(slug: string) {
-  const query = `*[_type == "sectionPage" && slug.current == $slug && defined(publishedAt)][0] {
+  const query = `*[_type == "sectionPage" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
     _id,
     title,
     slug,
@@ -788,7 +788,7 @@ export async function getSectionPageBySlug(slug: string) {
 
 // Fetch all section pages
 export async function getSectionPages() {
-  const query = `*[_type == "sectionPage" && defined(publishedAt)] | order(title asc) {
+  const query = `*[_type == "sectionPage" && !(_id in path("drafts.**"))] | order(title asc) {
     _id,
     title,
     slug,
@@ -813,7 +813,7 @@ export async function getSectionPages() {
 
 // Fetch section pages for navigation (excluding destinations)
 export async function getSectionPagesForNavigation() {
-  const query = `*[_type == "sectionPage" && slug.current != "destinations" && defined(publishedAt)] | order(sortOrder asc, title asc) {
+  const query = `*[_type == "sectionPage" && slug.current != "destinations" && !(_id in path("drafts.**"))] | order(sortOrder asc, title asc) {
     _id,
     title,
     slug,

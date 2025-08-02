@@ -49,7 +49,6 @@ export default function Header({ navigationData, sectionPages }: HeaderProps) {
 
   // Fallback navigation if no section pages are found
   const fallbackNavigation = [
-    { name: "Experiences", href: "/experiences" },
     { name: "Lodging", href: "/lodging" },
     { name: "Food", href: "/food" },
     { name: "Essentials", href: "/essentials" },

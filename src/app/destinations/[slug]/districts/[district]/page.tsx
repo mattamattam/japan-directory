@@ -10,6 +10,8 @@ import {
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/Button";
 import PortableText from "@/components/PortableText";
+import Breadcrumb from "@/components/Breadcrumb";
+import AdBanner from "@/components/AdBanner";
 import {
   MapPinIcon,
   StarIcon,
@@ -82,30 +84,27 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
 
   return (
     <Layout>
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          {
+            label: "Destinations",
+            href: "/destinations",
+          },
+          {
+            label: destination.name,
+            href: `/destinations/${typeof destination.slug === "string" ? destination.slug : destination.slug.current}`,
+          },
+          {
+            label: district.name,
+          },
+        ]}
+      />
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-red-600 to-red-800 text-white py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <nav className="mb-8 text-sm">
-              <ol className="flex items-center space-x-2">
-                <li>
-                  <Link href="/" className="hover:text-red-200">
-                    Home
-                  </Link>
-                </li>
-                <li>/</li>
-                <li>
-                  <Link
-                    href={`/destinations/${destination.slug.current}`}
-                    className="hover:text-red-200"
-                  >
-                    {destination.name}
-                  </Link>
-                </li>
-                <li>/</li>
-                <li>{district.name}</li>
-              </ol>
-            </nav>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               {district.name}
             </h1>
@@ -119,14 +118,12 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
       {/* Google AdSense Banner */}
       <section className="bg-white py-8">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="bg-gray-100 h-20 flex items-center justify-center rounded-lg">
-            <p className="text-gray-500 text-sm">Google AdSense Banner</p>
-          </div>
+          <AdBanner adSlot="district-page-banner" adFormat="banner" />
         </div>
       </section>
 
       {/* District Content */}
-      <section className="py-16 bg-white">
+      <section className="py-8 bg-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Content */}
@@ -137,19 +134,6 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
                 ) : (
                   <>
                     <p>{district.description}</p>
-
-                    {district.highlights && district.highlights.length > 0 && (
-                      <div className="mt-8">
-                        <h3>Highlights</h3>
-                        <ul>
-                          {district.highlights.map(
-                            (highlight: string, index: number) => (
-                              <li key={index}>{highlight}</li>
-                            )
-                          )}
-                        </ul>
-                      </div>
-                    )}
 
                     <div className="mt-8">
                       <h3>Getting There</h3>
@@ -198,6 +182,23 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
                 </div>
               </div>
 
+              {/* Highlights Section */}
+              {district.highlights && district.highlights.length > 0 && (
+                <div className="bg-gray-50 p-6 rounded-lg">
+                  <h3 className="text-lg font-semibold mb-4">Highlights</h3>
+                  <div className="space-y-2">
+                    {district.highlights.map(
+                      (highlight: string, index: number) => (
+                        <div key={index} className="flex items-center">
+                          <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+                          <span className="text-gray-700">{highlight}</span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Related Links */}
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold mb-4">Explore More</h3>
@@ -228,16 +229,6 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
                   </Link>
                 </div>
               </div>
-
-              {/* CTA */}
-              <div className="bg-red-50 p-6 rounded-lg">
-                <h3 className="text-lg font-semibold mb-4">Plan Your Trip</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  Ready to explore {district.name}? Start planning your perfect
-                  Japanese adventure.
-                </p>
-                <Button className="w-full">Start Planning</Button>
-              </div>
             </div>
           </div>
         </div>
@@ -246,9 +237,7 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
       {/* Google AdSense Banner */}
       <section className="bg-gray-50 py-8">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="bg-gray-100 h-20 flex items-center justify-center rounded-lg">
-            <p className="text-gray-500 text-sm">Google AdSense Banner</p>
-          </div>
+          <AdBanner adSlot="district-page-footer" adFormat="banner" />
         </div>
       </section>
     </Layout>

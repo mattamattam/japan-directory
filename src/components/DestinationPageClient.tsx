@@ -13,6 +13,8 @@ import Image from "next/image";
 import type { Destination } from "@/types";
 import Link from "next/link";
 import PortableText from "./PortableText";
+import Breadcrumb from "./Breadcrumb";
+import AdBanner from "./AdBanner";
 
 // Add Google Maps types
 declare global {
@@ -151,6 +153,19 @@ export default function DestinationPageClient({
   return (
     <>
       <main className="min-h-screen bg-gray-50">
+        {/* Breadcrumb */}
+        <Breadcrumb
+          items={[
+            {
+              label: "Destinations",
+              href: "/destinations",
+            },
+            {
+              label: destination.name,
+            },
+          ]}
+        />
+
         {/* Hero Section */}
         <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white">
           <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -180,7 +195,14 @@ export default function DestinationPageClient({
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Google AdSense Banner */}
+        <section className="bg-gray-50 py-4">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <AdBanner adSlot="destination-page-banner" adFormat="banner" />
+          </div>
+        </section>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
               {/* About Section */}
@@ -289,17 +311,6 @@ export default function DestinationPageClient({
                   ))}
                 </div>
               </section>
-
-              {/* Google AdSense Banner */}
-              <section className="bg-gray-50 py-8 mb-8">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                  <div className="bg-gray-100 h-20 flex items-center justify-center rounded-lg">
-                    <p className="text-gray-500 text-sm">
-                      Google AdSense Banner
-                    </p>
-                  </div>
-                </div>
-              </section>
             </div>
 
             {/* Sidebar */}
@@ -326,6 +337,27 @@ export default function DestinationPageClient({
                   </div>
                 </div>
               </div>
+
+              {/* Highlights Section */}
+              {destination.highlights && destination.highlights.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Highlights
+                  </h3>
+                  <div className="space-y-2">
+                    {destination.highlights.map(
+                      (highlight: string, index: number) => (
+                        <div key={index} className="flex items-center">
+                          <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+                          <span className="text-gray-700 text-sm">
+                            {highlight}
+                          </span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Popular Activities */}
               <div className="bg-white rounded-lg shadow-sm p-6">
@@ -361,9 +393,7 @@ export default function DestinationPageClient({
         {/* Google AdSense Banner */}
         <section className="bg-gray-50 py-8">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="bg-gray-100 h-20 flex items-center justify-center rounded-lg">
-              <p className="text-gray-500 text-sm">Google AdSense Banner</p>
-            </div>
+            <AdBanner adSlot="destination-page-footer" adFormat="banner" />
           </div>
         </section>
       </main>

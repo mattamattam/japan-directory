@@ -216,17 +216,17 @@ export default async function DistrictHotelsPage({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
             <Breadcrumb
               items={[
-                { name: "Destinations", href: "/destinations" },
+                { label: "Destinations", href: "/destinations" },
                 {
-                  name: destination.name,
+                  label: destination.name,
                   href: `/destinations/${resolvedParams.slug}`,
                 },
                 {
-                  name: district.name,
+                  label: district.name,
                   href: `/destinations/${resolvedParams.slug}/districts/${resolvedParams.district}`,
                 },
                 {
-                  name: "Hotels",
+                  label: "Hotels",
                   href: `/destinations/${resolvedParams.slug}/districts/${resolvedParams.district}/hotels`,
                 },
               ]}

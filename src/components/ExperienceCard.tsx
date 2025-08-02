@@ -23,7 +23,7 @@ interface ExperienceCardProps {
 export default function ExperienceCard({ experience }: ExperienceCardProps) {
   return (
     <Link
-      href={`/experiences/${experience.slug.current}`}
+      href={`/experiences/${typeof experience.slug === "string" ? experience.slug : experience.slug.current}`}
       className="group relative bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-lg transition-shadow duration-200 overflow-hidden"
     >
       {/* Experience Image */}
@@ -66,11 +66,11 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
         <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
           <div className="flex items-center">
             <MapPinIcon className="h-4 w-4 mr-1" />
-            <span>{experience.location}</span>
+            <span>{experience.location || "Location TBD"}</span>
           </div>
           <div className="flex items-center">
             <ClockIcon className="h-4 w-4 mr-1" />
-            <span>{experience.duration}</span>
+            <span>{experience.duration || "Duration TBD"}</span>
           </div>
         </div>
 
@@ -79,14 +79,17 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
           <div className="flex items-center">
             <StarIcon className="h-4 w-4 text-yellow-400 mr-1" />
             <span className="text-sm font-medium text-gray-900">
-              {experience.rating}
+              {experience.rating || "N/A"}
             </span>
             <span className="text-sm text-gray-500 ml-1">
-              ({experience.reviewCount} reviews)
+              ({experience.reviewCount || 0} reviews)
             </span>
           </div>
           <div className="text-lg font-semibold text-red-600">
-            ¥{experience.price.toLocaleString()}
+            ¥
+            {experience.price
+              ? experience.price.toLocaleString()
+              : "Contact for pricing"}
           </div>
         </div>
       </div>

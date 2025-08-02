@@ -19,9 +19,16 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600; // Revalidate every hour
 
-export default async function DestinationsPage() {
-  // Fetch destinations from Sanity
-  const destinations = await getDestinations();
+export default async function DestinationsPage({
+  searchParams,
+}: {
+  searchParams: { sort?: string };
+}) {
+  // Get sort parameter from URL, default to "featured"
+  const sortBy = searchParams.sort || "featured";
+
+  // Fetch destinations from Sanity with sorting
+  const destinations = await getDestinations(sortBy);
 
   // Fallback data if Sanity is not configured
   const fallbackDestinations = [
@@ -217,6 +224,62 @@ export default async function DestinationsPage() {
       {/* Destinations Grid */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          {/* Sort Selector */}
+          <div className="mb-8 flex justify-center">
+            <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
+              <a
+                href="/destinations?sort=featured"
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  sortBy === "featured"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Featured
+              </a>
+              <a
+                href="/destinations?sort=name"
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  sortBy === "name"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Name
+              </a>
+              <a
+                href="/destinations?sort=rating"
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  sortBy === "rating"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Rating
+              </a>
+              <a
+                href="/destinations?sort=price"
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  sortBy === "price"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Price
+              </a>
+              <a
+                href="/destinations?sort=region"
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  sortBy === "region"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Region
+              </a>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayDestinations.map((destination: Destination) => (
               <DestinationCard

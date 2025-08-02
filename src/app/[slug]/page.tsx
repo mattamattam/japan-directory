@@ -1,10 +1,33 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getSectionPageBySlug, getSectionPages } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
-import { notFound } from "next/navigation";
+import OptimizedImage from "@/components/OptimizedImage";
+import PortableText from "@/components/PortableText";
+import type { SectionPage } from "@/types";
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+// Generate static params for all section pages
+export async function generateStaticParams() {
+  const sectionPages = await getSectionPages();
+
+  // Filter out reserved routes
+  const reservedRoutes = ["destinations", "blog"];
+
+  return sectionPages
+    .filter((page: any) => {
+      const slug =
+        typeof page.slug === "string" ? page.slug : page.slug.current;
+      return !reservedRoutes.includes(slug);
+    })
+    .map((page: any) => ({
+      slug: typeof page.slug === "string" ? page.slug : page.slug.current,
+    }));
 }
 
 export async function generateMetadata({
@@ -15,35 +38,24 @@ export async function generateMetadata({
 
   if (!sectionPage) {
     return {
-      title: "Page Not Found - Visit Japan",
+      title: "Page Not Found",
+      description: "The page you're looking for doesn't exist.",
     };
   }
 
   return {
-    title: sectionPage.seoTitle || `${sectionPage.title} - Visit Japan`,
+    title: sectionPage.seoTitle || sectionPage.title,
     description: sectionPage.seoDescription || sectionPage.description,
-    keywords: sectionPage.seoKeywords?.join(", "),
+    keywords: sectionPage.seoKeywords,
   };
 }
 
-export async function generateStaticParams() {
-  const sectionPages = await getSectionPages();
-
-  // Filter out destinations since they have their own pages
-  const validSlugs = sectionPages
-    .filter((page: any) => page.slug.current !== "destinations")
-    .map((page: any) => ({
-      slug: page.slug.current,
-    }));
-
-  return validSlugs;
-}
-
-export default async function DynamicPage({ params }: PageProps) {
+export default async function SectionPage({ params }: PageProps) {
   const { slug } = await params;
 
-  // Don't allow destinations to be handled by this dynamic route
-  if (slug === "destinations") {
+  // Check for reserved routes that should not be handled by this dynamic route
+  const reservedRoutes = ["destinations", "blog"];
+  if (reservedRoutes.includes(slug)) {
     notFound();
   }
 
@@ -55,82 +67,59 @@ export default async function DynamicPage({ params }: PageProps) {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
-        <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-          {sectionPage?.image && (
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{
-                backgroundImage: `url(${sectionPage.image})`,
-              }}
+      {/* Hero Section */}
+      <section className="relative bg-gray-900 py-24 sm:py-32">
+        {sectionPage.image && (
+          <div className="absolute inset-0 overflow-hidden">
+            <OptimizedImage
+              src={sectionPage.image}
+              alt={sectionPage.title}
+              className="h-full w-full object-cover"
             />
-          )}
-          <div className="absolute inset-0 bg-black opacity-20"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-            <div className="text-center">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                {sectionPage?.heroTitle || sectionPage?.title}
-              </h1>
-              <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                {sectionPage?.heroSubtitle || sectionPage?.description}
+            <div className="absolute inset-0 bg-gray-900/60" />
+          </div>
+        )}
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+              {sectionPage.heroTitle || sectionPage.title}
+            </h1>
+            {sectionPage.heroSubtitle && (
+              <p className="mt-6 text-lg leading-8 text-gray-300">
+                {sectionPage.heroSubtitle}
               </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Content Section */}
+      <section className="py-16 bg-white">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl">
+            {/* Description */}
+            <div className="prose prose-lg max-w-none">
+              <p className="text-xl leading-8 text-gray-600 mb-8">
+                {sectionPage.description}
+              </p>
+
+              {/* Long Description if available */}
+              {sectionPage.longDescription && (
+                <div className="mt-8">
+                  <PortableText content={sectionPage.longDescription} />
+                </div>
+              )}
+
+              {/* Content if available */}
+              {sectionPage.content && (
+                <div className="mt-8">
+                  <PortableText content={sectionPage.content} />
+                </div>
+              )}
             </div>
           </div>
         </div>
-
-        {/* Google AdSense Banner */}
-        <section className="bg-white py-8">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="bg-gray-100 h-20 flex items-center justify-center rounded-lg">
-              <p className="text-gray-500 text-sm">Google AdSense Banner</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Long Description Section */}
-        {sectionPage?.longDescription && (
-          <section className="py-16 bg-gray-50">
-            <div className="mx-auto max-w-4xl px-6 lg:px-8">
-              <div className="prose prose-lg mx-auto text-gray-700">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: sectionPage.longDescription as string,
-                  }}
-                />
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Content Section */}
-        <section className="py-16 bg-white">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                {sectionPage?.title}
-              </h2>
-              <p className="mt-4 text-lg leading-8 text-gray-600">
-                {sectionPage?.description}
-              </p>
-            </div>
-
-            {/* Placeholder for future content */}
-            <div className="text-center py-12">
-              <p className="text-gray-500">Content coming soon!</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Google AdSense Banner */}
-        <section className="bg-gray-50 py-8">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="bg-gray-100 h-20 flex items-center justify-center rounded-lg">
-              <p className="text-gray-500 text-sm">Google AdSense Banner</p>
-            </div>
-          </div>
-        </section>
-      </div>
+      </section>
     </Layout>
   );
 }

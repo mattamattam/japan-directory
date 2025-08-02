@@ -11,7 +11,7 @@ interface SanityDestination {
   slug: { current: string } | string;
   region: string;
   description: string;
-  longDescription?: unknown;
+  longDescription?: any; // Portable Text content
   image: SanityImage;
   gallery?: SanityImage[];
   rating: number;
@@ -37,6 +37,7 @@ interface SanityDistrict {
     slug: { current: string } | string;
   };
   description: string;
+  longDescription?: any; // Portable Text content
   image: SanityImage;
   highlights?: string[];
   featured?: boolean;
@@ -146,11 +147,11 @@ interface SanitySectionPage {
   title: string;
   slug: { current: string } | string;
   description: string;
-  longDescription?: unknown;
+  longDescription?: any; // Portable Text content
   image: SanityImage;
   heroTitle?: string;
   heroSubtitle?: string;
-  content?: unknown;
+  content?: any; // Portable Text content
   seoTitle?: string;
   seoDescription?: string;
   seoKeywords?: string[];
@@ -175,7 +176,7 @@ function imageUrlBuilder(
 // Query to discover all available document types
 export async function getAvailableDocumentTypes() {
   // First, let's try to get all document types
-  const allTypesQuery = `*[_type in ["destination", "hotel", "tip", "district", "restaurant", "transportation", "insurance", "guide", "event", "language", "blog", "page", "author", "category", "tour", "article", "service", "faq", "testimonial", "partner", "sponsor"]] {
+  const allTypesQuery = `*[_type in ["destination", "hotel", "tip", "district", "restaurant", "transportation", "insurance", "guide", "event", "language", "blog", "page", "author", "category", "tour", "article", "service", "faq", "testimonial", "partner", "sponsor"] && defined(publishedAt)] {
     _type,
     _id,
     name,
@@ -215,7 +216,7 @@ export async function getAvailableDocumentTypes() {
 
 // Query to get all document types (more comprehensive)
 export async function getAllDocumentTypes() {
-  const query = `*[_type in ["destination", "tip", "district", "experience", "planningGuide", "foodGuide", "blogPost"]] {
+  const query = `*[_type in ["destination", "tip", "district", "experience", "planningGuide", "foodGuide", "blogPost"] && defined(publishedAt)] {
     _type,
     _id,
     name,
@@ -259,8 +260,29 @@ export async function getAllDocumentTypes() {
 }
 
 // Fetch all destinations
-export async function getDestinations() {
-  const query = `*[_type == "destination"] | order(featured desc, name asc) {
+export async function getDestinations(sortBy: string = "featured") {
+  let orderClause = "";
+
+  switch (sortBy) {
+    case "name":
+      orderClause = "| order(name asc)";
+      break;
+    case "rating":
+      orderClause = "| order(rating desc, name asc)";
+      break;
+    case "price":
+      orderClause = "| order(price asc, name asc)";
+      break;
+    case "region":
+      orderClause = "| order(region asc, name asc)";
+      break;
+    case "featured":
+    default:
+      orderClause = "| order(featured desc, name asc)";
+      break;
+  }
+
+  const query = `*[_type == "destination"] ${orderClause} {
     _id,
     name,
     slug,
@@ -289,7 +311,7 @@ export async function getDestinations() {
 
 // Fetch featured destinations
 export async function getFeaturedDestinations(limit: number = 3) {
-  const query = `*[_type == "destination" && featured == true] | order(name asc)[0...${limit}] {
+  const query = `*[_type == "destination" && featured == true && defined(publishedAt)] | order(name asc)[0...${limit}] {
     _id,
     name,
     slug,
@@ -361,7 +383,7 @@ export async function getDestinationBySlug(slug: string) {
 export async function getNavigationData() {
   try {
     // Get destinations
-    const destinationsQuery = `*[_type == "destination"] | order(name asc) {
+    const destinationsQuery = `*[_type == "destination" && defined(publishedAt)] | order(name asc) {
       _id,
       name,
       slug,
@@ -371,7 +393,7 @@ export async function getNavigationData() {
     const destinations = await sanity.fetch(destinationsQuery);
 
     // Get districts with a simpler query
-    const districtsQuery = `*[_type == "district" && featured == true] {
+    const districtsQuery = `*[_type == "district" && featured == true && defined(publishedAt)] {
       _id,
       name,
       slug,
@@ -423,6 +445,7 @@ export async function getDistrictsByDestination(destinationSlug: string) {
       name,
       slug,
       description,
+      longDescription,
       image,
       highlights,
       featured
@@ -449,6 +472,7 @@ export async function getDistrictBySlug(slug: string) {
     name,
     slug,
     description,
+    longDescription,
     image,
     highlights,
     destination->{
@@ -477,7 +501,7 @@ export async function getDistrictBySlug(slug: string) {
 
 // Fetch all experiences
 export async function getExperiences() {
-  const query = `*[_type == "experience"] | order(featured desc, name asc) {
+  const query = `*[_type == "experience" && defined(publishedAt)] | order(featured desc, name asc) {
     _id,
     name,
     slug,
@@ -509,7 +533,7 @@ export async function getExperiences() {
 
 // Fetch featured experiences
 export async function getFeaturedExperiences(limit: number = 6) {
-  const query = `*[_type == "experience" && featured == true] | order(name asc)[0...${limit}] {
+  const query = `*[_type == "experience" && featured == true && defined(publishedAt)] | order(name asc)[0...${limit}] {
     _id,
     name,
     slug,
@@ -540,7 +564,7 @@ export async function getFeaturedExperiences(limit: number = 6) {
 
 // Fetch single experience by slug
 export async function getExperienceBySlug(slug: string) {
-  const query = `*[_type == "experience" && slug.current == $slug][0] {
+  const query = `*[_type == "experience" && slug.current == $slug && defined(publishedAt)][0] {
     _id,
     name,
     slug,
@@ -581,7 +605,7 @@ export async function getExperienceBySlug(slug: string) {
 
 // Fetch all planning guides
 export async function getEssentials() {
-  const query = `*[_type == "planningGuide"] | order(featured desc, title asc) {
+  const query = `*[_type == "planningGuide" && defined(publishedAt)] | order(featured desc, title asc) {
     _id,
     title,
     slug,
@@ -608,7 +632,7 @@ export async function getEssentials() {
 
 // Fetch single essential by slug
 export async function getEssentialBySlug(slug: string) {
-  const query = `*[_type == "planningGuide" && slug.current == $slug][0] {
+  const query = `*[_type == "planningGuide" && slug.current == $slug && defined(publishedAt)][0] {
     _id,
     title,
     slug,
@@ -637,7 +661,7 @@ export async function getEssentialBySlug(slug: string) {
 
 // Fetch food
 export async function getFood() {
-  const query = `*[_type == "foodGuide"] | order(featured desc, title asc) {
+  const query = `*[_type == "foodGuide" && defined(publishedAt)] | order(featured desc, title asc) {
     _id,
     title,
     slug,
@@ -664,7 +688,7 @@ export async function getFood() {
 
 // Fetch single food item by slug
 export async function getFoodBySlug(slug: string) {
-  const query = `*[_type == "foodGuide" && slug.current == $slug][0] {
+  const query = `*[_type == "foodGuide" && slug.current == $slug && defined(publishedAt)][0] {
     _id,
     title,
     slug,
@@ -693,7 +717,7 @@ export async function getFoodBySlug(slug: string) {
 
 // Fetch all blog posts
 export async function getBlogPosts() {
-  const query = `*[_type == "blogPost"] | order(publishedAt desc) {
+  const query = `*[_type == "blogPost" && defined(publishedAt)] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -701,8 +725,7 @@ export async function getBlogPosts() {
     image,
     publishedAt,
     author,
-    category,
-    featured,
+    tags,
     seoTitle,
     seoDescription,
     seoKeywords
@@ -722,16 +745,16 @@ export async function getBlogPosts() {
 
 // Fetch single blog post by slug
 export async function getBlogPostBySlug(slug: string) {
-  const query = `*[_type == "blogPost" && slug.current == $slug][0] {
+  const query = `*[_type == "blogPost" && slug.current == $slug && defined(publishedAt)][0] {
     _id,
     title,
     slug,
     description,
-    content,
+    body,
     image,
     publishedAt,
     author,
-    category,
+    tags,
     seoTitle,
     seoDescription,
     seoKeywords
@@ -822,6 +845,73 @@ export async function getSectionPagesForNavigation() {
     return sectionPages;
   } catch (error) {
     console.error("Error fetching section pages for navigation:", error);
+    return [];
+  }
+}
+
+// Debug function to check all sectionPage documents
+export async function debugSectionPages() {
+  const query = `*[_type == "sectionPage"] {
+    _id,
+    title,
+    slug,
+    description,
+    "hasPublishedAt": defined(publishedAt),
+    "publishedAt": publishedAt,
+    "isPublished": defined(publishedAt)
+  }`;
+
+  try {
+    const sectionPages = await sanity.fetch(query);
+    console.log("All sectionPage documents:", sectionPages);
+    return sectionPages;
+  } catch (error) {
+    console.error("Error debugging section pages:", error);
+    return [];
+  }
+}
+
+// Debug function to check all destination documents
+export async function debugDestinations() {
+  const query = `*[_type == "destination"] {
+    _id,
+    name,
+    slug,
+    description,
+    "hasPublishedAt": defined(publishedAt),
+    "publishedAt": publishedAt,
+    "isPublished": defined(publishedAt)
+  }`;
+
+  try {
+    const destinations = await sanity.fetch(query);
+    console.log("All destination documents:", destinations);
+    return destinations;
+  } catch (error) {
+    console.error("Error debugging destinations:", error);
+    return [];
+  }
+}
+
+// Debug function to check all district documents
+export async function debugDistricts() {
+  const query = `*[_type == "district"] {
+    _id,
+    name,
+    slug,
+    description,
+    destination,
+    "hasPublishedAt": defined(publishedAt),
+    "publishedAt": publishedAt,
+    "isPublished": defined(publishedAt)
+  }`;
+
+  try {
+    const districts = await sanity.fetch(query);
+    console.log("All district documents:", districts);
+    return districts;
+  } catch (error) {
+    console.error("Error debugging districts:", error);
     return [];
   }
 }

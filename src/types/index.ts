@@ -5,7 +5,6 @@ export interface Destination {
   name: string;
   region: string;
   description: string;
-  longDescription?: any; // Portable Text content
   image: string;
   rating: number;
   reviewCount: number;
@@ -33,7 +32,6 @@ export interface Hotel {
 export interface District {
   name: string;
   description: string;
-  longDescription?: any; // Portable Text content
   image: string;
   rating: number;
   reviewCount: number;
@@ -83,19 +81,4 @@ export interface Shopping {
   category: string;
   description: string;
   slug: { current: string } | string;
-}
-
-export interface SectionPage {
-  _id: string;
-  title: string;
-  slug: { current: string } | string;
-  description: string;
-  longDescription?: any; // Portable Text content
-  image?: string;
-  heroTitle?: string;
-  heroSubtitle?: string;
-  content?: any; // Portable Text content
-  seoTitle?: string;
-  seoDescription?: string;
-  seoKeywords?: string[];
 }

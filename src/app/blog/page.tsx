@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import { getBlogPosts } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import AdBanner from "@/components/AdBanner";
@@ -49,10 +50,11 @@ export default async function BlogPage() {
               >
                 {post.image && (
                   <div className="relative h-48">
-                    <img
+                    <Image
                       src={post.image}
                       alt={post.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 )}

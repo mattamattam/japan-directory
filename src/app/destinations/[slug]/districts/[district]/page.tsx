@@ -4,7 +4,6 @@ import Link from "next/link";
 import { getDistrictBySlug, getDestinationBySlug } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/Button";
-import PortableText from "@/components/PortableText";
 import {
   MapPinIcon,
   StarIcon,
@@ -102,13 +101,7 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
             <div className="lg:col-span-2">
               <div className="prose prose-lg max-w-none">
                 <h2>About {district.name}</h2>
-
-                {/* Long Description if available */}
-                {district.longDescription && (
-                  <div className="mt-6">
-                    <PortableText content={district.longDescription} />
-                  </div>
-                )}
+                <p>{district.description}</p>
 
                 {district.highlights && district.highlights.length > 0 && (
                   <div className="mt-8">
@@ -123,28 +116,23 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
                   </div>
                 )}
 
-                {/* Fallback content if no long description */}
-                {!district.longDescription && (
-                  <>
-                    <div className="mt-8">
-                      <h3>Getting There</h3>
-                      <p>
-                        {district.name} is easily accessible from{" "}
-                        {destination.name} via public transportation. Consider
-                        using the Japan Rail Pass for convenient travel.
-                      </p>
-                    </div>
+                <div className="mt-8">
+                  <h3>Getting There</h3>
+                  <p>
+                    {district.name} is easily accessible from {destination.name}{" "}
+                    via public transportation. Consider using the Japan Rail
+                    Pass for convenient travel.
+                  </p>
+                </div>
 
-                    <div className="mt-8">
-                      <h3>Best Time to Visit</h3>
-                      <p>
-                        The best time to visit {district.name} depends on your
-                        interests. Spring and autumn offer pleasant weather and
-                        beautiful scenery.
-                      </p>
-                    </div>
-                  </>
-                )}
+                <div className="mt-8">
+                  <h3>Best Time to Visit</h3>
+                  <p>
+                    The best time to visit {district.name} depends on your
+                    interests. Spring and autumn offer pleasant weather and
+                    beautiful scenery.
+                  </p>
+                </div>
               </div>
             </div>
 

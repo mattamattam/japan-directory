@@ -10,11 +10,6 @@ export const metadata: Metadata = {
     "Discover the best of Japan with our comprehensive travel guide. From Tokyo to Kyoto, get insider tips, cultural insights, and practical advice for your Japan adventure.",
   keywords:
     "Japan travel, Tokyo guide, Kyoto travel, Japan tourism, Japanese culture, travel tips",
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
-  },
 };
 
 export default function RootLayout({
@@ -25,11 +20,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Favicon */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/favicon.ico" />
-
         {/* Google AdSense */}
         {process.env.NODE_ENV === "production" && (
           <script

@@ -11,7 +11,7 @@ interface SanityDestination {
   slug: { current: string } | string;
   region: string;
   description: string;
-  longDescription?: any; // Portable Text content
+  longDescription?: unknown;
   image: SanityImage;
   gallery?: SanityImage[];
   rating: number;
@@ -37,7 +37,6 @@ interface SanityDistrict {
     slug: { current: string } | string;
   };
   description: string;
-  longDescription?: any; // Portable Text content
   image: SanityImage;
   highlights?: string[];
   featured?: boolean;
@@ -147,11 +146,11 @@ interface SanitySectionPage {
   title: string;
   slug: { current: string } | string;
   description: string;
-  longDescription?: any; // Portable Text content
+  longDescription?: unknown;
   image: SanityImage;
   heroTitle?: string;
   heroSubtitle?: string;
-  content?: any; // Portable Text content
+  content?: unknown;
   seoTitle?: string;
   seoDescription?: string;
   seoKeywords?: string[];
@@ -282,7 +281,7 @@ export async function getDestinations(sortBy: string = "featured") {
       break;
   }
 
-  const query = `*[_type == "destination"] ${orderClause} {
+  const query = `*[_type == "destination" && defined(publishedAt)] ${orderClause} {
     _id,
     name,
     slug,
@@ -339,7 +338,7 @@ export async function getFeaturedDestinations(limit: number = 3) {
 
 // Fetch single destination by slug
 export async function getDestinationBySlug(slug: string) {
-  const query = `*[_type == "destination" && slug.current == $slug][0] {
+  const query = `*[_type == "destination" && slug.current == $slug && defined(publishedAt)][0] {
     _id,
     name,
     slug,
@@ -425,7 +424,7 @@ export async function getNavigationData() {
 // Fetch districts by destination
 export async function getDistrictsByDestination(destinationSlug: string) {
   // First, get the destination ID
-  const destinationQuery = `*[_type == "destination" && slug.current == $destinationSlug][0] {
+  const destinationQuery = `*[_type == "destination" && slug.current == $destinationSlug && defined(publishedAt)][0] {
     _id
   }`;
 
@@ -440,12 +439,11 @@ export async function getDistrictsByDestination(destinationSlug: string) {
     }
 
     // Then get districts for this destination
-    const districtsQuery = `*[_type == "district" && destination._ref == $destinationId] | order(name asc) {
+    const districtsQuery = `*[_type == "district" && destination._ref == $destinationId && defined(publishedAt)] | order(name asc) {
       _id,
       name,
       slug,
       description,
-      longDescription,
       image,
       highlights,
       featured
@@ -467,12 +465,11 @@ export async function getDistrictsByDestination(destinationSlug: string) {
 
 // Fetch single district by slug
 export async function getDistrictBySlug(slug: string) {
-  const query = `*[_type == "district" && slug.current == $slug][0] {
+  const query = `*[_type == "district" && slug.current == $slug && defined(publishedAt)][0] {
     _id,
     name,
     slug,
     description,
-    longDescription,
     image,
     highlights,
     destination->{
@@ -776,7 +773,7 @@ export async function getBlogPostBySlug(slug: string) {
 
 // Fetch section page by slug
 export async function getSectionPageBySlug(slug: string) {
-  const query = `*[_type == "sectionPage" && slug.current == $slug][0] {
+  const query = `*[_type == "sectionPage" && slug.current == $slug && defined(publishedAt)][0] {
     _id,
     title,
     slug,
@@ -807,7 +804,7 @@ export async function getSectionPageBySlug(slug: string) {
 
 // Fetch all section pages
 export async function getSectionPages() {
-  const query = `*[_type == "sectionPage"] | order(title asc) {
+  const query = `*[_type == "sectionPage" && defined(publishedAt)] | order(title asc) {
     _id,
     title,
     slug,
@@ -832,7 +829,7 @@ export async function getSectionPages() {
 
 // Fetch section pages for navigation (excluding destinations)
 export async function getSectionPagesForNavigation() {
-  const query = `*[_type == "sectionPage" && slug.current != "destinations"] | order(sortOrder asc, title asc) {
+  const query = `*[_type == "sectionPage" && slug.current != "destinations" && defined(publishedAt)] | order(sortOrder asc, title asc) {
     _id,
     title,
     slug,
@@ -845,73 +842,6 @@ export async function getSectionPagesForNavigation() {
     return sectionPages;
   } catch (error) {
     console.error("Error fetching section pages for navigation:", error);
-    return [];
-  }
-}
-
-// Debug function to check all sectionPage documents
-export async function debugSectionPages() {
-  const query = `*[_type == "sectionPage"] {
-    _id,
-    title,
-    slug,
-    description,
-    "hasPublishedAt": defined(publishedAt),
-    "publishedAt": publishedAt,
-    "isPublished": defined(publishedAt)
-  }`;
-
-  try {
-    const sectionPages = await sanity.fetch(query);
-    console.log("All sectionPage documents:", sectionPages);
-    return sectionPages;
-  } catch (error) {
-    console.error("Error debugging section pages:", error);
-    return [];
-  }
-}
-
-// Debug function to check all destination documents
-export async function debugDestinations() {
-  const query = `*[_type == "destination"] {
-    _id,
-    name,
-    slug,
-    description,
-    "hasPublishedAt": defined(publishedAt),
-    "publishedAt": publishedAt,
-    "isPublished": defined(publishedAt)
-  }`;
-
-  try {
-    const destinations = await sanity.fetch(query);
-    console.log("All destination documents:", destinations);
-    return destinations;
-  } catch (error) {
-    console.error("Error debugging destinations:", error);
-    return [];
-  }
-}
-
-// Debug function to check all district documents
-export async function debugDistricts() {
-  const query = `*[_type == "district"] {
-    _id,
-    name,
-    slug,
-    description,
-    destination,
-    "hasPublishedAt": defined(publishedAt),
-    "publishedAt": publishedAt,
-    "isPublished": defined(publishedAt)
-  }`;
-
-  try {
-    const districts = await sanity.fetch(query);
-    console.log("All district documents:", districts);
-    return districts;
-  } catch (error) {
-    console.error("Error debugging districts:", error);
     return [];
   }
 }

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getBlogPostBySlug, getBlogPosts } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
@@ -145,10 +146,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         {/* Hero Section */}
         {post.image && (
           <div className="relative h-96 w-full">
-            <img
+            <Image
               src={post.image}
               alt={post.title}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              priority
             />
             <div className="absolute inset-0 bg-black bg-opacity-40"></div>
           </div>

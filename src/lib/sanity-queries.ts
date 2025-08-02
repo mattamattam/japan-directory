@@ -338,7 +338,7 @@ export async function getFeaturedDestinations(limit: number = 3) {
 
 // Fetch single destination by slug
 export async function getDestinationBySlug(slug: string) {
-  const query = `*[_type == "destination" && slug.current == $slug && defined(publishedAt)][0] {
+  const query = `*[_type == "destination" && slug.current == $slug][0] {
     _id,
     name,
     slug,
@@ -424,7 +424,7 @@ export async function getNavigationData() {
 // Fetch districts by destination
 export async function getDistrictsByDestination(destinationSlug: string) {
   // First, get the destination ID
-  const destinationQuery = `*[_type == "destination" && slug.current == $destinationSlug && defined(publishedAt)][0] {
+  const destinationQuery = `*[_type == "destination" && slug.current == $destinationSlug][0] {
     _id
   }`;
 
@@ -439,7 +439,7 @@ export async function getDistrictsByDestination(destinationSlug: string) {
     }
 
     // Then get districts for this destination
-    const districtsQuery = `*[_type == "district" && destination._ref == $destinationId && defined(publishedAt)] | order(name asc) {
+    const districtsQuery = `*[_type == "district" && destination._ref == $destinationId] | order(name asc) {
       _id,
       name,
       slug,
@@ -465,7 +465,7 @@ export async function getDistrictsByDestination(destinationSlug: string) {
 
 // Fetch single district by slug
 export async function getDistrictBySlug(slug: string) {
-  const query = `*[_type == "district" && slug.current == $slug && defined(publishedAt)][0] {
+  const query = `*[_type == "district" && slug.current == $slug][0] {
     _id,
     name,
     slug,

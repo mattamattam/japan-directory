@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: DestinationPageProps) {
 }
 
 export async function generateStaticParams() {
-  const destinations = await getDestinations();
+  const destinations = await getDestinations("featured");
   if (destinations.length === 0) {
     return [
       { slug: "tokyo" },

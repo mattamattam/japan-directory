@@ -96,7 +96,9 @@ export default function ContactForm() {
               d="M5 13l4 4L19 7"
             />
           </svg>
-          <span>Message sent successfully! We'll get back to you soon.</span>
+          <span>
+            Message sent successfully! We&apos;ll get back to you soon.
+          </span>
           <button
             onClick={() => setShowToast(false)}
             className="ml-4 text-white hover:text-gray-200"

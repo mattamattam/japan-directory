@@ -3,7 +3,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Under Construction - Japan Directory",
   description:
-    "We're working hard to bring you the best Japan travel guide. Check back soon!",
+    "We&apos;re working hard to bring you the best Japan travel guide. Check back soon!",
 };
 
 export default function MaintenancePage() {
@@ -42,11 +42,13 @@ export default function MaintenancePage() {
         </h1>
 
         <p className="text-xl md:text-2xl mb-8 text-blue-100">
-          We're building something amazing for your Japan adventure!
+          We&apos;re building something amazing for your Japan adventure!
         </p>
 
         <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-semibold mb-4">What's Coming Soon</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            What&apos;s Coming Soon
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
             <div className="flex items-start space-x-3">
               <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
@@ -62,7 +64,7 @@ export default function MaintenancePage() {
               <div>
                 <h3 className="font-semibold">Interactive Maps</h3>
                 <p className="text-sm text-blue-100">
-                  Explore Japan's best locations
+                  Explore Japan&apos;s best locations
                 </p>
               </div>
             </div>

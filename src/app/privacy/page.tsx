@@ -1,0 +1,264 @@
+import { Metadata } from "next";
+import Breadcrumb from "@/components/Breadcrumb";
+import Layout from "@/components/Layout";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy - Visit Japan HQ",
+  description:
+    "Our privacy policy explains how we collect, use, and protect your information when you visit our Japan travel website.",
+};
+
+export default function PrivacyPolicy() {
+  return (
+    <Layout>
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          {
+            label: "Privacy Policy",
+          },
+        ]}
+      />
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-gray-600 to-gray-800 text-white py-16">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+              Privacy Policy
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-gray-100">
+              How we collect, use, and protect your information
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="py-16 bg-gray-50">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <div className="bg-white rounded-lg shadow-sm p-8">
+            <p className="text-sm text-gray-500 mb-8 border-b border-gray-200 pb-4">
+              Last updated:{" "}
+              {new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    1
+                  </span>
+                  Information We Collect
+                </h2>
+                <p>
+                  We collect information you provide directly to us, such as
+                  when you:
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>Contact us through our website</li>
+                  <li>Subscribe to our newsletter</li>
+                  <li>Leave comments or feedback</li>
+                  <li>Sign up for our services</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    2
+                  </span>
+                  Automatically Collected Information
+                </h2>
+                <p>
+                  When you visit our website, we automatically collect certain
+                  information about your device, including:
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>IP address and location data</li>
+                  <li>Browser type and version</li>
+                  <li>Operating system</li>
+                  <li>Pages visited and time spent</li>
+                  <li>Referring website</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    3
+                  </span>
+                  Cookies and Tracking Technologies
+                </h2>
+                <p>We use cookies and similar tracking technologies to:</p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>Remember your preferences</li>
+                  <li>Analyze website traffic</li>
+                  <li>Improve our services</li>
+                  <li>Provide personalized content</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    4
+                  </span>
+                  How We Use Your Information
+                </h2>
+                <p>We use the information we collect to:</p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>Provide and maintain our services</li>
+                  <li>Improve our website and user experience</li>
+                  <li>Send you updates and newsletters (with your consent)</li>
+                  <li>Respond to your inquiries and support requests</li>
+                  <li>Analyze usage patterns and trends</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    5
+                  </span>
+                  Information Sharing
+                </h2>
+                <p>
+                  We do not sell, trade, or otherwise transfer your personal
+                  information to third parties, except:
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>With your explicit consent</li>
+                  <li>To comply with legal obligations</li>
+                  <li>To protect our rights and safety</li>
+                  <li>
+                    With trusted service providers who assist in operating our
+                    website
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    6
+                  </span>
+                  Data Security
+                </h2>
+                <p>
+                  We implement appropriate security measures to protect your
+                  personal information against unauthorized access, alteration,
+                  disclosure, or destruction.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    7
+                  </span>
+                  Third-Party Services
+                </h2>
+                <p>
+                  Our website may contain links to third-party websites and
+                  services. We are not responsible for the privacy practices of
+                  these external sites.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    8
+                  </span>
+                  Google Analytics and Advertising
+                </h2>
+                <p>
+                  We use Google Analytics to understand how visitors use our
+                  website. Google may use the data collected to personalize ads.
+                  You can opt out of Google Analytics tracking.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    9
+                  </span>
+                  Your Rights
+                </h2>
+                <p>You have the right to:</p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>Access your personal information</li>
+                  <li>Correct inaccurate information</li>
+                  <li>Request deletion of your data</li>
+                  <li>Opt out of marketing communications</li>
+                  <li>Withdraw consent at any time</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    10
+                  </span>
+                  Children&apos;s Privacy
+                </h2>
+                <p>
+                  Our website is not intended for children under 13. We do not
+                  knowingly collect personal information from children under 13.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    11
+                  </span>
+                  International Data Transfers
+                </h2>
+                <p>
+                  Your information may be transferred to and processed in
+                  countries other than your own. We ensure appropriate
+                  safeguards are in place.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    12
+                  </span>
+                  Changes to This Policy
+                </h2>
+                <p>
+                  We may update this privacy policy from time to time. We will
+                  notify you of any changes by posting the new policy on this
+                  page.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    13
+                  </span>
+                  Contact Us
+                </h2>
+                <p>
+                  If you have any questions about this privacy policy, please
+                  contact us at:
+                </p>
+                <p>Email: privacy@visitjapanhq.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+}

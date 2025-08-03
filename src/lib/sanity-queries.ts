@@ -586,7 +586,7 @@ export async function getExperienceBySlug(slug: string) {
 
 // Fetch all planning guides
 export async function getEssentials() {
-  const query = `*[_type == "planningGuide" && defined(publishedAt)] | order(featured desc, title asc) {
+  const query = `*[_type == "essentials" && !(_id in path("drafts.**"))] | order(featured desc, title asc) {
     _id,
     title,
     slug,
@@ -613,11 +613,12 @@ export async function getEssentials() {
 
 // Fetch single essential by slug
 export async function getEssentialBySlug(slug: string) {
-  const query = `*[_type == "planningGuide" && slug.current == $slug && defined(publishedAt)][0] {
+  const query = `*[_type == "essentials" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
     _id,
     title,
     slug,
     description,
+    longDescription,
     content,
     image,
     category,

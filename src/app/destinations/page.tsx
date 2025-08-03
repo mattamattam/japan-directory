@@ -3,6 +3,7 @@ import { getDestinations } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import DestinationCard from "@/components/DestinationCard";
 import Breadcrumb from "@/components/Breadcrumb";
+import AdBanner from "@/components/AdBanner";
 import {
   CalendarIcon,
   MapPinIcon,
@@ -56,9 +57,7 @@ export default async function DestinationsPage() {
       {/* Google AdSense Banner */}
       <section className="bg-white py-8">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="bg-gray-100 h-20 flex items-center justify-center rounded-lg">
-            <p className="text-gray-500 text-sm">Google AdSense Banner</p>
-          </div>
+          <AdBanner adSlot="destinations-page-banner" adFormat="banner" />
         </div>
       </section>
 
@@ -129,9 +128,7 @@ export default async function DestinationsPage() {
       {/* Google AdSense Banner */}
       <section className="bg-gray-50 py-8">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="bg-gray-100 h-20 flex items-center justify-center rounded-lg">
-            <p className="text-gray-500 text-sm">Google AdSense Banner</p>
-          </div>
+          <AdBanner adSlot="destinations-page-footer" adFormat="banner" />
         </div>
       </section>
 

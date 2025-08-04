@@ -268,7 +268,11 @@ function WeatherWidget() {
 }
 
 // Main Header Widgets Component
-export default function HeaderWidgets() {
+export default function HeaderWidgets({
+  showExchangeRate = true,
+}: {
+  showExchangeRate?: boolean;
+}) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -279,9 +283,11 @@ export default function HeaderWidgets() {
   if (!mounted) {
     return (
       <div className="hidden lg:flex items-center space-x-4">
-        <div className="flex items-center space-x-2 text-xs">
-          <span className="text-gray-400">USD/JPY: --</span>
-        </div>
+        {showExchangeRate && (
+          <div className="flex items-center space-x-2 text-xs">
+            <span className="text-gray-400">USD/JPY: --</span>
+          </div>
+        )}
         <div className="w-px h-4 bg-gray-300"></div>
         <div className="flex items-center space-x-2 text-xs">
           <span className="text-gray-400">Weather: --</span>
@@ -292,7 +298,7 @@ export default function HeaderWidgets() {
 
   return (
     <div className="hidden lg:flex items-center space-x-4">
-      <CompactExchangeRate />
+      {showExchangeRate && <CompactExchangeRate />}
       {/* <div className="w-px h-4 bg-gray-300"></div>
       <WeatherWidget /> */}
     </div>

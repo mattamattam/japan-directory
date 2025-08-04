@@ -135,7 +135,7 @@ export default function Header({ navigationData, sectionPages }: HeaderProps) {
 
         {/* Header Widgets */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <HeaderWidgets />
+          <HeaderWidgets showExchangeRate={pathname === "/"} />
         </div>
       </nav>
 

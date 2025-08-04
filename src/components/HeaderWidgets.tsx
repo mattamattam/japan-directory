@@ -21,12 +21,15 @@ function CompactExchangeRate() {
   const [shouldStop, setShouldStop] = useState(false);
 
   // Currencies to rotate through (JPY to other currencies)
-  const currencies = [
-    { code: "USD", symbol: "$", name: "US Dollar" },
-    { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
-    { code: "EUR", symbol: "€", name: "Euro" },
-    { code: "GBP", symbol: "£", name: "British Pound" },
-  ];
+  const currencies = React.useMemo(
+    () => [
+      { code: "USD", symbol: "$", name: "US Dollar" },
+      { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
+      { code: "EUR", symbol: "€", name: "Euro" },
+      { code: "GBP", symbol: "£", name: "British Pound" },
+    ],
+    []
+  );
 
   // Configurable display duration (6.5 seconds default)
   const DISPLAY_DURATION = 6500; // 6.5 seconds per currency
@@ -75,7 +78,7 @@ function CompactExchangeRate() {
     }, DISPLAY_DURATION);
 
     return () => clearInterval(interval);
-  }, [mounted, currencies.length, currentCurrencyIndex, shouldStop]);
+  }, [mounted, currencies, currentCurrencyIndex, shouldStop]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -103,7 +106,7 @@ function CompactExchangeRate() {
       }
     }
     fetchRate();
-  }, [mounted, currentCurrencyIndex]);
+  }, [mounted, currencies, currentCurrencyIndex]);
 
   if (!mounted) return null;
 
@@ -190,16 +193,13 @@ function WeatherWidget() {
     async function fetchAllWeather() {
       try {
         setLoading(true);
-        console.log("Fetching weather data..."); // Debug
 
         // Fetch all weather data from our proxy API
         const response = await fetch("/api/weather");
-        console.log("Weather response status:", response.status); // Debug
 
         if (!response.ok) throw new Error("Weather API failed");
 
         const data = await response.json();
-        console.log("Weather data received:", data); // Debug
 
         if (data.cities) {
           // Convert array to object for easier lookup
@@ -210,8 +210,6 @@ function WeatherWidget() {
             return acc;
           }, {});
 
-          console.log("Weather object created:", weatherObject); // Debug
-          console.log("Sample weather data for Tokyo:", weatherObject.Tokyo); // Debug
           setWeatherData(weatherObject);
         }
       } catch (error) {
@@ -228,8 +226,6 @@ function WeatherWidget() {
 
   const currentCity = cities[currentCityIndex];
   const weather = weatherData[currentCity.name];
-  console.log("Current city:", currentCity.name); // Debug
-  console.log("Weather for current city:", weather); // Debug
 
   const getWeatherIcon = (weatherCode: number) => {
     if (weatherCode >= 200 && weatherCode < 600) return CloudIcon; // Rain/storm

@@ -97,7 +97,6 @@ export const searchPlace = async (
         const placeId = btoa(searchQuery).replace(/[^a-zA-Z0-9]/g, "");
         const cached = getCachedPlace(placeId);
         if (cached) {
-          console.log("Using cached result for:", landmark);
           return cached;
         }
 
@@ -114,7 +113,6 @@ export const searchPlace = async (
 
         // Check for the presence of rating to confirm success from proxy
         if (data.rating !== undefined) {
-          console.log("Found ratings for landmark:", landmark);
           // Cache the result using a hash of the query as place_id
           setCachedPlace(placeId, data);
           return data;
@@ -122,7 +120,6 @@ export const searchPlace = async (
       }
 
       // If no landmarks returned ratings, fall back to the original query
-      console.log("No landmarks returned ratings, trying original query");
     }
 
     // Fallback to original search logic

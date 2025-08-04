@@ -174,121 +174,9 @@ function imageUrlBuilder(
   return `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${fileId}.${fileExtension}?w=${width}&h=${height}&fit=crop`;
 }
 
-// Debug function to test Sanity connection
-export async function testSanityConnection() {
-  try {
-    console.log("Testing Sanity connection...");
-    console.log("Project ID:", process.env.NEXT_PUBLIC_SANITY_PROJECT_ID);
-    console.log("Dataset:", process.env.NEXT_PUBLIC_SANITY_DATASET);
-    console.log("Token configured:", !!process.env.SANITY_API_TOKEN);
-
-    // Test with a simple query
-    const testQuery = `*[_type == "destination"] | order(_createdAt desc)[0...5] {
-      _id,
-      _type,
-      name,
-      slug
-    }`;
-
-    const results = await sanity.fetch(testQuery);
-    console.log("Test query results:", results);
-    return results;
-  } catch (error) {
-    console.error("Sanity connection test failed:", error);
-    return null;
-  }
-}
-
-// Query to discover all available document types
-export async function getAvailableDocumentTypes() {
-  // First, let's try to get all document types
-  const allTypesQuery = `*[_type in ["destination", "hotel", "tip", "district", "restaurant", "transportation", "insurance", "guide", "event", "language", "blog", "page", "author", "category", "tour", "article", "service", "faq", "testimonial", "partner", "sponsor"] && defined(publishedAt)] {
-    _type,
-    _id,
-    name,
-    title,
-    slug
-  }`;
-
-  try {
-    const results = await sanity.fetch(allTypesQuery);
-
-    // Group by document type
-    const groupedResults = results.reduce((acc: any, doc: any) => {
-      if (!acc[doc._type]) {
-        acc[doc._type] = [];
-      }
-      acc[doc._type].push(doc);
-      return acc;
-    }, {});
-
-    console.log(
-      "Available document types in Sanity:",
-      Object.keys(groupedResults)
-    );
-    console.log(
-      "Document counts:",
-      Object.keys(groupedResults).map(
-        (type) => `${type}: ${groupedResults[type].length}`
-      )
-    );
-
-    return groupedResults;
-  } catch (error) {
-    console.error("Error fetching document types:", error);
-    return {};
-  }
-}
-
-// Query to get all document types (more comprehensive)
-export async function getAllDocumentTypes() {
-  const query = `*[_type in ["destination", "tip", "district", "experience", "planningGuide", "foodGuide", "blogPost"] && defined(publishedAt)] {
-    _type,
-    _id,
-    name,
-    title,
-    slug,
-    "hasContent": defined(content),
-    "hasImage": defined(image),
-    "hasDescription": defined(description)
-  }`;
-
-  try {
-    const results = await sanity.fetch(query);
-
-    // Group by document type and analyze structure
-    const groupedResults = results.reduce((acc: any, doc: any) => {
-      if (!acc[doc._type]) {
-        acc[doc._type] = {
-          count: 0,
-          documents: [],
-          hasContent: false,
-          hasImage: false,
-          hasDescription: false,
-        };
-      }
-      acc[doc._type].count++;
-      acc[doc._type].documents.push(doc);
-      acc[doc._type].hasContent = acc[doc._type].hasContent || doc.hasContent;
-      acc[doc._type].hasImage = acc[doc._type].hasImage || doc.hasImage;
-      acc[doc._type].hasDescription =
-        acc[doc._type].hasDescription || doc.hasDescription;
-      return acc;
-    }, {});
-
-    console.log("Comprehensive document type analysis:", groupedResults);
-
-    return groupedResults;
-  } catch (error) {
-    console.error("Error fetching all document types:", error);
-    return {};
-  }
-}
-
 // Fetch all destinations
 export async function getDestinations() {
-  // First, let's try a broader query to see what's available
-  const debugQuery = `*[_type == "destination"] {
+  const query = `*[_type == "destination" && !(_id in path("drafts.**"))] | order(sortOrder asc, featured desc, name asc) {
     _id,
     name,
     slug,
@@ -301,33 +189,12 @@ export async function getDestinations() {
     highlights,
     bestTime,
     featured,
-    sortOrder,
-    "isDraft": _id in path("drafts.**")
+    sortOrder
   }`;
 
   try {
-    console.log("Fetching destinations from Sanity...");
-    const allDestinations = await sanity.fetch(debugQuery);
-    console.log("All destinations found:", allDestinations.length);
-    console.log("Destinations:", allDestinations);
-
-    // Filter out drafts and map the results
-    const publishedDestinations = allDestinations
-      .filter((dest: any) => !dest.isDraft)
-      .sort((a: any, b: any) => {
-        // Sort by sortOrder, then featured, then name
-        if (a.sortOrder !== b.sortOrder) {
-          return (a.sortOrder || 999) - (b.sortOrder || 999);
-        }
-        if (a.featured !== b.featured) {
-          return b.featured ? 1 : -1;
-        }
-        return a.name.localeCompare(b.name);
-      });
-
-    console.log("Published destinations:", publishedDestinations.length);
-
-    return publishedDestinations.map((dest: SanityDestination) => ({
+    const destinations = await sanity.fetch(query);
+    return destinations.map((dest: SanityDestination) => ({
       ...dest,
       image: imageUrlBuilder(dest.image, 800, 600),
     }));
@@ -463,7 +330,6 @@ export async function getDistrictsByDestination(destinationSlug: string) {
     });
 
     if (!destination) {
-      console.log(`No destination found for slug: ${destinationSlug}`);
       return [];
     }
 

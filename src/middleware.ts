@@ -14,8 +14,20 @@ export function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/images") ||
     request.nextUrl.pathname.includes(".");
 
+  // Check for maintenance override secret
+  const maintenanceOverride = request.nextUrl.searchParams.get(
+    "maintenance_override"
+  );
+  const isOverrideValid =
+    maintenanceOverride === process.env.MAINTENANCE_OVERRIDE_SECRET;
+
   // If maintenance mode is enabled and not accessing allowed routes
   if (isMaintenanceMode && !isMaintenancePage && !isApiRoute && !isStaticFile) {
+    // Allow access if override secret is provided
+    if (isOverrideValid) {
+      return NextResponse.next();
+    }
+
     // Redirect to maintenance page
     return NextResponse.redirect(new URL("/maintenance", request.url));
   }

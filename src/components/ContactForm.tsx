@@ -41,7 +41,7 @@ export default function ContactForm() {
     setIsSubmitting(true);
 
     try {
-      // Send email using secure API route
+      // Send email using our proxy API
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {

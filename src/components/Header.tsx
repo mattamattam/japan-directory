@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import HeaderWidgets from "./HeaderWidgets";
 
 // Types for navigation data
 interface NavigationDestination {
@@ -132,8 +133,10 @@ export default function Header({ navigationData, sectionPages }: HeaderProps) {
           ))}
         </div>
 
-        {/* Empty div for flex spacing */}
-        <div className="hidden lg:flex lg:flex-1"></div>
+        {/* Header Widgets */}
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <HeaderWidgets />
+        </div>
       </nav>
 
       {/* Mobile menu */}

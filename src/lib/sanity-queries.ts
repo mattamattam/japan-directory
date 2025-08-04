@@ -274,6 +274,27 @@ export async function getDestinationBySlug(slug: string) {
   }
 }
 
+// Fetch top destinations for footer
+export async function getFooterDestinations(limit: number = 5) {
+  const query = `*[_type == "destination" && !(_id in path("drafts.**"))] | order(sortOrder asc, featured desc, name asc)[0...${limit}] {
+    _id,
+    name,
+    slug
+  }`;
+
+  try {
+    const destinations = await sanity.fetch(query);
+    return destinations.map((dest: SanityDestination) => ({
+      _id: dest._id,
+      name: dest.name,
+      slug: dest.slug,
+    }));
+  } catch (error) {
+    console.error("Error fetching footer destinations:", error);
+    return [];
+  }
+}
+
 // Fetch navigation data for header
 export async function getNavigationData() {
   try {

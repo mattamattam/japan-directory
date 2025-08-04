@@ -1,5 +1,12 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { getFooterDestinations } from "@/lib/sanity-queries";
+
+interface FooterDestination {
+  _id: string;
+  name: string;
+  slug: { current: string };
+}
 
 const navigation = {
   destinations: [
@@ -32,7 +39,10 @@ const navigation = {
   ],
 };
 
-export default function Footer() {
+export default async function Footer() {
+  // Fetch footer destinations from Sanity
+  const footerDestinations = await getFooterDestinations(5);
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
@@ -97,16 +107,24 @@ export default function Footer() {
                   Destinations
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
-                  {navigation.destinations.map((item) => (
-                    <li key={item.name}>
+                  {footerDestinations.map((destination: FooterDestination) => (
+                    <li key={destination._id}>
                       <Link
-                        href={item.href}
+                        href={`/destinations/${destination.slug.current}`}
                         className="text-sm leading-6 text-gray-300 hover:text-white"
                       >
-                        {item.name}
+                        {destination.name}
                       </Link>
                     </li>
                   ))}
+                  <li>
+                    <Link
+                      href="/destinations"
+                      className="text-sm leading-6 text-red-400 hover:text-red-300 font-medium"
+                    >
+                      See all destinations →
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
@@ -148,11 +166,8 @@ export default function Footer() {
         {/* Affiliate Disclosure */}
         <div className="mt-16 border-t border-gray-800 pt-8">
           <p className="text-xs text-gray-400">
-            <strong>Affiliate Disclosure:</strong> This website contains
-            affiliate links. We may earn a commission when you click on or make
-            purchases through these links at no additional cost to you. This
-            helps support our website and allows us to continue providing free
-            travel information.
+            <strong>Affiliate Disclosure:</strong> We may earn commissions from
+            purchases made through links on this site.
           </p>
         </div>
 

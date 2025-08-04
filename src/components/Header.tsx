@@ -55,6 +55,7 @@ export default function Header({ navigationData, sectionPages }: HeaderProps) {
     { name: "Essentials", href: "/essentials" },
     { name: "Itineraries", href: "/itineraries" },
     { name: "Blog", href: "/blog" },
+    { name: "About Us", href: "/about" },
   ];
 
   // Use section pages if available, otherwise use fallback

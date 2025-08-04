@@ -53,6 +53,20 @@ export default function PrivacyPolicy() {
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
                     1
                   </span>
+                  Data Controller
+                </h2>
+                <p>
+                  Visit Japan HQ is the data controller for the information
+                  collected on this site. We are responsible for determining how
+                  and why your personal information is processed.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    2
+                  </span>
                   Information We Collect
                 </h2>
                 <p>
@@ -70,7 +84,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    2
+                    3
                   </span>
                   Automatically Collected Information
                 </h2>
@@ -90,7 +104,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    3
+                    4
                   </span>
                   Cookies and Tracking Technologies
                 </h2>
@@ -101,12 +115,27 @@ export default function PrivacyPolicy() {
                   <li>Improve our services</li>
                   <li>Provide personalized content</li>
                 </ul>
+                <p className="mt-3 text-gray-700">
+                  <strong>Managing Cookie Preferences:</strong> You can manage
+                  your cookie preferences through your browser settings. Most
+                  browsers allow you to block or delete cookies. You can also
+                  opt out of Google Analytics tracking by installing the Google
+                  Analytics Opt-out Browser Add-on. For more information about
+                  managing cookies, please visit
+                  <a
+                    href="https://www.allaboutcookies.org"
+                    className="text-red-600 hover:text-red-700 underline ml-1"
+                  >
+                    allaboutcookies.org
+                  </a>
+                  .
+                </p>
               </div>
 
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    4
+                    5
                   </span>
                   How We Use Your Information
                 </h2>
@@ -123,7 +152,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    5
+                    6
                   </span>
                   Information Sharing
                 </h2>
@@ -145,7 +174,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    6
+                    7
                   </span>
                   Data Security
                 </h2>
@@ -159,7 +188,43 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    7
+                    8
+                  </span>
+                  Data Retention Policy
+                </h2>
+                <p>
+                  We retain your personal information for the following periods:
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>
+                    <strong>Newsletter subscriptions:</strong> Until you
+                    unsubscribe or request deletion
+                  </li>
+                  <li>
+                    <strong>Contact form submissions:</strong> 2 years from the
+                    date of submission
+                  </li>
+                  <li>
+                    <strong>Website analytics data:</strong> 26 months (Google
+                    Analytics standard)
+                  </li>
+                  <li>
+                    <strong>Server logs:</strong> 90 days for security and
+                    debugging purposes
+                  </li>
+                </ul>
+                <p className="mt-3 text-gray-700">
+                  We will delete your personal information when it is no longer
+                  needed for the purposes for which it was collected, or when
+                  you request deletion. You can request deletion of your data at
+                  any time by contacting us.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    9
                   </span>
                   Third-Party Services
                 </h2>
@@ -173,7 +238,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    8
+                    10
                   </span>
                   Google Analytics and Advertising
                 </h2>
@@ -187,7 +252,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    9
+                    11
                   </span>
                   Your Rights
                 </h2>
@@ -204,7 +269,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    10
+                    12
                   </span>
                   Children&apos;s Privacy
                 </h2>
@@ -217,7 +282,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    11
+                    13
                   </span>
                   International Data Transfers
                 </h2>
@@ -231,7 +296,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    12
+                    14
                   </span>
                   Changes to This Policy
                 </h2>
@@ -245,15 +310,44 @@ export default function PrivacyPolicy() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    13
+                    15
                   </span>
                   Contact Us
                 </h2>
                 <p>
-                  If you have any questions about this privacy policy, please
-                  contact us at:
+                  If you have any questions about this privacy policy or would
+                  like to exercise your data rights, please contact us using one
+                  of the following methods:
                 </p>
-                <p>Email: privacy@visitjapanhq.com</p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>
+                    <strong>Email:</strong> privacy@visitjapanhq.com
+                  </li>
+                  <li>
+                    <strong>Contact Form:</strong>{" "}
+                    <a
+                      href="/contact"
+                      className="text-red-600 hover:text-red-700 underline"
+                    >
+                      Visit our contact page
+                    </a>
+                  </li>
+                  <li>
+                    <strong>Data Request Form:</strong> For specific data
+                    access, correction, or deletion requests, please use our{" "}
+                    <a
+                      href="/contact"
+                      className="text-red-600 hover:text-red-700 underline"
+                    >
+                      contact form
+                    </a>{" "}
+                    and specify your request type.
+                  </li>
+                </ul>
+                <p className="mt-3 text-gray-700">
+                  We will respond to your privacy-related inquiries within 30
+                  days of receiving your request.
+                </p>
               </div>
             </div>
           </div>

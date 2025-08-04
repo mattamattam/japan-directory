@@ -39,7 +39,14 @@ export default function TermsOfService() {
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
           <div className="bg-white rounded-lg shadow-sm p-8">
             <p className="text-sm text-gray-500 mb-8 border-b border-gray-200 pb-4">
-              Last updated:{" "}
+              <strong>Effective Date:</strong>{" "}
+              {new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+              <br />
+              <strong>Last Updated:</strong>{" "}
               {new Date().toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -190,8 +197,11 @@ export default function TermsOfService() {
                 </h2>
                 <p>
                   These terms and conditions are governed by and construed in
-                  accordance with the laws and you irrevocably submit to the
-                  exclusive jurisdiction of the courts in that location.
+                  accordance with the laws of the State of California, United
+                  States of America, without regard to its conflict of law
+                  provisions. You irrevocably submit to the exclusive
+                  jurisdiction of the courts in California, USA for the
+                  resolution of any disputes.
                 </p>
               </div>
 
@@ -199,6 +209,29 @@ export default function TermsOfService() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
                     9
+                  </span>
+                  Dispute Resolution
+                </h2>
+                <p>
+                  Any dispute arising out of or relating to these Terms of
+                  Service or your use of the Website shall be resolved through
+                  binding arbitration in accordance with the rules of the
+                  American Arbitration Association. The arbitration shall be
+                  conducted in California, USA, and the decision of the
+                  arbitrator shall be final and binding.
+                </p>
+                <p className="mt-3 text-gray-700">
+                  Notwithstanding the foregoing, either party may seek
+                  injunctive relief in a court of competent jurisdiction in
+                  California, USA, to prevent irreparable harm or to preserve
+                  the status quo pending arbitration.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    10
                   </span>
                   User Conduct
                 </h2>
@@ -215,7 +248,7 @@ export default function TermsOfService() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    10
+                    11
                   </span>
                   Intellectual Property
                 </h2>
@@ -230,7 +263,7 @@ export default function TermsOfService() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    11
+                    12
                   </span>
                   Privacy Policy
                 </h2>
@@ -244,7 +277,40 @@ export default function TermsOfService() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    12
+                    13
+                  </span>
+                  User-Generated Content
+                </h2>
+                <p>
+                  If you submit any content to our Website, including but not
+                  limited to reviews, comments, or feedback, you grant Visit
+                  Japan HQ a non-exclusive, worldwide, royalty-free license to
+                  use, reproduce, modify, and distribute such content.
+                </p>
+                <p className="mt-3 text-gray-700">
+                  You represent and warrant that any content you submit:
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>
+                    Is original or you have the right to grant the license
+                  </li>
+                  <li>Does not violate any third-party rights</li>
+                  <li>
+                    Is not defamatory, obscene, or otherwise objectionable
+                  </li>
+                  <li>Complies with all applicable laws and regulations</li>
+                </ul>
+                <p className="mt-3 text-gray-700">
+                  Visit Japan HQ reserves the right to remove any user-generated
+                  content that violates these terms or is otherwise
+                  inappropriate, without prior notice.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    14
                   </span>
                   Termination
                 </h2>
@@ -258,7 +324,7 @@ export default function TermsOfService() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    13
+                    15
                   </span>
                   Limitation of Liability
                 </h2>
@@ -275,7 +341,7 @@ export default function TermsOfService() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    14
+                    16
                   </span>
                   Indemnification
                 </h2>
@@ -292,7 +358,7 @@ export default function TermsOfService() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    15
+                    17
                   </span>
                   Severability
                 </h2>
@@ -308,7 +374,7 @@ export default function TermsOfService() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    16
+                    18
                   </span>
                   Contact Information
                 </h2>

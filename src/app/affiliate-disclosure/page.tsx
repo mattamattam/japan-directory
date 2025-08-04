@@ -53,6 +53,26 @@ export default function AffiliateDisclosure() {
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
                     1
                   </span>
+                  FTC Compliance and Disclosure
+                </h2>
+                <p>
+                  In accordance with the Federal Trade Commission (FTC)
+                  guidelines, please assume that some of the links on this
+                  website are affiliate links. We are committed to transparency
+                  and honesty in all our affiliate relationships.
+                </p>
+                <p className="mt-3 text-gray-700">
+                  This disclosure policy is intended to meet U.S. FTC
+                  requirements as well as international disclosure standards for
+                  affiliate marketing and sponsored content.
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    2
+                  </span>
                   What Are Affiliate Links?
                 </h2>
                 <p>
@@ -66,7 +86,7 @@ export default function AffiliateDisclosure() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    2
+                    3
                   </span>
                   How Affiliate Links Work
                 </h2>
@@ -85,7 +105,7 @@ export default function AffiliateDisclosure() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    3
+                    4
                   </span>
                   Our Affiliate Partners
                 </h2>
@@ -106,7 +126,7 @@ export default function AffiliateDisclosure() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    4
+                    5
                   </span>
                   Our Commitment to Honesty
                 </h2>
@@ -137,7 +157,7 @@ export default function AffiliateDisclosure() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    5
+                    6
                   </span>
                   How We Use Affiliate Commissions
                 </h2>
@@ -154,7 +174,7 @@ export default function AffiliateDisclosure() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    6
+                    7
                   </span>
                   Identifying Affiliate Links
                 </h2>
@@ -178,7 +198,7 @@ export default function AffiliateDisclosure() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    7
+                    8
                   </span>
                   Your Privacy and Affiliate Links
                 </h2>
@@ -207,7 +227,43 @@ export default function AffiliateDisclosure() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
                   <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
-                    8
+                    9
+                  </span>
+                  Disclosure in Blog Posts and Content
+                </h2>
+                <p>
+                  We are committed to clear disclosure of affiliate
+                  relationships in our content:
+                </p>
+                <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700 mt-3">
+                  <li>
+                    <strong>Blog Posts:</strong> Posts containing affiliate
+                    links will include a disclosure such as: &ldquo;This post
+                    may contain affiliate links. We may earn a small
+                    commission—at no additional cost to you.&rdquo;
+                  </li>
+                  <li>
+                    <strong>Site Footer:</strong> Our website footer includes
+                    the disclosure: &ldquo;We may earn commissions from
+                    purchases made through links on this site.&rdquo;
+                  </li>
+                  <li>
+                    <strong>Individual Links:</strong> Some affiliate links may
+                    be marked with an asterisk (*) or include a note indicating
+                    they are affiliate links.
+                  </li>
+                  <li>
+                    <strong>Product Reviews:</strong> When reviewing products or
+                    services, we clearly disclose if we have affiliate
+                    relationships with the companies mentioned.
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                  <span className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+                    10
                   </span>
                   Questions About Affiliate Links
                 </h2>

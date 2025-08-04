@@ -678,6 +678,81 @@ export async function getLodgingBySlug(slug: string) {
   }
 }
 
+// Fetch itineraries
+export async function getItineraries() {
+  const query = `*[_type == "itinerary" && !(_id in path("drafts.**"))] | order(featured desc, title asc) {
+    _id,
+    title,
+    slug,
+    description,
+    image,
+    duration,
+    difficulty,
+    destinations[]->{
+      _id,
+      name,
+      slug
+    },
+    priceRange,
+    featured,
+    seoTitle,
+    seoDescription,
+    seoKeywords
+  }`;
+
+  try {
+    const itineraries = await sanity.fetch(query);
+    return itineraries.map((item: any) => ({
+      ...item,
+      image: imageUrlBuilder(item.image, 800, 600),
+    }));
+  } catch (error) {
+    console.error("Error fetching itineraries:", error);
+    return [];
+  }
+}
+
+// Fetch single itinerary by slug
+export async function getItineraryBySlug(slug: string) {
+  const query = `*[_type == "itinerary" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
+    _id,
+    title,
+    slug,
+    description,
+    longDescription,
+    content,
+    image,
+    duration,
+    difficulty,
+    destinations[]->{
+      _id,
+      name,
+      slug
+    },
+    priceRange,
+    dayByDay,
+    transportation,
+    accommodation,
+    tips,
+    seoTitle,
+    seoDescription,
+    seoKeywords
+  }`;
+
+  try {
+    const item = await sanity.fetch(query, { slug });
+    if (!item) return null;
+
+    return {
+      ...item,
+      image: imageUrlBuilder(item.image, 1200, 800),
+    };
+  } catch (error) {
+    console.error("Error fetching itinerary item:", error);
+    return null;
+  }
+}
+
 // Fetch all blog posts
 export async function getBlogPosts() {
   const query = `*[_type == "blogPost" && !(_id in path("drafts.**"))] | order(publishedAt desc) {

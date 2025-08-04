@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { setCookie } from "cookies-next";
 
 export default function OverridePage() {
   const router = useRouter();
@@ -13,10 +12,7 @@ export default function OverridePage() {
 
     if (override) {
       // Store the override in a cookie (expires in 24 hours)
-      setCookie("maintenance_override", override, {
-        maxAge: 60 * 60 * 24, // 24 hours
-        path: "/",
-      });
+      document.cookie = `maintenance_override=${override}; max-age=${60 * 60 * 24}; path=/; SameSite=Strict`;
 
       // Redirect to home page
       router.push("/");

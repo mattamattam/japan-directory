@@ -29,3 +29,6 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# API routes for local development only
+src/app/api/

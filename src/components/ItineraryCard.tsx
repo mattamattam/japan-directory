@@ -29,9 +29,6 @@ export default function ItineraryCard({ itinerary }: ItineraryCardProps) {
     return null;
   }
 
-  // Debug logging
-  console.log("Itinerary data:", itinerary);
-
   const slug =
     typeof itinerary.slug === "string"
       ? itinerary.slug
@@ -117,13 +114,12 @@ export default function ItineraryCard({ itinerary }: ItineraryCardProps) {
                 {itinerary.destinations
                   .slice(0, 3)
                   .map((destination, index) => (
-                    <Link
+                    <span
                       key={destination._id || index}
-                      href={`/destinations/${destination.slug.current}`}
-                      className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full hover:bg-green-200 transition-colors"
+                      className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full"
                     >
                       {destination.name}
-                    </Link>
+                    </span>
                   ))}
                 {itinerary.destinations.length > 3 && (
                   <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">

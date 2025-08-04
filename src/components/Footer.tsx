@@ -40,9 +40,9 @@ export default function Footer() {
           <div className="space-y-8">
             <div className="flex items-center">
               <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">日</span>
+                <span className="text-white font-bold text-lg">訪</span>
               </div>
-              <span className="ml-2 text-xl font-bold">Japan Directory</span>
+              <span className="ml-2 text-xl font-bold">Visit Japan HQ</span>
             </div>
             <p className="text-sm leading-6 text-gray-300">
               Your ultimate guide to Japan tourism. Discover the best hotels,
@@ -173,7 +173,8 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-xs text-gray-400">
-            &copy; 2024 Japan Travel Directory. All rights reserved.
+            &copy; {new Date().getFullYear()} Visit Japan HQ. All rights
+            reserved.
           </p>
           <div className="mt-4 sm:mt-0">
             <Button

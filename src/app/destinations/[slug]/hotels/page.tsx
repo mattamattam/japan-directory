@@ -37,7 +37,7 @@ export async function generateMetadata({
     };
   }
   return {
-    title: `Hotels in ${destination.name} - Japan Directory`,
+    title: `Hotels in ${destination.name} - Visit Japan HQ`,
     description: `Find the best hotels in ${destination.name}. Compare prices, read reviews, and book your stay in this amazing destination.`,
     keywords: `${destination.name} hotels, ${destination.name} accommodation, hotels in ${destination.name}, ${destination.name} lodging`,
   };

@@ -40,7 +40,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `Tours in ${destination.name} - Japan Directory`,
+    title: `Tours in ${destination.name} - Visit Japan HQ`,
     description: `Find the best tours and experiences in ${destination.name}. Book guided tours, cultural experiences, and adventure activities.`,
     keywords: `${destination.name} tours, ${destination.name} experiences, guided tours ${destination.name}, ${destination.name} activities`,
   };

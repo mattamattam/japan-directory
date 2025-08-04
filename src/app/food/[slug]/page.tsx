@@ -32,7 +32,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${food.title} - Japan Directory`,
+    title: `${food.title} - Visit Japan HQ`,
     description: food.seoDescription || food.description,
     keywords: food.seoKeywords?.join(", ") || "",
   };

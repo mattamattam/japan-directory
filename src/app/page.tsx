@@ -10,7 +10,7 @@ import ExchangeRate from "./components/ExchangeRate";
 import type { Destination } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Japan Directory - Your Complete Guide to Japan Travel",
+  title: "Visit Japan HQ - Your Complete Guide to Japan Travel",
   description:
     "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
   keywords:

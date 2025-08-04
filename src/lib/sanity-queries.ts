@@ -611,6 +611,73 @@ export async function getFoodBySlug(slug: string) {
   }
 }
 
+// Fetch lodging
+export async function getLodging() {
+  const query = `*[_type == "lodging" && !(_id in path("drafts.**"))] | order(featured desc, name asc) {
+    _id,
+    name,
+    slug,
+    description,
+    image,
+    category,
+    featured,
+    location,
+    priceRange,
+    rating,
+    reviewCount,
+    amenities,
+    seoTitle,
+    seoDescription,
+    seoKeywords
+  }`;
+
+  try {
+    const lodging = await sanity.fetch(query);
+    return lodging.map((item: any) => ({
+      ...item,
+      image: imageUrlBuilder(item.image, 800, 600),
+    }));
+  } catch (error) {
+    console.error("Error fetching lodging:", error);
+    return [];
+  }
+}
+
+// Fetch single lodging item by slug
+export async function getLodgingBySlug(slug: string) {
+  const query = `*[_type == "lodging" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
+    _id,
+    name,
+    slug,
+    description,
+    longDescription,
+    content,
+    image,
+    category,
+    location,
+    priceRange,
+    rating,
+    reviewCount,
+    amenities,
+    seoTitle,
+    seoDescription,
+    seoKeywords
+  }`;
+
+  try {
+    const item = await sanity.fetch(query, { slug });
+    if (!item) return null;
+
+    return {
+      ...item,
+      image: imageUrlBuilder(item.image, 1200, 800),
+    };
+  } catch (error) {
+    console.error("Error fetching lodging item:", error);
+    return null;
+  }
+}
+
 // Fetch all blog posts
 export async function getBlogPosts() {
   const query = `*[_type == "blogPost" && !(_id in path("drafts.**"))] | order(publishedAt desc) {

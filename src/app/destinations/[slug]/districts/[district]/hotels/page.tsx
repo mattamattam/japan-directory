@@ -122,7 +122,7 @@ export async function generateMetadata({
     };
   }
   return {
-    title: `Hotels in ${district.name}, ${destination.name} - Japan Directory`,
+    title: `Hotels in ${district.name}, ${destination.name} - Visit Japan HQ`,
     description: `Find the best hotels in ${district.name}, ${destination.name}. Compare prices, read reviews, and book your stay in this vibrant district.`,
     keywords: `${district.name} hotels, ${destination.name} accommodation, hotels in ${district.name}, ${district.name} lodging`,
   };

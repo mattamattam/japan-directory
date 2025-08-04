@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: DestinationPageProps) {
   }
 
   return {
-    title: `${destination.name} - Japan Directory`,
+    title: `${destination.name} - Visit Japan HQ`,
     description: `Explore ${destination.name}, Japan. Discover hotels, restaurants, tours, and shopping in this amazing destination.`,
     keywords: `${destination.name}, Japan, ${destination.name} hotels, ${destination.name} restaurants, ${destination.name} tours, ${destination.name} shopping`,
   };

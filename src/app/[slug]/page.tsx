@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: SectionPageProps) {
   }
 
   return {
-    title: `${sectionPage.title} - Japan Directory`,
+    title: `${sectionPage.title} - Visit Japan HQ`,
     description: sectionPage.seoDescription || sectionPage.description,
     keywords: sectionPage.seoKeywords?.join(", ") || "",
   };

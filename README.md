@@ -1,6 +1,6 @@
-# Japan Directory API
+# Visit Japan HQ API
 
-This is the API service for the Japan Directory project. It provides the backend functionality for the static frontend.
+This is the API service for the Visit Japan HQ project. It provides the backend functionality for the static frontend.
 
 ## API Endpoints
 

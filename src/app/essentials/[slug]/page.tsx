@@ -30,7 +30,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${essential.title} - Japan Directory`,
+    title: `${essential.title} - Visit Japan HQ`,
     description: essential.seoDescription || essential.description,
     keywords: essential.seoKeywords?.join(", ") || "",
   };

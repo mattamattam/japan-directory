@@ -40,7 +40,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `Shopping in ${destination.name} - Japan Directory`,
+    title: `Shopping in ${destination.name} - Visit Japan HQ`,
     description: `Discover the best shopping in ${destination.name}, Japan. From traditional markets to modern shopping centers, find unique souvenirs and local products.`,
     keywords: `${destination.name} shopping, ${destination.name} markets, shopping in ${destination.name}, ${destination.name} souvenirs`,
   };

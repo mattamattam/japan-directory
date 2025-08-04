@@ -1,4 +1,4 @@
-// Main shared types for Japan Directory
+// Main shared types for Visit Japan HQ
 
 export interface Destination {
   _id: string;

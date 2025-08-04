@@ -174,6 +174,31 @@ function imageUrlBuilder(
   return `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${fileId}.${fileExtension}?w=${width}&h=${height}&fit=crop`;
 }
 
+// Debug function to test Sanity connection
+export async function testSanityConnection() {
+  try {
+    console.log("Testing Sanity connection...");
+    console.log("Project ID:", process.env.NEXT_PUBLIC_SANITY_PROJECT_ID);
+    console.log("Dataset:", process.env.NEXT_PUBLIC_SANITY_DATASET);
+    console.log("Token configured:", !!process.env.SANITY_API_TOKEN);
+
+    // Test with a simple query
+    const testQuery = `*[_type == "destination"] | order(_createdAt desc)[0...5] {
+      _id,
+      _type,
+      name,
+      slug
+    }`;
+
+    const results = await sanity.fetch(testQuery);
+    console.log("Test query results:", results);
+    return results;
+  } catch (error) {
+    console.error("Sanity connection test failed:", error);
+    return null;
+  }
+}
+
 // Query to discover all available document types
 export async function getAvailableDocumentTypes() {
   // First, let's try to get all document types
@@ -262,7 +287,8 @@ export async function getAllDocumentTypes() {
 
 // Fetch all destinations
 export async function getDestinations() {
-  const query = `*[_type == "destination" && !(_id in path("drafts.**"))] | order(sortOrder asc, featured desc, name asc) {
+  // First, let's try a broader query to see what's available
+  const debugQuery = `*[_type == "destination"] {
     _id,
     name,
     slug,
@@ -275,12 +301,33 @@ export async function getDestinations() {
     highlights,
     bestTime,
     featured,
-    sortOrder
+    sortOrder,
+    "isDraft": _id in path("drafts.**")
   }`;
 
   try {
-    const destinations = await sanity.fetch(query);
-    return destinations.map((dest: SanityDestination) => ({
+    console.log("Fetching destinations from Sanity...");
+    const allDestinations = await sanity.fetch(debugQuery);
+    console.log("All destinations found:", allDestinations.length);
+    console.log("Destinations:", allDestinations);
+
+    // Filter out drafts and map the results
+    const publishedDestinations = allDestinations
+      .filter((dest: any) => !dest.isDraft)
+      .sort((a: any, b: any) => {
+        // Sort by sortOrder, then featured, then name
+        if (a.sortOrder !== b.sortOrder) {
+          return (a.sortOrder || 999) - (b.sortOrder || 999);
+        }
+        if (a.featured !== b.featured) {
+          return b.featured ? 1 : -1;
+        }
+        return a.name.localeCompare(b.name);
+      });
+
+    console.log("Published destinations:", publishedDestinations.length);
+
+    return publishedDestinations.map((dest: SanityDestination) => ({
       ...dest,
       image: imageUrlBuilder(dest.image, 800, 600),
     }));
@@ -643,7 +690,7 @@ export async function getEssentialBySlug(slug: string) {
 
 // Fetch food
 export async function getFood() {
-  const query = `*[_type == "foodGuide" && defined(publishedAt)] | order(featured desc, title asc) {
+  const query = `*[_type == "food" && !(_id in path("drafts.**"))] | order(featured desc, title asc) {
     _id,
     title,
     slug,
@@ -670,11 +717,12 @@ export async function getFood() {
 
 // Fetch single food item by slug
 export async function getFoodBySlug(slug: string) {
-  const query = `*[_type == "foodGuide" && slug.current == $slug && defined(publishedAt)][0] {
+  const query = `*[_type == "food" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
     _id,
     title,
     slug,
     description,
+    longDescription,
     content,
     image,
     category,

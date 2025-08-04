@@ -5,5 +5,5 @@ export const sanity = createSanityClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   apiVersion: "2023-07-19",
   useCdn: true,
-  token: process.env.SANITY_API_TOKEN, // Server-side only
+  token: process.env.SANITY_API_TOKEN,
 });

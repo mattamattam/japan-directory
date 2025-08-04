@@ -26,9 +26,23 @@ declare global {
         // eslint-disable-next-line
         LatLng: any;
         // eslint-disable-next-line
+        LatLngBounds: any;
+        // eslint-disable-next-line
         MapTypeId: any;
         // eslint-disable-next-line
         Marker: any;
+        // eslint-disable-next-line
+        Polygon: any;
+        // eslint-disable-next-line
+        Geocoder: any;
+        // eslint-disable-next-line
+        SymbolPath: any;
+        places: {
+          // eslint-disable-next-line
+          Autocomplete: any;
+          // eslint-disable-next-line
+          PlacesService: any;
+        };
       };
     };
   }

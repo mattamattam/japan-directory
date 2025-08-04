@@ -18,7 +18,7 @@ interface FoodGuideCardProps {
 export default function FoodGuideCard({ guide }: FoodGuideCardProps) {
   return (
     <Link
-      href={`/food-guides/${guide.slug.current}`}
+      href={`/food/${guide.slug.current}`}
       className="group relative bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-lg transition-shadow duration-200 overflow-hidden"
     >
       {/* Guide Image */}

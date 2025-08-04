@@ -1,25 +1,15 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { getDestinations } from "@/lib/sanity-queries";
-
-// Type for destination from Sanity
-interface Destination {
-  _id: string;
-  name: string;
-  slug: { current: string };
-  region: string;
-  description: string;
-  image: string | null;
-  rating: number;
-  reviewCount: number;
-  price: number;
-  highlights?: string[];
-  bestTime?: string;
-  featured?: boolean;
-  sortOrder?: number;
-}
 
 const navigation = {
+  destinations: [
+    { name: "Tokyo", href: "/destinations/tokyo" },
+    { name: "Kyoto", href: "/destinations/kyoto" },
+    { name: "Osaka", href: "/destinations/osaka" },
+    { name: "Hiroshima", href: "/destinations/hiroshima" },
+    { name: "Nara", href: "/destinations/nara" },
+    { name: "Sapporo", href: "/destinations/sapporo" },
+  ],
   services: [
     { name: "Experiences", href: "/experiences" },
     { name: "Lodging", href: "/lodging" },
@@ -42,11 +32,7 @@ const navigation = {
   ],
 };
 
-export default async function Footer() {
-  // Fetch top 5 destinations from Sanity
-  const allDestinations = await getDestinations();
-  const topDestinations = allDestinations.slice(0, 5);
-
+export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
@@ -111,24 +97,16 @@ export default async function Footer() {
                   Destinations
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
-                  {topDestinations.map((destination: Destination) => (
-                    <li key={destination._id}>
+                  {navigation.destinations.map((item) => (
+                    <li key={item.name}>
                       <Link
-                        href={`/destinations/${destination.slug.current}`}
+                        href={item.href}
                         className="text-sm leading-6 text-gray-300 hover:text-white"
                       >
-                        {destination.name}
+                        {item.name}
                       </Link>
                     </li>
                   ))}
-                  <li>
-                    <Link
-                      href="/destinations"
-                      className="text-sm leading-6 text-red-400 hover:text-red-300 font-medium"
-                    >
-                      more &gt;&gt;
-                    </Link>
-                  </li>
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">

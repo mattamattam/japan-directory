@@ -19,7 +19,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
   className = "",
   style = {},
 }) => {
-  // Check if ads should be shown
+  // Check if ads should be shown based on environment and flag
   const shouldShowAds =
     process.env.NODE_ENV === "production" &&
     process.env.NEXT_PUBLIC_SHOW_ADS !== "false";
@@ -27,6 +27,20 @@ const AdBanner: React.FC<AdBannerProps> = ({
   // Don't render anything if ads are disabled
   if (!shouldShowAds) {
     return null;
+  }
+
+  // Show placeholder in development
+  if (process.env.NODE_ENV !== "production") {
+    return (
+      <div
+        className={`bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center text-gray-500 ${className}`}
+        style={style}
+      >
+        <div className="text-sm font-medium">Ad Space</div>
+        <div className="text-xs">Slot: {adSlot}</div>
+        <div className="text-xs">Format: {adFormat}</div>
+      </div>
+    );
   }
 
   return (

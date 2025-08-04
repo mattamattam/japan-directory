@@ -6,7 +6,9 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     // Forward the request to the external API server
-    const externalUrl = "http://localhost:3002/api/newsletter";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const externalUrl = `${apiBaseUrl}/api/newsletter`;
     const body = await request.json();
 
     const response = await fetch(externalUrl, {

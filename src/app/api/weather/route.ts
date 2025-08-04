@@ -6,7 +6,9 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
     // Forward the request to the external API server
-    const externalUrl = "http://localhost:3002/api/weather";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const externalUrl = `${apiBaseUrl}/api/weather`;
 
     const response = await fetch(externalUrl, {
       method: "GET",

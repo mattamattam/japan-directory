@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     // Forward the request to the external API server
-    const externalUrl = "http://localhost:3002/api/contact";
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const externalUrl = `${apiBaseUrl}/api/contact`;
     const body = await request.json();
 
     const response = await fetch(externalUrl, {

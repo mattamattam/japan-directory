@@ -9,7 +9,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const currency = searchParams.get("currency") || "USD";
 
-    const externalUrl = `http://localhost:3002/api/exchange-rate?currency=${currency}`;
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+    const externalUrl = `${apiBaseUrl}/api/exchange-rate?currency=${currency}`;
     const response = await fetch(externalUrl, {
       method: "GET",
       headers: {

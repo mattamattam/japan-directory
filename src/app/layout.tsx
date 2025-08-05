@@ -33,6 +33,25 @@ export default function RootLayout({
             crossOrigin="anonymous"
           />
         )}
+
+        {process.env.NODE_ENV === "production" && (
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=G-GL294NMWVF`}
+          ></script>
+        )}
+        {process.env.NODE_ENV === "production" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-GL294NMWVF');
+            `,
+            }}
+          />
+        )}
       </head>
       <body className={inter.className}>{children}</body>
     </html>

@@ -26,11 +26,17 @@ export default function RootLayout({
       <head>
         {/* Google AdSense */}
         {shouldShowAds && (
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9762028848349439"
-            crossOrigin="anonymous"
-          />
+          <>
+            <meta
+              name="google-adsense-account"
+              content="ca-pub-9762028848349439"
+            ></meta>
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9762028848349439"
+              crossOrigin="anonymous"
+            />
+          </>
         )}
 
         {process.env.NODE_ENV === "production" && (

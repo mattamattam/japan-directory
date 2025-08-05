@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 
 interface AdBannerProps {
   adSlot: string;
@@ -19,8 +21,27 @@ const AdBanner: React.FC<AdBannerProps> = ({
   className = "",
   style = {},
 }) => {
+  const adRef = useRef<any>(null);
+
   // Check if ads should be shown based on environment
   const shouldShowAds = process.env.NODE_ENV === "production";
+
+  // Initialize AdSense ads
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" && adRef.current) {
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(() => {
+        try {
+          // @ts-ignore
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (error) {
+          console.error("AdSense error:", error);
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Show placeholder in development
   if (process.env.NODE_ENV !== "production") {
@@ -44,6 +65,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
   return (
     <div className={`ad-banner ${className}`} style={style}>
       <ins
+        ref={adRef}
         className="adsbygoogle"
         style={{ display: "block" }}
         data-ad-client="ca-pub-9762028848349439"
@@ -51,7 +73,6 @@ const AdBanner: React.FC<AdBannerProps> = ({
         data-ad-format={adFormat}
         data-full-width-responsive="true"
       />
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
   );
 };

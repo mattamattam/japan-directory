@@ -59,6 +59,16 @@ export default async function Footer() {
               attractions, restaurants, and travel tips for an unforgettable
               Japanese adventure.
             </p>
+            <div className="space-y-2 text-xs text-gray-400">
+              <p>
+                <strong>Affiliate Disclosure:</strong> We may earn commissions
+                from purchases made through links on this site.
+              </p>
+              <p>
+                &copy; {new Date().getFullYear()} Visit Japan HQ. All rights
+                reserved.
+              </p>
+            </div>
           </div>
           <div className="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
@@ -120,30 +130,6 @@ export default async function Footer() {
                 </ul>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Affiliate Disclosure */}
-        <div className="mt-12 border-t border-gray-800 pt-6">
-          <p className="text-xs text-gray-400">
-            <strong>Affiliate Disclosure:</strong> We may earn commissions from
-            purchases made through links on this site.
-          </p>
-        </div>
-
-        <div className="mt-6 border-t border-gray-800 pt-6 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-xs text-gray-400">
-            &copy; {new Date().getFullYear()} Visit Japan HQ. All rights
-            reserved.
-          </p>
-          <div className="mt-4 sm:mt-0">
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-gray-400 border-gray-600 hover:text-white hover:border-gray-500"
-            >
-              Subscribe to Newsletter
-            </Button>
           </div>
         </div>
       </div>

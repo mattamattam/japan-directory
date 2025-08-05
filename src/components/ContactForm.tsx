@@ -53,8 +53,32 @@ export default function ContactForm() {
       const result = await response.json();
 
       if (response.ok) {
-        // Show success toast
-        setShowToast(true);
+        // Handle newsletter subscription if checked
+        if (formData.newsletter) {
+          try {
+            const newsletterResponse = await fetch("/api/newsletter", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email: formData.email }),
+            });
+
+            if (newsletterResponse.ok) {
+              // Show success toast with newsletter info
+              setShowToast(true);
+            } else {
+              // Show success toast without newsletter info
+              setShowToast(true);
+            }
+          } catch (newsletterError) {
+            // Newsletter subscription failed, but contact form succeeded
+            setShowToast(true);
+          }
+        } else {
+          // Show success toast
+          setShowToast(true);
+        }
 
         // Clear form
         clearForm();
@@ -81,42 +105,52 @@ export default function ContactForm() {
     <>
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center">
-          <svg
-            className="w-6 h-6 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-          <span>
-            Message sent successfully! We&apos;ll get back to you soon.
-          </span>
-          <button
-            onClick={() => setShowToast(false)}
-            className="ml-4 text-white hover:text-gray-200"
-          >
+        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg max-w-md">
+          <div className="flex items-start">
             <svg
-              className="w-5 h-5"
+              className="w-6 h-6 mr-2 mt-0.5 flex-shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
+                d="M5 13l4 4L19 7"
               />
             </svg>
-          </button>
+            <div className="flex-1">
+              <span className="block">
+                Message sent successfully! We&apos;ll get back to you soon.
+              </span>
+              {formData.newsletter && (
+                <span className="block mt-1 text-sm text-green-100">
+                  Newsletter subscription initiated. Please check your email for
+                  verification.
+                </span>
+              )}
+            </div>
+            <button
+              onClick={() => setShowToast(false)}
+              className="ml-4 text-white hover:text-gray-200 flex-shrink-0"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       )}
 

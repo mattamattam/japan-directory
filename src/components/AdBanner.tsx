@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 
 interface AdBannerProps {
-  adSlot: string;
+  adSlot?: string;
   adFormat?:
     | "auto"
     | "fluid"
@@ -16,7 +16,7 @@ interface AdBannerProps {
 }
 
 const AdBanner: React.FC<AdBannerProps> = ({
-  adSlot,
+  adSlot = "3345413633",
   adFormat = "auto",
   className = "",
   style = {},
@@ -72,7 +72,6 @@ const AdBanner: React.FC<AdBannerProps> = ({
         data-ad-slot={adSlot}
         data-ad-format={adFormat}
         data-full-width-responsive="true"
-        data-adtest="on"
       />
     </div>
   );

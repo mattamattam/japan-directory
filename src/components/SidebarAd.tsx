@@ -20,11 +20,7 @@ const SidebarAd: React.FC<SidebarAdProps> = ({ adSlot, className = "" }) => {
       <div className="text-center text-sm text-gray-500 mb-2">
         📢 Sidebar Advertisement
       </div>
-      <AdBanner
-        adSlot={adSlot}
-        adFormat="rectangle"
-        className="min-h-[250px]"
-      />
+      <AdBanner adSlot="8597740317" adFormat="auto" className="min-h-[250px]" />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,22 +36,22 @@ export default function RootLayout({
         )}
 
         {process.env.NODE_ENV === "production" && (
-          <script
-            async
+          <Script
             src={`https://www.googletagmanager.com/gtag/js?id=G-GL294NMWVF`}
-          ></script>
+            strategy="afterInteractive"
+          />
         )}
         {process.env.NODE_ENV === "production" && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-GL294NMWVF');
-            `,
-            }}
-          />
+          <Script id="ga-init" strategy="afterInteractive">
+            {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-GL294NMWVF', {
+            page_path: window.location.pathname,
+          });
+        `}
+          </Script>
         )}
       </head>
       <body className={inter.className}>{children}</body>

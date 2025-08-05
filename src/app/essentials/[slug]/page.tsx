@@ -4,6 +4,7 @@ import { getEssentialBySlug, getEssentials } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
+import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
 import Image from "next/image";
 import {
@@ -174,16 +175,12 @@ export default async function EssentialPage({ params }: EssentialPageProps) {
                 View All Essentials
               </a>
             </div>
+
+            {/* Sidebar Ad */}
+            <SidebarAd adSlot="essential-sidebar-ad" />
           </div>
         </div>
       </div>
-
-      {/* Google AdSense Banner */}
-      <section className="bg-gray-50 py-8">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <AdBanner adSlot="essential-page-footer" adFormat="banner" />
-        </div>
-      </section>
     </Layout>
   );
 }

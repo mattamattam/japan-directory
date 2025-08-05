@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/Button";
 import PortableText from "@/components/PortableText";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
+import SidebarAd from "@/components/SidebarAd";
 import {
   MapPinIcon,
   StarIcon,
@@ -229,15 +230,11 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
                   </Link>
                 </div>
               </div>
+
+              {/* Sidebar Ad */}
+              <SidebarAd adSlot="district-sidebar-ad" />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Google AdSense Banner */}
-      <section className="bg-gray-50 py-8">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <AdBanner adSlot="district-page-footer" adFormat="banner" />
         </div>
       </section>
     </Layout>

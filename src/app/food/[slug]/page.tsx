@@ -4,6 +4,7 @@ import { getFoodBySlug, getFood } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
+import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
 import Image from "next/image";
 import {
@@ -202,16 +203,12 @@ export default async function FoodPage({ params }: FoodPageProps) {
                 View All Food Guides
               </a>
             </div>
+
+            {/* Sidebar Ad */}
+            <SidebarAd adSlot="food-sidebar-ad" />
           </div>
         </div>
       </div>
-
-      {/* Google AdSense Banner */}
-      <section className="bg-gray-50 py-8">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <AdBanner adSlot="food-page-footer" adFormat="banner" />
-        </div>
-      </section>
     </Layout>
   );
 }

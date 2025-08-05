@@ -15,6 +15,7 @@ import Link from "next/link";
 import PortableText from "./PortableText";
 import Breadcrumb from "./Breadcrumb";
 import AdBanner from "./AdBanner";
+import SidebarAd from "./SidebarAd";
 
 // Add Google Maps types
 declare global {
@@ -400,16 +401,12 @@ export default function DestinationPageClient({
                   <li>• Carry cash for smaller establishments</li>
                 </ul>
               </div>
+
+              {/* Sidebar Ad */}
+              <SidebarAd adSlot="destination-sidebar-ad" />
             </div>
           </div>
         </div>
-
-        {/* Google AdSense Banner */}
-        <section className="bg-gray-50 py-8">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <AdBanner adSlot="destination-page-footer" adFormat="banner" />
-          </div>
-        </section>
       </main>
 
       {/* Map Modal */}

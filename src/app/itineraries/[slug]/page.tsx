@@ -4,6 +4,7 @@ import { getItineraryBySlug, getItineraries } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
+import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
 import Image from "next/image";
 import Link from "next/link";
@@ -297,16 +298,12 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
                 View All Itineraries
               </a>
             </div>
+
+            {/* Sidebar Ad */}
+            <SidebarAd adSlot="itinerary-sidebar-ad" />
           </div>
         </div>
       </div>
-
-      {/* Google AdSense Banner */}
-      <section className="bg-gray-50 py-8">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <AdBanner adSlot="itinerary-page-footer" adFormat="banner" />
-        </div>
-      </section>
     </Layout>
   );
 }

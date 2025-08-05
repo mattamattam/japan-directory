@@ -4,6 +4,7 @@ import { getLodgingBySlug, getLodging } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
+import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
 import Image from "next/image";
 import {
@@ -201,7 +202,6 @@ export default async function LodgingPage({ params }: LodgingPageProps) {
 
             {/* CTA */}
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white">
-              <h3 className="text-lg font-semibold mb-2">Ready to Book?</h3>
               <p className="text-blue-100 text-sm mb-4">
                 Explore our other lodging guides to find more accommodation
                 options across Japan.
@@ -213,16 +213,12 @@ export default async function LodgingPage({ params }: LodgingPageProps) {
                 View All Lodging
               </a>
             </div>
+
+            {/* Sidebar Ad */}
+            <SidebarAd adSlot="lodging-sidebar-ad" />
           </div>
         </div>
       </div>
-
-      {/* Google AdSense Banner */}
-      <section className="bg-gray-50 py-8">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <AdBanner adSlot="lodging-page-footer" adFormat="banner" />
-        </div>
-      </section>
     </Layout>
   );
 }

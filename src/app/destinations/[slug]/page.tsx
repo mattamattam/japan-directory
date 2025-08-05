@@ -6,6 +6,7 @@ import {
 } from "@/lib/sanity-queries";
 import DestinationPageClient from "@/components/DestinationPageClient";
 import Layout from "@/components/Layout";
+import SidebarAd from "@/components/SidebarAd";
 
 interface DestinationPageProps {
   params: Promise<{ slug: string }>;

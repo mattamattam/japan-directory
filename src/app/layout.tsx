@@ -19,9 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   // Check if ads should be shown
-  const shouldShowAds =
-    process.env.NODE_ENV === "production" &&
-    process.env.NEXT_PUBLIC_SHOW_ADS !== "false";
+  const shouldShowAds = process.env.NODE_ENV === "production";
 
   return (
     <html lang="en">
@@ -30,7 +28,7 @@ export default function RootLayout({
         {shouldShowAds && (
           <script
             async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}`}
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9762028848349439"
             crossOrigin="anonymous"
           />
         )}

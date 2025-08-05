@@ -4,6 +4,7 @@ import Layout from "@/components/Layout";
 import DestinationCard from "@/components/DestinationCard";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
+import SidebarAd from "@/components/SidebarAd";
 import {
   CalendarIcon,
   MapPinIcon,

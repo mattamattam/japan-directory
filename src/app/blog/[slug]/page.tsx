@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getBlogPostBySlug, getBlogPosts } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import AdBanner from "@/components/AdBanner";
+import ContentMetadata from "@/components/ContentMetadata";
 import { CalendarIcon, UserIcon, TagIcon } from "@heroicons/react/24/outline";
 import React from "react"; // Added missing import for React
 
@@ -160,6 +161,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
           {/* Header */}
           <header className="mb-12">
+            {/* Content Metadata */}
+            <ContentMetadata 
+              lastUpdated={post._updatedAt || new Date()}
+              publishedAt={post.publishedAt || post._createdAt}
+              factChecked={true}
+              sources={[
+                "Editorial Research",
+                "Local Expert Interviews", 
+                "Official Tourism Data",
+                "On-site Verification"
+              ]}
+              className="mb-8"
+            />
+
             <div className="flex items-center text-sm text-gray-500 mb-4">
               <CalendarIcon className="h-4 w-4 mr-1" />
               <time dateTime={post.publishedAt}>

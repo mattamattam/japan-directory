@@ -3,14 +3,29 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: "swap", // Optimize font loading
+  preload: true
+});
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://visitjapanhq.com'),
   title: "Japan Travel Guide - Your Complete Guide to Japan",
   description:
     "Discover the best of Japan with our comprehensive travel guide. From Tokyo to Kyoto, get insider tips, cultural insights, and practical advice for your Japan adventure.",
   keywords:
     "Japan travel, Tokyo guide, Kyoto travel, Japan tourism, Japanese culture, travel tips",
+  alternates: {
+    languages: {
+      'en': 'https://visitjapanhq.com',
+      'en-US': 'https://visitjapanhq.com',
+      'en-GB': 'https://visitjapanhq.com',
+      'en-AU': 'https://visitjapanhq.com',
+      'en-CA': 'https://visitjapanhq.com',
+      'x-default': 'https://visitjapanhq.com',
+    },
+  },
 };
 
 export default function RootLayout({

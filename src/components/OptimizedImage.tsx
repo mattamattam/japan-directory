@@ -33,7 +33,7 @@ export default function OptimizedImage({
   height,
   className = "",
   priority = false,
-  placeholder = "empty",
+  placeholder = "blur",
   blurDataURL,
   config = "card",
   fallbackType,
@@ -47,6 +47,14 @@ export default function OptimizedImage({
   // Get image configuration
   const imageConfig =
     typeof config === "string" ? IMAGE_CONFIGS[config] : config;
+
+  // Default blur placeholder - a simple 1x1 gray pixel
+  const defaultBlurDataURL = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Rw==";
+
+  // Use provided blurDataURL or default when placeholder is blur
+  const finalBlurDataURL = placeholder === "blur" 
+    ? (blurDataURL || defaultBlurDataURL)
+    : blurDataURL;
 
   // Handle image error
   const handleError = () => {
@@ -79,7 +87,7 @@ export default function OptimizedImage({
         className={className}
         priority={priority}
         placeholder={placeholder}
-        blurDataURL={blurDataURL}
+        blurDataURL={finalBlurDataURL}
         onLoad={handleLoad}
         quality={imageConfig.quality}
       />
@@ -108,7 +116,7 @@ export default function OptimizedImage({
         className={className}
         priority={priority}
         placeholder={placeholder}
-        blurDataURL={blurDataURL}
+        blurDataURL={finalBlurDataURL}
         onLoad={handleLoad}
         quality={imageConfig.quality}
       />
@@ -143,7 +151,7 @@ export default function OptimizedImage({
         className={`transition-opacity duration-300 ${isLoading ? "opacity-0" : "opacity-100"}`}
         priority={priority}
         placeholder={placeholder}
-        blurDataURL={blurDataURL}
+        blurDataURL={finalBlurDataURL}
         onError={handleError}
         onLoad={handleLoad}
         quality={imageConfig.quality}

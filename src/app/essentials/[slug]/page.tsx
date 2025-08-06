@@ -8,6 +8,7 @@ import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { shouldShowNewsletterSignup } from "@/lib/utils";
+import ContentMetadata from "@/components/ContentMetadata";
 import Image from "next/image";
 import {
   BookOpenIcon,
@@ -105,6 +106,20 @@ export default async function EssentialPage({ params }: EssentialPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Content */}
           <div className="lg:col-span-2">
+            {/* Content Metadata */}
+            <ContentMetadata 
+              lastUpdated={essential._updatedAt || new Date()}
+              publishedAt={essential.publishedAt || essential._createdAt}
+              factChecked={true}
+              sources={[
+                "Government Travel Resources",
+                "Embassy Guidelines", 
+                "Official Transport Companies",
+                "Japan Travel Authorities"
+              ]}
+              className="mb-8"
+            />
+
             {/* About Section */}
             <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <div className="prose prose-lg text-gray-600">

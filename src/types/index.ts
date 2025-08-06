@@ -13,6 +13,13 @@ export interface Destination {
   highlights?: string[];
   bestTime?: string;
   slug: { current: string } | string;
+  _createdAt?: string;
+  _updatedAt?: string;
+  publishedAt?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface Hotel {
@@ -82,4 +89,26 @@ export interface Shopping {
   category: string;
   description: string;
   slug: { current: string } | string;
+}
+
+export interface Experience {
+  _id: string;
+  name: string;
+  description: string;
+  longDescription?: unknown;
+  image?: string;
+  category: string;
+  location?: string;
+  duration?: string;
+  price?: number;
+  rating?: number;
+  reviewCount?: number;
+  highlights?: string[];
+  gallery?: string[];
+  slug: { current: string } | string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  _createdAt?: string;
+  _updatedAt?: string;
+  publishedAt?: string;
 }

@@ -44,7 +44,7 @@ export default function ItineraryCard({ itinerary }: ItineraryCardProps) {
         {itinerary.image && typeof itinerary.image === "string" ? (
           <Image
             src={itinerary.image}
-            alt={itinerary.title}
+            alt={`${itinerary.title} - Japan travel itinerary`}
             width={400}
             height={300}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"

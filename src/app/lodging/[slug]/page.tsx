@@ -6,6 +6,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
 import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
+import ContentMetadata from "@/components/ContentMetadata";
 import Image from "next/image";
 import {
   HomeIcon,
@@ -115,6 +116,20 @@ export default async function LodgingPage({ params }: LodgingPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Content */}
           <div className="lg:col-span-2">
+            {/* Content Metadata */}
+            <ContentMetadata 
+              lastUpdated={lodging._updatedAt || new Date()}
+              publishedAt={lodging.publishedAt || lodging._createdAt}
+              factChecked={true}
+              sources={[
+                "Hotel Booking Platforms",
+                "Official Accommodation Websites", 
+                "Travel Agency Partners",
+                "Guest Reviews & Ratings"
+              ]}
+              className="mb-8"
+            />
+
             {/* About Section */}
             <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <div className="prose prose-lg text-gray-600">

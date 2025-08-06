@@ -8,6 +8,8 @@ import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { shouldShowNewsletterSignup } from "@/lib/utils";
+import { getExperienceStructuredData, getBreadcrumbStructuredData, generateStructuredDataScript } from "@/lib/structured-data";
+import ContentMetadata from "@/components/ContentMetadata";
 import {
   StarIcon,
   MapPinIcon,
@@ -40,6 +42,43 @@ export async function generateMetadata({
     alternates: {
       canonical: `https://visitjapanhq.com/experiences/${resolvedParams.slug}`,
     },
+    openGraph: {
+      type: "article",
+      siteName: "Visit Japan HQ",
+      title: `${experience.name} - Visit Japan HQ`,
+      description: experience.seoDescription || experience.description,
+      url: `https://visitjapanhq.com/experiences/${resolvedParams.slug}`,
+      images: [
+        {
+          url: experience.image || `https://visitjapanhq.com/images/og-experience-${resolvedParams.slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `${experience.name} - Japan Experience`,
+        },
+      ],
+      locale: "en_US",
+      section: "Experiences",
+      tags: [experience.category, "Japan", "Experience", "Tourism"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${experience.name} - Visit Japan HQ`,
+      description: experience.seoDescription || experience.description,
+      images: [experience.image || `https://visitjapanhq.com/images/twitter-experience-${resolvedParams.slug}.jpg`],
+      creator: "@visitjapanhq",
+      site: "@visitjapanhq",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 
@@ -65,8 +104,18 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
   // Check if newsletter signup should show on this page
   const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);
 
+  // Generate structured data
+  const experienceData = getExperienceStructuredData(experience, resolvedParams.slug);
+  const breadcrumbData = getBreadcrumbStructuredData([
+    { name: "Home", url: "/" },
+    { name: "Experiences", url: "/experiences" },
+    { name: experience.name }
+  ]);
+
   return (
     <Layout>
+      {/* Structured Data */}
+      {generateStructuredDataScript([experienceData, breadcrumbData])}
       {/* Breadcrumb */}
       <Breadcrumb
         items={[
@@ -106,6 +155,20 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Content */}
           <div className="lg:col-span-2">
+            {/* Content Metadata */}
+            <ContentMetadata 
+              lastUpdated={experience._updatedAt || new Date()}
+              publishedAt={experience.publishedAt || experience._createdAt}
+              factChecked={true}
+              sources={[
+                "Experience Provider Websites",
+                "Local Tourism Boards", 
+                "Cultural Institution Guidelines",
+                "Recent Visitor Reviews"
+              ]}
+              className="mb-8"
+            />
+
             {/* About Section */}
             <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">

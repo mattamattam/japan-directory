@@ -26,7 +26,7 @@ export default function EssentialCard({ essential }: EssentialCardProps) {
         {essential.image ? (
           <Image
             src={essential.image}
-            alt={essential.title}
+            alt={`${essential.title} - Japan travel guide`}
             width={400}
             height={300}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"

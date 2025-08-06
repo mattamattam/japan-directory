@@ -26,7 +26,7 @@ export default function FoodGuideCard({ guide }: FoodGuideCardProps) {
         {guide.image ? (
           <Image
             src={guide.image}
-            alt={guide.title}
+            alt={`${guide.title} - Japanese food guide`}
             width={400}
             height={300}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"

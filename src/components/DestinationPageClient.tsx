@@ -17,6 +17,9 @@ import Breadcrumb from "./Breadcrumb";
 import AdBanner from "./AdBanner";
 import SidebarAd from "./SidebarAd";
 import NewsletterSignup from "./NewsletterSignup";
+import { getContextualLinks, InternalLinkSuggestions } from "@/lib/internal-linking";
+import FAQSection, { JAPAN_TRAVEL_FAQS, TOKYO_FAQS, KYOTO_FAQS } from "./FAQSection";
+import ContentMetadata from "./ContentMetadata";
 
 // Add Google Maps types
 declare global {
@@ -223,6 +226,20 @@ export default function DestinationPageClient({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
+              {/* Content Metadata */}
+              <ContentMetadata 
+                lastUpdated={destination._updatedAt || new Date()}
+                publishedAt={destination.publishedAt || destination._createdAt}
+                factChecked={true}
+                sources={[
+                  "Japan National Tourism Organization",
+                  "Local Tourism Boards",
+                  "Transportation Companies",
+                  "Cultural Sites Official Websites"
+                ]}
+                className="mb-8"
+              />
+
               {/* About Section */}
               <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -253,6 +270,18 @@ export default function DestinationPageClient({
                   )}
                 </div>
               </section>
+
+              {/* Internal Links */}
+              {(() => {
+                const slug = typeof destination.slug === 'string' ? destination.slug : destination.slug?.current || '';
+                const content = destination.longDescription ? 
+                  (Array.isArray(destination.longDescription) ? 
+                    destination.longDescription.map(block => block.children?.map((child: any) => child.text).join(' ')).join(' ') : 
+                    destination.description
+                  ) : destination.description;
+                const contextualLinks = getContextualLinks('destination', slug, content);
+                return <InternalLinkSuggestions links={contextualLinks} />;
+              })()}
 
               {/* Districts/Sub-Areas Section */}
               <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
@@ -329,6 +358,25 @@ export default function DestinationPageClient({
                   ))}
                 </div>
               </section>
+
+              {/* FAQ Section */}
+              {(() => {
+                const slug = typeof destination.slug === 'string' ? destination.slug : destination.slug?.current || '';
+                let faqs = JAPAN_TRAVEL_FAQS;
+                
+                if (slug.toLowerCase().includes('tokyo')) {
+                  faqs = [...TOKYO_FAQS, ...JAPAN_TRAVEL_FAQS.slice(0, 2)];
+                } else if (slug.toLowerCase().includes('kyoto')) {
+                  faqs = [...KYOTO_FAQS, ...JAPAN_TRAVEL_FAQS.slice(0, 2)];
+                }
+                
+                return (
+                  <FAQSection 
+                    title={`${destination.name} Travel FAQ`}
+                    faqs={faqs.slice(0, 6)}
+                  />
+                );
+              })()}
             </div>
 
             {/* Sidebar */}

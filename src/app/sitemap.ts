@@ -49,21 +49,21 @@ interface TourDocument extends SanityDocument {
   district?: { slug: { current: string } };
 }
 
-// Static pages
+// Static pages with priorities
 const staticPages = [
-  "",
-  "/about",
-  "/contact",
-  "/privacy",
-  "/terms",
-  "/affiliate-disclosure",
-  "/destinations",
-  "/experiences",
-  "/lodging",
-  "/food",
-  "/essentials",
-  "/itineraries",
-  "/blog",
+  { path: "", priority: 1.0, changeFreq: "daily" as const }, // Homepage
+  { path: "/destinations", priority: 0.9, changeFreq: "daily" as const },
+  { path: "/experiences", priority: 0.9, changeFreq: "daily" as const },
+  { path: "/food", priority: 0.8, changeFreq: "weekly" as const },
+  { path: "/essentials", priority: 0.8, changeFreq: "weekly" as const },
+  { path: "/lodging", priority: 0.8, changeFreq: "weekly" as const },
+  { path: "/itineraries", priority: 0.7, changeFreq: "monthly" as const },
+  { path: "/blog", priority: 0.7, changeFreq: "daily" as const },
+  { path: "/about", priority: 0.5, changeFreq: "monthly" as const },
+  { path: "/contact", priority: 0.5, changeFreq: "monthly" as const },
+  { path: "/privacy", priority: 0.3, changeFreq: "yearly" as const },
+  { path: "/terms", priority: 0.3, changeFreq: "yearly" as const },
+  { path: "/affiliate-disclosure", priority: 0.3, changeFreq: "yearly" as const },
 ];
 
 // Fetch destinations from Sanity
@@ -75,12 +75,23 @@ async function getDestinations(): Promise<SitemapEntry[]> {
     }`;
 
     const destinations = await sanity.fetch<SanityDocument[]>(query);
-    return destinations.map((dest) => ({
-      url: `/destinations/${dest.slug.current}`,
-      lastModified: dest._updatedAt,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }));
+    return destinations.map((dest) => {
+      // Higher priority for major destinations
+      const slug = dest.slug.current;
+      let priority = 0.8;
+      if (["tokyo", "kyoto", "osaka"].includes(slug)) {
+        priority = 0.9;
+      } else if (["hiroshima", "nara", "hakone", "nikko"].includes(slug)) {
+        priority = 0.85;
+      }
+      
+      return {
+        url: `/destinations/${slug}`,
+        lastModified: dest._updatedAt,
+        changeFrequency: "weekly" as const,
+        priority,
+      };
+    });
   } catch (error) {
     console.error("Error fetching destinations for sitemap:", error);
     return [];
@@ -400,12 +411,12 @@ async function getItineraries(): Promise<SitemapEntry[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static pages with default priorities
+  // Static pages with optimized priorities
   const staticSitemap: SitemapEntry[] = staticPages.map((page) => ({
-    url: `${baseUrl}${page}`,
+    url: `${baseUrl}${page.path}`,
     lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: page === "" ? 1.0 : 0.8, // Homepage gets highest priority
+    changeFrequency: page.changeFreq,
+    priority: page.priority,
   }));
 
   // Fetch dynamic content

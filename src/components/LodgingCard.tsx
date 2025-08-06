@@ -38,7 +38,7 @@ export default function LodgingCard({ lodging }: LodgingCardProps) {
         {lodging.image ? (
           <Image
             src={lodging.image}
-            alt={lodging.name}
+            alt={`${lodging.name} - Japan accommodation guide`}
             width={400}
             height={300}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"

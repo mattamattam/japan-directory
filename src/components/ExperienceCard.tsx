@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { StarIcon, MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
+import { ExperienceImage } from "./OptimizedImage";
 
 interface Experience {
   _id: string;
@@ -28,19 +29,14 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
     >
       {/* Experience Image */}
       <div className="relative h-48 bg-gray-200">
-        {experience.image ? (
-          <Image
-            src={experience.image}
-            alt={experience.name}
-            width={400}
-            height={300}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-            <MapPinIcon className="h-12 w-12 text-white opacity-50" />
-          </div>
-        )}
+        <ExperienceImage
+          src={experience.image}
+          name={experience.name}
+          category={experience.category}
+          width={400}
+          height={300}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+        />
 
         {/* Category Badge */}
         <div className="absolute top-3 left-3">

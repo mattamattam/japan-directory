@@ -2,7 +2,9 @@
 import { Metadata } from "next";
 import {
   getFeaturedDestinations,
+  getDestinations,
   getFeaturedExperiences,
+  getExperiences,
   getEssentials,
   getFood,
   getLodging,
@@ -19,7 +21,9 @@ import ItineraryCard from "@/components/ItineraryCard";
 import AdBanner from "@/components/AdBanner";
 import HeroMontage from "./components/HeroMontage";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import HorizontalCarousel from "@/components/HorizontalCarousel";
 import Link from "next/link";
+import { getOrganizationStructuredData, getWebsiteStructuredData, generateStructuredDataScript } from "@/lib/structured-data";
 import {
   MapIcon,
   StarIcon,
@@ -39,31 +43,64 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://visitjapanhq.com",
   },
+  openGraph: {
+    type: "website",
+    siteName: "Visit Japan HQ",
+    title: "Visit Japan HQ - Your Complete Guide to Japan Travel",
+    description: "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
+    url: "https://visitjapanhq.com",
+    images: [
+      {
+        url: "https://visitjapanhq.com/images/og-homepage.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Visit Japan HQ - Japan Travel Guide",
+      },
+    ],
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Visit Japan HQ - Your Complete Guide to Japan Travel",
+    description: "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
+    images: ["https://visitjapanhq.com/images/twitter-homepage.jpg"],
+    creator: "@visitjapanhq",
+    site: "@visitjapanhq",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export const revalidate = 3600; // Revalidate every hour
 
 export default async function Home() {
-  // Fetch data from Sanity
-  const featuredDestinations = await getFeaturedDestinations(3);
-  const featuredExperiences = await getFeaturedExperiences(3);
+  // Fetch data from Sanity - get all items for carousel display
+  const allDestinations = await getDestinations();
+  const allExperiences = await getExperiences();
   const essentials = await getEssentials();
   const foodGuides = await getFood();
   const lodging = await getLodging();
   const itineraries = await getItineraries();
 
-  // Get top items from each section
-  const topEssentials = Array.isArray(essentials) ? essentials.slice(0, 3) : [];
-  const topFoodGuides = Array.isArray(foodGuides) ? foodGuides.slice(0, 3) : [];
-  const topLodging = Array.isArray(lodging) ? lodging.slice(0, 3) : [];
-  const topItineraries = Array.isArray(itineraries)
-    ? itineraries.slice(0, 3)
-    : [];
+  // Use all items for carousel display instead of limiting to top 3
+  const displayEssentials = Array.isArray(essentials) ? essentials : [];
+  const displayFoodGuides = Array.isArray(foodGuides) ? foodGuides : [];
+  const displayLodging = Array.isArray(lodging) ? lodging : [];
+  const displayItineraries = Array.isArray(itineraries) ? itineraries : [];
 
   // Fallback data if Sanity is not configured
   const destinations =
-    featuredDestinations.length > 0
-      ? featuredDestinations
+    allDestinations.length > 0
+      ? allDestinations
       : [
           {
             _id: 1,
@@ -103,8 +140,14 @@ export default async function Home() {
           },
         ];
 
+  // Generate structured data for homepage
+  const organizationData = getOrganizationStructuredData();
+  const websiteData = getWebsiteStructuredData();
+
   return (
     <Layout>
+      {/* Structured Data */}
+      {generateStructuredDataScript([organizationData, websiteData])}
       {/* Hero Section */}
       <HeroMontage>
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
@@ -221,14 +264,14 @@ export default async function Home() {
               View All <ArrowRightIcon className="h-4 w-4 ml-1" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <HorizontalCarousel>
             {destinations.map((destination: Destination) => (
               <DestinationCard
                 key={destination._id}
                 destination={destination}
               />
             ))}
-          </div>
+          </HorizontalCarousel>
         </div>
       </section>
 
@@ -236,7 +279,7 @@ export default async function Home() {
       <AdBanner adSlot="homepage-middle" adFormat="banner" />
 
       {/* Featured Experiences */}
-      {featuredExperiences.length > 0 && (
+      {allExperiences.length > 0 && (
         <section className="py-16 bg-gray-50">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="flex items-center justify-between mb-12">
@@ -256,17 +299,17 @@ export default async function Home() {
                 View All <ArrowRightIcon className="h-4 w-4 ml-1" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredExperiences.map((experience: any) => (
+            <HorizontalCarousel>
+              {allExperiences.map((experience: any) => (
                 <ExperienceCard key={experience._id} experience={experience} />
               ))}
-            </div>
+            </HorizontalCarousel>
           </div>
         </section>
       )}
 
       {/* Travel Essentials */}
-      {topEssentials.length > 0 && (
+      {displayEssentials.length > 0 && (
         <section className="py-16 bg-white">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="flex items-center justify-between mb-12">
@@ -285,17 +328,17 @@ export default async function Home() {
                 View All <ArrowRightIcon className="h-4 w-4 ml-1" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {topEssentials.map((essential) => (
+            <HorizontalCarousel>
+              {displayEssentials.map((essential) => (
                 <EssentialCard key={essential._id} essential={essential} />
               ))}
-            </div>
+            </HorizontalCarousel>
           </div>
         </section>
       )}
 
       {/* Food Guides */}
-      {topFoodGuides.length > 0 && (
+      {displayFoodGuides.length > 0 && (
         <section className="py-16 bg-gray-50">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="flex items-center justify-between mb-12">
@@ -314,17 +357,17 @@ export default async function Home() {
                 View All <ArrowRightIcon className="h-4 w-4 ml-1" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {topFoodGuides.map((food) => (
+            <HorizontalCarousel>
+              {displayFoodGuides.map((food) => (
                 <FoodGuideCard key={food._id} guide={food} />
               ))}
-            </div>
+            </HorizontalCarousel>
           </div>
         </section>
       )}
 
       {/* Lodging */}
-      {topLodging.length > 0 && (
+      {displayLodging.length > 0 && (
         <section className="py-16 bg-white">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="flex items-center justify-between mb-12">
@@ -343,17 +386,17 @@ export default async function Home() {
                 View All <ArrowRightIcon className="h-4 w-4 ml-1" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {topLodging.map((lodging) => (
+            <HorizontalCarousel>
+              {displayLodging.map((lodging) => (
                 <LodgingCard key={lodging._id} lodging={lodging} />
               ))}
-            </div>
+            </HorizontalCarousel>
           </div>
         </section>
       )}
 
       {/* Itineraries */}
-      {topItineraries.length > 0 && (
+      {displayItineraries.length > 0 && (
         <section className="py-16 bg-gray-50">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="flex items-center justify-between mb-12">
@@ -372,11 +415,11 @@ export default async function Home() {
                 View All <ArrowRightIcon className="h-4 w-4 ml-1" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {topItineraries.map((itinerary) => (
+            <HorizontalCarousel>
+              {displayItineraries.map((itinerary) => (
                 <ItineraryCard key={itinerary._id} itinerary={itinerary} />
               ))}
-            </div>
+            </HorizontalCarousel>
           </div>
         </section>
       )}

@@ -9,6 +9,7 @@ import Layout from "@/components/Layout";
 import SidebarAd from "@/components/SidebarAd";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { shouldShowNewsletterSignup } from "@/lib/utils";
+import { getDestinationStructuredData, getBreadcrumbStructuredData, generateStructuredDataScript } from "@/lib/structured-data";
 
 interface DestinationPageProps {
   params: Promise<{ slug: string }>;
@@ -31,6 +32,43 @@ export async function generateMetadata({ params }: DestinationPageProps) {
     keywords: `${destination.name}, Japan, ${destination.name} hotels, ${destination.name} restaurants, ${destination.name} tours, ${destination.name} shopping`,
     alternates: {
       canonical: `https://visitjapanhq.com/destinations/${resolvedParams.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      siteName: "Visit Japan HQ",
+      title: `${destination.name} - Visit Japan HQ`,
+      description: `Explore ${destination.name}, Japan. Discover hotels, restaurants, tours, and shopping in this amazing destination.`,
+      url: `https://visitjapanhq.com/destinations/${resolvedParams.slug}`,
+      images: [
+        {
+          url: destination.image || `https://visitjapanhq.com/images/og-${resolvedParams.slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `${destination.name}, Japan - Travel Guide`,
+        },
+      ],
+      locale: "en_US",
+      section: "Travel",
+      tags: [`${destination.name}`, "Japan", "Travel", "Tourism"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${destination.name} - Visit Japan HQ`,
+      description: `Explore ${destination.name}, Japan. Discover hotels, restaurants, tours, and shopping in this amazing destination.`,
+      images: [destination.image || `https://visitjapanhq.com/images/twitter-${resolvedParams.slug}.jpg`],
+      creator: "@visitjapanhq",
+      site: "@visitjapanhq",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
   };
 }
@@ -82,8 +120,18 @@ export default async function DestinationPage({
   // Check if newsletter signup should show on this page
   const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);
 
+  // Generate structured data
+  const destinationData = getDestinationStructuredData(destination, resolvedParams.slug);
+  const breadcrumbData = getBreadcrumbStructuredData([
+    { name: "Home", url: "/" },
+    { name: "Destinations", url: "/destinations" },
+    { name: destination.name }
+  ]);
+
   return (
     <Layout>
+      {/* Structured Data */}
+      {generateStructuredDataScript([destinationData, breadcrumbData])}
       <DestinationPageClient
         destination={destination}
         districts={districtsWithProps}

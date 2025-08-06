@@ -16,6 +16,16 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Remove trailing slashes from non-root paths
+      {
+        source: '/:path+/',
+        destination: '/:path+',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

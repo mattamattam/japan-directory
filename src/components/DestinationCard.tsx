@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { StarIcon, MapPinIcon } from "@heroicons/react/24/solid";
 import type { Destination } from "@/types";
+import { DestinationImage } from "./OptimizedImage";
 
 export default function DestinationCard({
   destination,
@@ -17,19 +17,13 @@ export default function DestinationCard({
     >
       {/* Destination Image */}
       <div className="relative h-48 bg-gray-200">
-        {destination.image ? (
-          <Image
-            src={destination.image}
-            alt={destination.name}
-            width={400}
-            height={300}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-red-400 to-orange-500 flex items-center justify-center">
-            <MapPinIcon className="h-12 w-12 text-white opacity-50" />
-          </div>
-        )}
+        <DestinationImage
+          src={destination.image}
+          name={destination.name}
+          width={400}
+          height={300}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+        />
 
         {/* Region Badge */}
         {destination.region && (

@@ -36,6 +36,9 @@ export const metadata: Metadata = {
     "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
   keywords:
     "Japan travel, Japan tourism, Tokyo, Kyoto, Osaka, Japan hotels, Japan tours, Japan destinations",
+  alternates: {
+    canonical: "https://visitjapanhq.com",
+  },
 };
 
 export const revalidate = 3600; // Revalidate every hour
@@ -379,17 +382,18 @@ export default async function Home() {
       )}
 
       {/* Newsletter Signup */}
-      <section className="bg-red-600 py-16">
+      <section className="bg-gray-50 py-12">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
               Get Japan Travel Updates
             </h2>
-            <p className="mt-4 text-lg leading-8 text-red-100">
-              Subscribe to our newsletter for the latest travel tips, deals, and
-              Japan insights
+            <p className="mt-3 text-base leading-6 text-gray-600">
+              Subscribe for the latest travel tips and Japan insights
             </p>
-            <NewsletterSignup />
+            <div className="mt-6">
+              <NewsletterSignup />
+            </div>
           </div>
         </div>
       </section>

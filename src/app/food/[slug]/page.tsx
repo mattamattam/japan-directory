@@ -6,6 +6,8 @@ import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
 import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import { shouldShowNewsletterSignup } from "@/lib/utils";
 import Image from "next/image";
 import {
   CakeIcon,
@@ -36,6 +38,9 @@ export async function generateMetadata({
     title: `${food.title} - Visit Japan HQ`,
     description: food.seoDescription || food.description,
     keywords: food.seoKeywords?.join(", ") || "",
+    alternates: {
+      canonical: `https://visitjapanhq.com/food/${resolvedParams.slug}`,
+    },
   };
 }
 
@@ -54,6 +59,9 @@ export default async function FoodPage({ params }: FoodPageProps) {
   if (!food) {
     notFound();
   }
+
+  // Check if newsletter signup should show on this page
+  const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);
 
   return (
     <Layout>
@@ -206,6 +214,13 @@ export default async function FoodPage({ params }: FoodPageProps) {
 
             {/* Sidebar Ad */}
             <SidebarAd adSlot="food-sidebar-ad" />
+
+            {/* Newsletter Signup (randomly shown) */}
+            {showNewsletterSignup && (
+              <div className="mt-6">
+                <NewsletterSignup />
+              </div>
+            )}
           </div>
         </div>
       </div>

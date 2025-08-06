@@ -6,6 +6,8 @@ import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
 import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import { shouldShowNewsletterSignup } from "@/lib/utils";
 import Image from "next/image";
 import {
   BookOpenIcon,
@@ -34,6 +36,9 @@ export async function generateMetadata({
     title: `${essential.title} - Visit Japan HQ`,
     description: essential.seoDescription || essential.description,
     keywords: essential.seoKeywords?.join(", ") || "",
+    alternates: {
+      canonical: `https://visitjapanhq.com/essentials/${resolvedParams.slug}`,
+    },
   };
 }
 
@@ -55,6 +60,9 @@ export default async function EssentialPage({ params }: EssentialPageProps) {
   if (!essential) {
     notFound();
   }
+
+  // Check if newsletter signup should show on this page
+  const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);
 
   return (
     <Layout>
@@ -178,6 +186,13 @@ export default async function EssentialPage({ params }: EssentialPageProps) {
 
             {/* Sidebar Ad */}
             <SidebarAd adSlot="essential-sidebar-ad" />
+
+            {/* Newsletter Signup (randomly shown) */}
+            {showNewsletterSignup && (
+              <div className="mt-6">
+                <NewsletterSignup />
+              </div>
+            )}
           </div>
         </div>
       </div>

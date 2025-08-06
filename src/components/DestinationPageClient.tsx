@@ -16,6 +16,7 @@ import PortableText from "./PortableText";
 import Breadcrumb from "./Breadcrumb";
 import AdBanner from "./AdBanner";
 import SidebarAd from "./SidebarAd";
+import NewsletterSignup from "./NewsletterSignup";
 
 // Add Google Maps types
 declare global {
@@ -61,12 +62,14 @@ interface DestinationPageClientProps {
     href: string;
   }>;
   params: { slug: string };
+  showNewsletterSignup?: boolean;
 }
 
 export default function DestinationPageClient({
   destination,
   districts,
   params,
+  showNewsletterSignup = false,
 }: DestinationPageClientProps) {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
@@ -404,6 +407,13 @@ export default function DestinationPageClient({
 
               {/* Sidebar Ad */}
               <SidebarAd adSlot="destination-sidebar-ad" />
+
+              {/* Newsletter Signup (randomly shown) */}
+              {showNewsletterSignup && (
+                <div className="mt-6">
+                  <NewsletterSignup />
+                </div>
+              )}
             </div>
           </div>
         </div>

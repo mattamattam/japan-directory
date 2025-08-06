@@ -7,6 +7,8 @@ import {
 import DestinationPageClient from "@/components/DestinationPageClient";
 import Layout from "@/components/Layout";
 import SidebarAd from "@/components/SidebarAd";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import { shouldShowNewsletterSignup } from "@/lib/utils";
 
 interface DestinationPageProps {
   params: Promise<{ slug: string }>;
@@ -27,6 +29,9 @@ export async function generateMetadata({ params }: DestinationPageProps) {
     title: `${destination.name} - Visit Japan HQ`,
     description: `Explore ${destination.name}, Japan. Discover hotels, restaurants, tours, and shopping in this amazing destination.`,
     keywords: `${destination.name}, Japan, ${destination.name} hotels, ${destination.name} restaurants, ${destination.name} tours, ${destination.name} shopping`,
+    alternates: {
+      canonical: `https://visitjapanhq.com/destinations/${resolvedParams.slug}`,
+    },
   };
 }
 
@@ -74,12 +79,16 @@ export default async function DestinationPage({
     href: `/destinations/${resolvedParams.slug}/districts/${typeof district.slug === "string" ? district.slug : district.slug.current}`,
   }));
 
+  // Check if newsletter signup should show on this page
+  const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);
+
   return (
     <Layout>
       <DestinationPageClient
         destination={destination}
         districts={districtsWithProps}
         params={resolvedParams}
+        showNewsletterSignup={showNewsletterSignup}
       />
     </Layout>
   );

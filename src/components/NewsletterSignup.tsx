@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -47,6 +48,12 @@ export default function NewsletterSignup() {
       return;
     }
 
+    // Validate consent
+    if (!consent) {
+      setError("Please agree to receive our newsletter.");
+      return;
+    }
+
     // Sanitize email
     const sanitizedEmail = sanitizeEmail(email);
 
@@ -61,6 +68,7 @@ export default function NewsletterSignup() {
         },
         body: JSON.stringify({
           email: sanitizedEmail,
+          consent: consent,
           csrfToken: csrfToken,
         }),
       });
@@ -89,14 +97,13 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg">
-      <h3 className="text-xl font-semibold mb-4">Stay Updated</h3>
-      <p className="text-blue-100 mb-6">
-        Get the latest Japan travel tips, destination guides, and exclusive
-        content delivered to your inbox.
+    <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-lg">
+      <h3 className="text-lg font-semibold mb-3">Stay Updated</h3>
+      <p className="text-emerald-100 mb-4 text-sm">
+        Get Japan travel tips and guides delivered to your inbox.
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <input type="hidden" name="csrfToken" value={csrfToken} />
         <div>
           <input
@@ -104,39 +111,53 @@ export default function NewsletterSignup() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email address"
-            className="w-full px-4 py-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full px-3 py-2 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-300 text-sm"
             disabled={isLoading}
-            maxLength={254} // RFC 5321 limit
+            maxLength={254}
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
             title="Please enter a valid email address"
             autoComplete="email"
           />
         </div>
 
+        <div className="flex items-start space-x-2">
+          <input
+            type="checkbox"
+            id="consent"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            disabled={isLoading}
+            className="mt-0.5 h-3 w-3 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
+            required
+          />
+          <label
+            htmlFor="consent"
+            className="text-xs text-emerald-100 leading-relaxed"
+          >
+            I agree to receive the newsletter and can unsubscribe anytime.
+          </label>
+        </div>
+
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-white text-blue-600 hover:bg-blue-50 disabled:opacity-50"
+          className="w-full bg-white text-emerald-600 hover:bg-emerald-50 disabled:opacity-50 text-sm py-2"
         >
-          {isLoading ? "Subscribing..." : "Subscribe to Newsletter"}
+          {isLoading ? "Subscribing..." : "Subscribe"}
         </Button>
       </form>
 
       {message && (
-        <div className="mt-4 p-3 bg-green-500 bg-opacity-20 rounded-md">
-          <p className="text-green-100">{message}</p>
+        <div className="mt-3 p-2 bg-green-500 bg-opacity-20 rounded-md">
+          <p className="text-green-100 text-sm">{message}</p>
         </div>
       )}
 
       {error && (
-        <div className="mt-4 p-3 bg-red-500 bg-opacity-20 rounded-md">
-          <p className="text-red-100">{error}</p>
+        <div className="mt-3 p-2 bg-red-500 bg-opacity-20 rounded-md">
+          <p className="text-red-100 text-sm">{error}</p>
         </div>
       )}
-
-      <p className="text-xs text-blue-200 mt-4">
-        We respect your privacy. Unsubscribe at any time.
-      </p>
     </div>
   );
 }

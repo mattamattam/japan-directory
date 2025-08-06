@@ -6,13 +6,15 @@ import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
 import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
-import Image from "next/image";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import { shouldShowNewsletterSignup } from "@/lib/utils";
 import {
   StarIcon,
   MapPinIcon,
   ClockIcon,
   CurrencyYenIcon,
 } from "@heroicons/react/24/solid";
+import { ExperienceImage } from "@/components/OptimizedImage";
 
 interface ExperiencePageProps {
   params: Promise<{ slug: string }>;
@@ -35,6 +37,9 @@ export async function generateMetadata({
     title: `${experience.name} - Visit Japan HQ`,
     description: experience.seoDescription || experience.description,
     keywords: experience.seoKeywords?.join(", ") || "",
+    alternates: {
+      canonical: `https://visitjapanhq.com/experiences/${resolvedParams.slug}`,
+    },
   };
 }
 
@@ -56,6 +61,9 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
   if (!experience) {
     notFound();
   }
+
+  // Check if newsletter signup should show on this page
+  const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);
 
   return (
     <Layout>
@@ -124,11 +132,13 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
                       key={index}
                       className="relative h-64 rounded-lg overflow-hidden"
                     >
-                      <Image
+                      <ExperienceImage
                         src={image.url || image}
-                        alt={`${experience.name} - Image ${index + 1}`}
-                        fill
-                        className="object-cover"
+                        name={experience.name}
+                        category={experience.category}
+                        width={400}
+                        height={300}
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   ))}
@@ -207,8 +217,8 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
               </div>
             )}
 
-            {/* CTA */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white">
+            {/* CTA - Hidden until affiliates are ready */}
+            {/* <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white">
               <h3 className="text-lg font-semibold mb-2">Ready to Book?</h3>
               <p className="text-blue-100 text-sm mb-4">
                 Contact us to reserve your spot for this amazing experience.
@@ -216,10 +226,17 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
               <button className="w-full bg-white text-blue-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition-colors">
                 Book This Experience
               </button>
-            </div>
+            </div> */}
 
             {/* Sidebar Ad */}
             <SidebarAd adSlot="experience-sidebar-ad" />
+
+            {/* Newsletter Signup (randomly shown) */}
+            {showNewsletterSignup && (
+              <div className="mt-6">
+                <NewsletterSignup />
+              </div>
+            )}
           </div>
         </div>
       </div>

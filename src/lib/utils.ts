@@ -5,6 +5,24 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Function to determine if newsletter signup should show on a page
+export function shouldShowNewsletterSignup(slug: string): boolean {
+  // Create a consistent hash from the slug
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    const char = slug.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+
+  // Use the hash to determine if this page should show newsletter signup
+  // This will be consistent for the same slug but random across different slugs
+  const randomValue = Math.abs(hash) % 100;
+
+  // Show on approximately 20% of pages
+  return randomValue < 20;
+}
+
 export function formatPrice(price: number, currency = "USD") {
   return new Intl.NumberFormat("en-US", {
     style: "currency",

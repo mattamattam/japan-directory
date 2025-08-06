@@ -17,6 +17,9 @@ export const metadata: Metadata = {
     "Discover authentic Japanese experiences and activities. From tea ceremonies and sushi-making classes to hiking sacred mountains and hot spring baths.",
   keywords:
     "Japan experiences, Japanese activities, tea ceremony, sushi making, hot springs, cultural tours, Japan tours",
+  alternates: {
+    canonical: "https://visitjapanhq.com/experiences",
+  },
 };
 
 export const revalidate = 3600; // Revalidate every hour

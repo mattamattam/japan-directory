@@ -13,6 +13,8 @@ export function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/_next") ||
     request.nextUrl.pathname.startsWith("/favicon") ||
     request.nextUrl.pathname.startsWith("/images") ||
+    request.nextUrl.pathname.startsWith("/robots") ||
+    request.nextUrl.pathname.startsWith("/sitemap") ||
     request.nextUrl.pathname.includes(".");
 
   // Check for maintenance override secret (from URL parameter or cookie)

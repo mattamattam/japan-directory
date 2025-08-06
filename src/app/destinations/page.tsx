@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     "Discover the best destinations in Japan. From Tokyo's modern metropolis to Kyoto's ancient temples, explore cities, regions, and attractions across Japan.",
   keywords:
     "Japan destinations, Tokyo, Kyoto, Osaka, Hiroshima, Nara, Sapporo, Japan cities, Japan regions, Japan attractions",
+  alternates: {
+    canonical: "https://visitjapanhq.com/destinations",
+  },
 };
 
 export const revalidate = 3600; // Revalidate every hour

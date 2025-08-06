@@ -24,15 +24,23 @@ export async function generateMetadata({ params }: SectionPageProps) {
     title: `${sectionPage.title} - Visit Japan HQ`,
     description: sectionPage.seoDescription || sectionPage.description,
     keywords: sectionPage.seoKeywords?.join(", ") || "",
+    alternates: {
+      canonical: `https://visitjapanhq.com/${resolvedParams.slug}`,
+    },
   };
 }
 
 export async function generateStaticParams() {
   const sectionPages = await getSectionPages();
-  const reservedRoutes = ["destinations", "blog"]; // Routes that conflict with static pages
+  const reservedRoutes = [
+    "destinations", "blog", "experiences", "food", "essentials", 
+    "lodging", "itineraries", "about", "contact", "privacy", 
+    "terms", "affiliate-disclosure", "unsubscribe", "verify-email",
+    "maintenance", "override", "api"
+  ]; // Routes that conflict with static pages
 
   return sectionPages
-    .filter((page: any) => !reservedRoutes.includes(page.slug.current))
+    .filter((page: any) => page?.slug?.current && !reservedRoutes.includes(page.slug.current))
     .map((page: any) => ({
       slug: page.slug.current,
     }));

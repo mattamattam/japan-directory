@@ -98,16 +98,16 @@ export const FOOD_INTERNAL_LINKS = {
       title: "Fresh sushi at Tsukiji Market",
     },
     {
-      text: "sushi etiquette guide",
-      href: "/essentials/sushi-etiquette",
-      title: "How to eat sushi properly in Japan",
+      text: "Japan's Raw Ambassadors",
+      href: "/food/sushi-and-sashimi",
+      title: "The art of eating raw fish in Japan",
     },
   ],
   ramen: [
     {
-      text: "Tokyo's ramen districts",
-      href: "/destinations/tokyo/food/ramen",
-      title: "Best ramen neighborhoods in Tokyo",
+      text: "Japan's Ramen Noodle Obsession",
+      href: "/food/ramen-noodle-obsession",
+      title: "The history and evolution of ramen in Japan",
     },
     {
       text: "Osaka's unique ramen styles",
@@ -115,29 +115,10 @@ export const FOOD_INTERNAL_LINKS = {
       title: "Osaka's distinctive ramen variations",
     },
   ],
-  sake: [
-    {
-      text: "sake tasting experiences",
-      href: "/experiences/sake-tasting",
-      title: "Traditional sake tasting tours",
-    },
-    {
-      text: "Kyoto's sake breweries",
-      href: "/destinations/kyoto",
-      title: "Historic sake breweries in Kyoto",
-    },
-  ],
 } as const;
 
 // Experience-related internal links
 export const EXPERIENCE_INTERNAL_LINKS = {
-  temples: [
-    {
-      text: "Kyoto's temple district",
-      href: "/destinations/kyoto",
-      title: "Explore Kyoto's historic temples",
-    },
-  ],
   onsen: [
     {
       text: "Onsen Retreat",
@@ -191,12 +172,6 @@ export function getContextualLinks(
     }
     if (lowerContent.includes("ramen")) {
       links.push(...FOOD_INTERNAL_LINKS.ramen);
-    }
-    if (lowerContent.includes("sake")) {
-      links.push(...FOOD_INTERNAL_LINKS.sake);
-    }
-    if (lowerContent.includes("temple") || lowerContent.includes("shrine")) {
-      links.push(...EXPERIENCE_INTERNAL_LINKS.temples);
     }
     if (lowerContent.includes("onsen") || lowerContent.includes("hot spring")) {
       links.push(...EXPERIENCE_INTERNAL_LINKS.onsen);

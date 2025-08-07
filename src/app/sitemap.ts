@@ -63,13 +63,17 @@ const staticPages = [
   { path: "/contact", priority: 0.5, changeFreq: "monthly" as const },
   { path: "/privacy", priority: 0.3, changeFreq: "yearly" as const },
   { path: "/terms", priority: 0.3, changeFreq: "yearly" as const },
-  { path: "/affiliate-disclosure", priority: 0.3, changeFreq: "yearly" as const },
+  {
+    path: "/affiliate-disclosure",
+    priority: 0.3,
+    changeFreq: "yearly" as const,
+  },
 ];
 
 // Fetch destinations from Sanity
 async function getDestinations(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "destination" && (published == true || published == null)] | order(sortOrder asc) {
+    const query = `*[_type == "destination" && published == true] | order(sortOrder asc) {
       slug,
       _updatedAt
     }`;
@@ -84,7 +88,7 @@ async function getDestinations(): Promise<SitemapEntry[]> {
       } else if (["hiroshima", "nara", "hakone", "nikko"].includes(slug)) {
         priority = 0.85;
       }
-      
+
       return {
         url: `/destinations/${slug}`,
         lastModified: dest._updatedAt,
@@ -101,7 +105,7 @@ async function getDestinations(): Promise<SitemapEntry[]> {
 // Fetch districts from Sanity
 async function getDistricts(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "district" && (published == true || published == null)] {
+    const query = `*[_type == "district" && published == true] {
       slug,
       _updatedAt,
       destination->{ slug }
@@ -127,7 +131,7 @@ async function getDistricts(): Promise<SitemapEntry[]> {
 // Fetch hotels from Sanity
 async function getHotels(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "hotel" && (published == true || published == null)] {
+    const query = `*[_type == "hotel" && published == true] {
       slug,
       _updatedAt,
       destination->{ slug },
@@ -165,7 +169,7 @@ async function getHotels(): Promise<SitemapEntry[]> {
 // Fetch restaurants from Sanity
 async function getRestaurants(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "restaurant" && (published == true || published == null)] {
+    const query = `*[_type == "restaurant" && published == true] {
       slug,
       _updatedAt,
       destination->{ slug },
@@ -204,7 +208,7 @@ async function getRestaurants(): Promise<SitemapEntry[]> {
 // Fetch shopping from Sanity
 async function getShopping(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "shopping" && (published == true || published == null)] {
+    const query = `*[_type == "shopping" && published == true] {
       slug,
       _updatedAt,
       destination->{ slug },
@@ -242,7 +246,7 @@ async function getShopping(): Promise<SitemapEntry[]> {
 // Fetch tours from Sanity
 async function getTours(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "tour" && (published == true || published == null)] {
+    const query = `*[_type == "tour" && published == true] {
       slug,
       _updatedAt,
       destination->{ slug },
@@ -280,7 +284,7 @@ async function getTours(): Promise<SitemapEntry[]> {
 // Fetch blog posts from Sanity
 async function getBlogPosts(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "blogPost" && (published == true || published == null)] | order(publishedAt desc) {
+    const query = `*[_type == "blogPost" && published == true] | order(publishedAt desc) {
       slug,
       publishedAt,
       _updatedAt
@@ -305,7 +309,7 @@ async function getBlogPosts(): Promise<SitemapEntry[]> {
 // Fetch experiences from Sanity
 async function getExperiences(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "experience" && (published == true || published == null)] | order(sortOrder asc) {
+    const query = `*[_type == "experience" && published == true] | order(sortOrder asc) {
       slug,
       _updatedAt
     }`;
@@ -326,7 +330,7 @@ async function getExperiences(): Promise<SitemapEntry[]> {
 // Fetch lodging from Sanity
 async function getLodging(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "lodging" && (published == true || published == null)] | order(sortOrder asc) {
+    const query = `*[_type == "lodging" && published == true] | order(sortOrder asc) {
       slug,
       _updatedAt
     }`;
@@ -348,7 +352,7 @@ async function getLodging(): Promise<SitemapEntry[]> {
 // Fetch food guides from Sanity
 async function getFoodGuides(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "food" && (published == true || published == null)] | order(sortOrder asc) {
+    const query = `*[_type == "food" && published == true] | order(sortOrder asc) {
       slug,
       _updatedAt
     }`;
@@ -370,7 +374,7 @@ async function getFoodGuides(): Promise<SitemapEntry[]> {
 // Fetch essentials from Sanity
 async function getEssentials(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "essentials" && (published == true || published == null)] | order(sortOrder asc) {
+    const query = `*[_type == "essentials" && published == true] | order(sortOrder asc) {
       slug,
       _updatedAt
     }`;
@@ -392,7 +396,7 @@ async function getEssentials(): Promise<SitemapEntry[]> {
 // Fetch itineraries from Sanity
 async function getItineraries(): Promise<SitemapEntry[]> {
   try {
-    const query = `*[_type == "itinerary" && (published == true || published == null)] | order(sortOrder asc) {
+    const query = `*[_type == "itinerary" && published == true] | order(sortOrder asc) {
       slug,
       _updatedAt
     }`;

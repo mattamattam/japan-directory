@@ -134,9 +134,13 @@ export default function Header({ navigationData, sectionPages }: HeaderProps) {
           ))}
         </div>
 
-        {/* Header Widgets */}
+        {/* Header Widgets - Only show on homepage */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <HeaderWidgets showExchangeRate={pathname === "/"} />
+          {pathname === "/" ? (
+            <HeaderWidgets showExchangeRate={true} />
+          ) : (
+            <div className="w-48" />
+          )}
         </div>
       </nav>
 

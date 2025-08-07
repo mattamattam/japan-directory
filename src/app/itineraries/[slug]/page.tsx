@@ -15,6 +15,10 @@ import {
   CurrencyYenIcon,
   CheckIcon,
 } from "@heroicons/react/24/solid";
+import ContentMetadata, {
+  ContentStatusPills,
+  LastUpdatedText,
+} from "@/components/ContentMetadata";
 
 interface ItineraryPageProps {
   params: Promise<{ slug: string }>;
@@ -128,7 +132,15 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* About Section */}
-            <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
+            <section className="bg-white rounded-lg shadow-sm p-8 mb-8 relative">
+              {/* Content Status Pills in upper right corner */}
+              <div className="absolute top-4 right-4">
+                <ContentStatusPills
+                  lastUpdated={itinerary._updatedAt || new Date()}
+                  factChecked={true}
+                />
+              </div>
+
               <div className="prose prose-lg text-gray-600">
                 {safeItinerary.longDescription &&
                 Array.isArray(safeItinerary.longDescription) ? (
@@ -139,6 +151,13 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
                 ) : (
                   <p className="mb-4">{safeItinerary.description}</p>
                 )}
+              </div>
+
+              {/* Last Updated at bottom of article */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <LastUpdatedText
+                  lastUpdated={itinerary._updatedAt || new Date()}
+                />
               </div>
             </section>
 

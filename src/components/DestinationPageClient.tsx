@@ -20,6 +20,7 @@ import NewsletterSignup from "./NewsletterSignup";
 import { getContextualLinks, InternalLinkSuggestions } from "@/lib/internal-linking";
 import FAQSection, { JAPAN_TRAVEL_FAQS, TOKYO_FAQS, KYOTO_FAQS } from "./FAQSection";
 import ContentMetadata from "./ContentMetadata";
+import WeatherSidebar from "./WeatherSidebar";
 
 // Add Google Maps types
 declare global {
@@ -438,6 +439,9 @@ export default function DestinationPageClient({
                   <li>• Take scenic walks and photography</li>
                 </ul>
               </div>
+
+              {/* Weather Widget */}
+              <WeatherSidebar destinationName={destination.name} />
 
               {/* Travel Tips */}
               <div className="bg-white rounded-lg shadow-sm p-6">

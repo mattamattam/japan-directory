@@ -8,7 +8,10 @@ import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { shouldShowNewsletterSignup } from "@/lib/utils";
-import ContentMetadata from "@/components/ContentMetadata";
+import ContentMetadata, {
+  ContentStatusPills,
+  LastUpdatedText,
+} from "@/components/ContentMetadata";
 import Image from "next/image";
 import {
   BookOpenIcon,
@@ -106,22 +109,16 @@ export default async function EssentialPage({ params }: EssentialPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* Content Metadata */}
-            <ContentMetadata 
-              lastUpdated={essential._updatedAt || new Date()}
-              publishedAt={essential.publishedAt || essential._createdAt}
-              factChecked={true}
-              sources={[
-                "Government Travel Resources",
-                "Embassy Guidelines", 
-                "Official Transport Companies",
-                "Japan Travel Authorities"
-              ]}
-              className="mb-8"
-            />
-
             {/* About Section */}
-            <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
+            <section className="bg-white rounded-lg shadow-sm p-8 mb-8 relative">
+              {/* Content Status Pills in upper right corner */}
+              <div className="absolute top-4 right-4">
+                <ContentStatusPills
+                  lastUpdated={essential._updatedAt || new Date()}
+                  factChecked={true}
+                />
+              </div>
+
               <div className="prose prose-lg text-gray-600">
                 {essential.longDescription ? (
                   <PortableText content={essential.longDescription} />
@@ -141,6 +138,13 @@ export default async function EssentialPage({ params }: EssentialPageProps) {
                   <TagIcon className="h-4 w-4 text-gray-500 mr-2" />
                   <span className="text-gray-700">{essential.category}</span>
                 </div>
+              </div>
+
+              {/* Last Updated at bottom of article */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <LastUpdatedText
+                  lastUpdated={essential._updatedAt || new Date()}
+                />
               </div>
             </section>
 

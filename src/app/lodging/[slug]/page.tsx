@@ -6,7 +6,10 @@ import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
 import SidebarAd from "@/components/SidebarAd";
 import PortableText from "@/components/PortableText";
-import ContentMetadata from "@/components/ContentMetadata";
+import ContentMetadata, {
+  ContentStatusPills,
+  LastUpdatedText,
+} from "@/components/ContentMetadata";
 import Image from "next/image";
 import {
   HomeIcon,
@@ -116,22 +119,16 @@ export default async function LodgingPage({ params }: LodgingPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* Content Metadata */}
-            <ContentMetadata 
-              lastUpdated={lodging._updatedAt || new Date()}
-              publishedAt={lodging.publishedAt || lodging._createdAt}
-              factChecked={true}
-              sources={[
-                "Hotel Booking Platforms",
-                "Official Accommodation Websites", 
-                "Travel Agency Partners",
-                "Guest Reviews & Ratings"
-              ]}
-              className="mb-8"
-            />
-
             {/* About Section */}
-            <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
+            <section className="bg-white rounded-lg shadow-sm p-8 mb-8 relative">
+              {/* Content Status Pills in upper right corner */}
+              <div className="absolute top-4 right-4">
+                <ContentStatusPills
+                  lastUpdated={lodging._updatedAt || new Date()}
+                  factChecked={true}
+                />
+              </div>
+
               <div className="prose prose-lg text-gray-600">
                 {safeLodging.longDescription ? (
                   <PortableText content={safeLodging.longDescription} />
@@ -140,6 +137,13 @@ export default async function LodgingPage({ params }: LodgingPageProps) {
                 ) : (
                   <p className="mb-4">{safeLodging.description}</p>
                 )}
+              </div>
+
+              {/* Last Updated at bottom of article */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <LastUpdatedText
+                  lastUpdated={lodging._updatedAt || new Date()}
+                />
               </div>
             </section>
 

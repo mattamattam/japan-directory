@@ -43,6 +43,52 @@ export async function generateMetadata({
     alternates: {
       canonical: `https://visitjapanhq.com/essentials/${resolvedParams.slug}`,
     },
+    openGraph: {
+      type: "article",
+      siteName: "Visit Japan HQ",
+      title: `${essential.title} - Visit Japan HQ`,
+      description: essential.seoDescription || essential.description,
+      url: `https://visitjapanhq.com/essentials/${resolvedParams.slug}`,
+      images: [
+        {
+          url:
+            essential.image ||
+            `https://visitjapanhq.com/images/og-essential-${resolvedParams.slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `${essential.title} - Japan Travel Guide`,
+        },
+      ],
+      locale: "en_US",
+      section: "Travel Guide",
+      tags: essential.seoKeywords || [
+        "Japan Travel",
+        "Japan Guide",
+        "Travel Tips",
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${essential.title} - Visit Japan HQ`,
+      description: essential.seoDescription || essential.description,
+      images: [
+        essential.image ||
+          `https://visitjapanhq.com/images/twitter-essential-${resolvedParams.slug}.jpg`,
+      ],
+      creator: "@visitjapanhq",
+      site: "@visitjapanhq",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 

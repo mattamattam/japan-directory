@@ -41,6 +41,55 @@ export async function generateMetadata({
     title: `${itinerary.title} - Visit Japan HQ`,
     description: itinerary.seoDescription || itinerary.description,
     keywords: itinerary.seoKeywords?.join(", ") || "",
+    alternates: {
+      canonical: `https://visitjapanhq.com/itineraries/${resolvedParams.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      siteName: "Visit Japan HQ",
+      title: `${itinerary.title} - Visit Japan HQ`,
+      description: itinerary.seoDescription || itinerary.description,
+      url: `https://visitjapanhq.com/itineraries/${resolvedParams.slug}`,
+      images: [
+        {
+          url:
+            itinerary.image ||
+            `https://visitjapanhq.com/images/og-itinerary-${resolvedParams.slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `${itinerary.title} - Japan Travel Itinerary`,
+        },
+      ],
+      locale: "en_US",
+      section: "Travel Itineraries",
+      tags: itinerary.seoKeywords || [
+        "Japan Itinerary",
+        "Japan Travel",
+        "Travel Planning",
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${itinerary.title} - Visit Japan HQ`,
+      description: itinerary.seoDescription || itinerary.description,
+      images: [
+        itinerary.image ||
+          `https://visitjapanhq.com/images/twitter-itinerary-${resolvedParams.slug}.jpg`,
+      ],
+      creator: "@visitjapanhq",
+      site: "@visitjapanhq",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 

@@ -15,7 +15,8 @@ export function getOrganizationStructuredData() {
     name: ORGANIZATION_NAME,
     url: SITE_URL,
     logo: ORGANIZATION_LOGO,
-    description: "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips for an unforgettable Japanese adventure.",
+    description:
+      "Your ultimate guide to Japan tourism. Find the best hotels, attractions, restaurants, and travel tips for an unforgettable Japanese adventure.",
     sameAs: [
       // Add social media URLs when available
     ],
@@ -24,12 +25,12 @@ export function getOrganizationStructuredData() {
       contactType: "Customer Service",
       url: `${SITE_URL}/contact`,
       areaServed: "JP",
-      availableLanguage: ["en", "ja"]
+      availableLanguage: ["en", "ja"],
     },
     areaServed: {
       "@type": "Country",
       name: "Japan",
-      alternateName: "JP"
+      alternateName: "JP",
     },
     serviceType: [
       "Travel Planning",
@@ -37,7 +38,7 @@ export function getOrganizationStructuredData() {
       "Destination Guides",
       "Cultural Experiences",
       "Hotel Recommendations",
-      "Restaurant Guides"
+      "Restaurant Guides",
     ],
     knowsAbout: [
       "Japan Tourism",
@@ -46,8 +47,8 @@ export function getOrganizationStructuredData() {
       "Kyoto Travel",
       "Japanese Food",
       "Japanese Hotels",
-      "Japanese Experiences"
-    ]
+      "Japanese Experiences",
+    ],
   };
 }
 
@@ -58,25 +59,29 @@ export function getWebsiteStructuredData() {
     "@type": "WebSite",
     name: ORGANIZATION_NAME,
     url: SITE_URL,
-    description: "Discover the best of Japan with our comprehensive travel guide. From Tokyo to Kyoto, get insider tips, cultural insights, and practical advice for your Japan adventure.",
+    description:
+      "Discover the best of Japan with our comprehensive travel guide. From Tokyo to Kyoto, get insider tips, cultural insights, and practical advice for your Japan adventure.",
     publisher: {
       "@type": "Organization",
       name: ORGANIZATION_NAME,
-      logo: ORGANIZATION_LOGO
+      logo: ORGANIZATION_LOGO,
     },
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/search?q={search_term_string}`
+        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
       },
-      "query-input": "required name=search_term_string"
-    }
+      "query-input": "required name=search_term_string",
+    },
   };
 }
 
 // Destination structured data
-export function getDestinationStructuredData(destination: Destination, slug: string) {
+export function getDestinationStructuredData(
+  destination: Destination,
+  slug: string
+) {
   const baseData = {
     "@context": "https://schema.org",
     "@type": "TouristDestination",
@@ -87,20 +92,24 @@ export function getDestinationStructuredData(destination: Destination, slug: str
     address: {
       "@type": "PostalAddress",
       addressCountry: "JP",
-      addressRegion: destination.region || "Japan"
+      addressRegion: destination.region || "Japan",
     },
-    geo: destination.coordinates ? {
-      "@type": "GeoCoordinates",
-      latitude: destination.coordinates.lat,
-      longitude: destination.coordinates.lng
-    } : undefined,
-    image: destination.image ? {
-      "@type": "ImageObject",
-      url: destination.image,
-      description: `${destination.name}, Japan`
-    } : undefined,
+    geo: destination.coordinates
+      ? {
+          "@type": "GeoCoordinates",
+          latitude: destination.coordinates.lat,
+          longitude: destination.coordinates.lng,
+        }
+      : undefined,
+    image: destination.image
+      ? {
+          "@type": "ImageObject",
+          url: destination.image,
+          description: `${destination.name}, Japan`,
+        }
+      : undefined,
     touristType: ["Cultural Tourism", "Urban Tourism", "Food Tourism"],
-    isAccessibleForFree: false
+    isAccessibleForFree: false,
   };
 
   // Add rating if available
@@ -110,7 +119,7 @@ export function getDestinationStructuredData(destination: Destination, slug: str
       ratingValue: destination.rating,
       reviewCount: destination.reviewCount,
       bestRating: 5,
-      worstRating: 1
+      worstRating: 1,
     };
   }
 
@@ -128,15 +137,17 @@ export function getExperienceStructuredData(experience: any, slug: string) {
     url: `${SITE_URL}/experiences/${slug}`,
     address: {
       "@type": "PostalAddress",
-      addressCountry: "JP"
+      addressCountry: "JP",
     },
-    image: experience.image ? {
-      "@type": "ImageObject", 
-      url: experience.image,
-      description: `${experience.name} experience`
-    } : undefined,
+    image: experience.image
+      ? {
+          "@type": "ImageObject",
+          url: experience.image,
+          description: `${experience.name} experience`,
+        }
+      : undefined,
     category: experience.category,
-    isAccessibleForFree: !experience.price
+    isAccessibleForFree: !experience.price,
   };
 
   // Add rating if available
@@ -146,7 +157,7 @@ export function getExperienceStructuredData(experience: any, slug: string) {
       ratingValue: experience.rating,
       reviewCount: experience.reviewCount,
       bestRating: 5,
-      worstRating: 1
+      worstRating: 1,
     };
   }
 
@@ -156,7 +167,7 @@ export function getExperienceStructuredData(experience: any, slug: string) {
       "@type": "Offer",
       price: experience.price,
       priceCurrency: "JPY",
-      availability: "https://schema.org/InStock"
+      availability: "https://schema.org/InStock",
     };
   }
 
@@ -164,18 +175,20 @@ export function getExperienceStructuredData(experience: any, slug: string) {
 }
 
 // Breadcrumb structured data
-export function getBreadcrumbStructuredData(items: Array<{name: string, url?: string}>) {
+export function getBreadcrumbStructuredData(
+  items: Array<{ name: string; url?: string }>
+) {
   const listItems = items.map((item, index) => ({
     "@type": "ListItem",
     position: index + 1,
     name: item.name,
-    item: item.url ? `${SITE_URL}${item.url}` : undefined
+    item: item.url ? `${SITE_URL}${item.url}` : undefined,
   }));
 
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: listItems
+    itemListElement: listItems,
   };
 }
 
@@ -188,34 +201,39 @@ export function getFoodGuideStructuredData(food: any, slug: string) {
     headline: food.title,
     description: food.description,
     url: `${SITE_URL}/food/${slug}`,
-    image: food.image ? {
-      "@type": "ImageObject",
-      url: food.image,
-      description: `${food.title} - Japanese food guide`
-    } : undefined,
+    image: food.image
+      ? {
+          "@type": "ImageObject",
+          url: food.image,
+          description: `${food.title} - Japanese food guide`,
+        }
+      : undefined,
     author: {
       "@type": "Organization",
       name: ORGANIZATION_NAME,
-      url: SITE_URL
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
       name: ORGANIZATION_NAME,
-      logo: ORGANIZATION_LOGO
+      logo: ORGANIZATION_LOGO,
     },
     datePublished: food.publishedAt || new Date().toISOString(),
     dateModified: food._updatedAt || new Date().toISOString(),
     articleSection: "Food & Dining",
-    keywords: food.seoKeywords?.join(", ") || "Japanese food, Japan dining, Japanese cuisine",
+    keywords:
+      food.seoKeywords?.join(", ") ||
+      "Japanese food, Japan dining, Japanese cuisine",
     about: {
       "@type": "Thing",
       name: "Japanese Cuisine",
-      description: "Traditional and modern Japanese food and dining experiences"
-    }
+      description:
+        "Traditional and modern Japanese food and dining experiences",
+    },
   };
 }
 
-// Essential guide structured data  
+// Essential guide structured data
 export function getEssentialStructuredData(essential: any, slug: string) {
   return {
     "@context": "https://schema.org",
@@ -224,30 +242,74 @@ export function getEssentialStructuredData(essential: any, slug: string) {
     headline: essential.title,
     description: essential.description,
     url: `${SITE_URL}/essentials/${slug}`,
-    image: essential.image ? {
-      "@type": "ImageObject",
-      url: essential.image,
-      description: `${essential.title} - Japan travel guide`
-    } : undefined,
+    image: essential.image
+      ? {
+          "@type": "ImageObject",
+          url: essential.image,
+          description: `${essential.title} - Japan travel guide`,
+        }
+      : undefined,
     author: {
-      "@type": "Organization", 
+      "@type": "Organization",
       name: ORGANIZATION_NAME,
-      url: SITE_URL
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
       name: ORGANIZATION_NAME,
-      logo: ORGANIZATION_LOGO
+      logo: ORGANIZATION_LOGO,
     },
     datePublished: essential.publishedAt || new Date().toISOString(),
     dateModified: essential._updatedAt || new Date().toISOString(),
     articleSection: "Travel Guide",
-    keywords: essential.seoKeywords?.join(", ") || "Japan travel, Japan guide, Japan tips",
+    keywords:
+      essential.seoKeywords?.join(", ") ||
+      "Japan travel, Japan guide, Japan tips",
     about: {
       "@type": "Place",
       name: "Japan",
-      description: "Travel information and guides for Japan"
-    }
+      description: "Travel information and guides for Japan",
+    },
+  };
+}
+
+// Blog post structured data
+export function getBlogPostStructuredData(blogPost: any, slug: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${SITE_URL}/blog/${slug}`,
+    headline: blogPost.title,
+    description: blogPost.description,
+    url: `${SITE_URL}/blog/${slug}`,
+    image: blogPost.image
+      ? {
+          "@type": "ImageObject",
+          url: blogPost.image,
+          description: `${blogPost.title} - Blog post`,
+        }
+      : undefined,
+    author: {
+      "@type": "Organization",
+      name: ORGANIZATION_NAME,
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: ORGANIZATION_NAME,
+      logo: ORGANIZATION_LOGO,
+    },
+    datePublished: blogPost.publishedAt || new Date().toISOString(),
+    dateModified: blogPost._updatedAt || new Date().toISOString(),
+    articleSection: "Travel Blog",
+    keywords:
+      blogPost.seoKeywords?.join(", ") ||
+      "Japan travel, Japan blog, Japanese culture",
+    about: {
+      "@type": "Place",
+      name: "Japan",
+      description: "Travel information and cultural insights about Japan",
+    },
   };
 }
 
@@ -259,46 +321,50 @@ export function getHomepageStructuredData() {
     "@id": `${SITE_URL}/`,
     url: SITE_URL,
     name: "Visit Japan HQ - Your Complete Guide to Japan Travel",
-    description: "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
+    description:
+      "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
     about: {
       "@type": "Place",
       name: "Japan",
       alternateName: "JP",
-      description: "Island country in East Asia known for its rich culture, technology, and natural beauty"
+      description:
+        "Island country in East Asia known for its rich culture, technology, and natural beauty",
     },
     mainEntity: {
       "@type": "TravelAgency",
       "@id": `${SITE_URL}/#organization`,
       name: ORGANIZATION_NAME,
-      url: SITE_URL
+      url: SITE_URL,
     },
     breadcrumb: {
       "@type": "BreadcrumbList",
-      itemListElement: [{
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: SITE_URL
-      }]
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: SITE_URL,
+        },
+      ],
     },
     isPartOf: {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       name: ORGANIZATION_NAME,
-      url: SITE_URL
-    }
+      url: SITE_URL,
+    },
   };
 }
 
 // Generate JSON-LD script tag
 export function generateStructuredDataScript(data: object | object[]) {
   const jsonData = Array.isArray(data) ? data : [data];
-  
+
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(jsonData, null, 2)
+        __html: JSON.stringify(jsonData, null, 2),
       }}
     />
   );

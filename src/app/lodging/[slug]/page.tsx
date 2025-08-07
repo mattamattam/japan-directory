@@ -39,6 +39,55 @@ export async function generateMetadata({
     title: `${lodging.name} - Visit Japan HQ`,
     description: lodging.seoDescription || lodging.description,
     keywords: lodging.seoKeywords?.join(", ") || "",
+    alternates: {
+      canonical: `https://visitjapanhq.com/lodging/${resolvedParams.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      siteName: "Visit Japan HQ",
+      title: `${lodging.name} - Visit Japan HQ`,
+      description: lodging.seoDescription || lodging.description,
+      url: `https://visitjapanhq.com/lodging/${resolvedParams.slug}`,
+      images: [
+        {
+          url:
+            lodging.image ||
+            `https://visitjapanhq.com/images/og-lodging-${resolvedParams.slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `${lodging.name} - Japan Lodging Guide`,
+        },
+      ],
+      locale: "en_US",
+      section: "Lodging",
+      tags: lodging.seoKeywords || [
+        "Japan Lodging",
+        "Japan Hotels",
+        "Accommodation",
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${lodging.name} - Visit Japan HQ`,
+      description: lodging.seoDescription || lodging.description,
+      images: [
+        lodging.image ||
+          `https://visitjapanhq.com/images/twitter-lodging-${resolvedParams.slug}.jpg`,
+      ],
+      creator: "@visitjapanhq",
+      site: "@visitjapanhq",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 

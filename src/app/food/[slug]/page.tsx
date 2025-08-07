@@ -45,6 +45,48 @@ export async function generateMetadata({
     alternates: {
       canonical: `https://visitjapanhq.com/food/${resolvedParams.slug}`,
     },
+    openGraph: {
+      type: "article",
+      siteName: "Visit Japan HQ",
+      title: `${food.title} - Visit Japan HQ`,
+      description: food.seoDescription || food.description,
+      url: `https://visitjapanhq.com/food/${resolvedParams.slug}`,
+      images: [
+        {
+          url:
+            food.image ||
+            `https://visitjapanhq.com/images/og-food-${resolvedParams.slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `${food.title} - Japanese Food Guide`,
+        },
+      ],
+      locale: "en_US",
+      section: "Food & Dining",
+      tags: food.seoKeywords || ["Japanese Food", "Japan", "Dining", "Cuisine"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${food.title} - Visit Japan HQ`,
+      description: food.seoDescription || food.description,
+      images: [
+        food.image ||
+          `https://visitjapanhq.com/images/twitter-food-${resolvedParams.slug}.jpg`,
+      ],
+      creator: "@visitjapanhq",
+      site: "@visitjapanhq",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 

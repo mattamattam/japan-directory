@@ -7,6 +7,10 @@ import AdBanner from "@/components/AdBanner";
 import ContentMetadata from "@/components/ContentMetadata";
 import { CalendarIcon, UserIcon, TagIcon } from "@heroicons/react/24/outline";
 import React from "react"; // Added missing import for React
+import {
+  getBlogPostStructuredData,
+  generateStructuredDataScript,
+} from "@/lib/structured-data";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -31,6 +35,52 @@ export async function generateMetadata({
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.description,
     keywords: post.seoKeywords?.join(", "),
+    alternates: {
+      canonical: `https://visitjapanhq.com/blog/${slug}`,
+    },
+    openGraph: {
+      type: "article",
+      siteName: "Visit Japan HQ",
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.description,
+      url: `https://visitjapanhq.com/blog/${slug}`,
+      images: [
+        {
+          url:
+            post.image || `https://visitjapanhq.com/images/og-blog-${slug}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `${post.title} - Blog Post`,
+        },
+      ],
+      locale: "en_US",
+      section: "Travel Blog",
+      tags: post.seoKeywords || ["Japan", "Travel", "Blog"],
+      publishedTime: post.publishedAt || new Date().toISOString(),
+      modifiedTime: post._updatedAt || new Date().toISOString(),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.description,
+      images: [
+        post.image ||
+          `https://visitjapanhq.com/images/twitter-blog-${slug}.jpg`,
+      ],
+      creator: "@visitjapanhq",
+      site: "@visitjapanhq",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 
@@ -143,6 +193,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <Layout>
+      {generateStructuredDataScript(getBlogPostStructuredData(post, slug))}
       <article className="bg-white">
         {/* Hero Section */}
         {post.image && (
@@ -162,15 +213,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* Header */}
           <header className="mb-12">
             {/* Content Metadata */}
-            <ContentMetadata 
+            <ContentMetadata
               lastUpdated={post._updatedAt || new Date()}
               publishedAt={post.publishedAt || post._createdAt}
               factChecked={true}
               sources={[
                 "Editorial Research",
-                "Local Expert Interviews", 
+                "Local Expert Interviews",
                 "Official Tourism Data",
-                "On-site Verification"
+                "On-site Verification",
               ]}
               className="mb-8"
             />

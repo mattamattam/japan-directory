@@ -7,11 +7,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://visitjapanhq.com";
 const ORGANIZATION_NAME = "Visit Japan HQ";
 const ORGANIZATION_LOGO = `${SITE_URL}/images/logo.png`;
 
-// Organization structured data
+// Travel Agency structured data (enhanced from basic Organization)
 export function getOrganizationStructuredData() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "TravelAgency",
     name: ORGANIZATION_NAME,
     url: SITE_URL,
     logo: ORGANIZATION_LOGO,
@@ -22,8 +22,32 @@ export function getOrganizationStructuredData() {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Customer Service",
-      url: `${SITE_URL}/contact`
-    }
+      url: `${SITE_URL}/contact`,
+      areaServed: "JP",
+      availableLanguage: ["en", "ja"]
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "Japan",
+      alternateName: "JP"
+    },
+    serviceType: [
+      "Travel Planning",
+      "Tourism Information",
+      "Destination Guides",
+      "Cultural Experiences",
+      "Hotel Recommendations",
+      "Restaurant Guides"
+    ],
+    knowsAbout: [
+      "Japan Tourism",
+      "Japanese Culture",
+      "Tokyo Travel",
+      "Kyoto Travel",
+      "Japanese Food",
+      "Japanese Hotels",
+      "Japanese Experiences"
+    ]
   };
 }
 
@@ -223,6 +247,45 @@ export function getEssentialStructuredData(essential: any, slug: string) {
       "@type": "Place",
       name: "Japan",
       description: "Travel information and guides for Japan"
+    }
+  };
+}
+
+// Homepage structured data with enhanced travel-specific schema
+export function getHomepageStructuredData() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${SITE_URL}/`,
+    url: SITE_URL,
+    name: "Visit Japan HQ - Your Complete Guide to Japan Travel",
+    description: "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
+    about: {
+      "@type": "Place",
+      name: "Japan",
+      alternateName: "JP",
+      description: "Island country in East Asia known for its rich culture, technology, and natural beauty"
+    },
+    mainEntity: {
+      "@type": "TravelAgency",
+      "@id": `${SITE_URL}/#organization`,
+      name: ORGANIZATION_NAME,
+      url: SITE_URL
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [{
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_URL
+      }]
+    },
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: ORGANIZATION_NAME,
+      url: SITE_URL
     }
   };
 }

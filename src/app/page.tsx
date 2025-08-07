@@ -23,7 +23,7 @@ import HeroMontage from "./components/HeroMontage";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import HorizontalCarousel from "@/components/HorizontalCarousel";
 import Link from "next/link";
-import { getOrganizationStructuredData, getWebsiteStructuredData, generateStructuredDataScript } from "@/lib/structured-data";
+import { getOrganizationStructuredData, getWebsiteStructuredData, getHomepageStructuredData, generateStructuredDataScript } from "@/lib/structured-data";
 import {
   MapIcon,
   StarIcon,
@@ -143,11 +143,12 @@ export default async function Home() {
   // Generate structured data for homepage
   const organizationData = getOrganizationStructuredData();
   const websiteData = getWebsiteStructuredData();
+  const homepageData = getHomepageStructuredData();
 
   return (
     <Layout>
       {/* Structured Data */}
-      {generateStructuredDataScript([organizationData, websiteData])}
+      {generateStructuredDataScript([organizationData, websiteData, homepageData])}
       {/* Hero Section */}
       <HeroMontage>
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">

@@ -39,41 +39,52 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google AdSense */}
+        {/* Preconnect to external domains for better performance */}
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        
+        {/* Google AdSense - Meta tag */}
         {shouldShowAds && (
-          <>
-            <meta
-              name="google-adsense-account"
-              content="ca-pub-9762028848349439"
-            ></meta>
-            <script
-              async
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9762028848349439"
-              crossOrigin="anonymous"
-            />
-          </>
+          <meta
+            name="google-adsense-account"
+            content="ca-pub-9762028848349439"
+          />
+        )}
+      </head>
+      <body className={inter.className}>
+        {children}
+        
+        {/* Load scripts after page content */}
+        {shouldShowAds && (
+          <Script
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9762028848349439"
+            strategy="lazyOnload"
+            crossOrigin="anonymous"
+          />
         )}
 
         {process.env.NODE_ENV === "production" && (
           <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=G-GL294NMWVF`}
-            strategy="afterInteractive"
+            src="https://www.googletagmanager.com/gtag/js?id=G-GL294NMWVF"
+            strategy="lazyOnload"
           />
         )}
+        
         {process.env.NODE_ENV === "production" && (
-          <Script id="ga-init" strategy="afterInteractive">
+          <Script id="ga-init" strategy="lazyOnload">
             {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-GL294NMWVF', {
-            page_path: window.location.pathname,
-          });
-        `}
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-GL294NMWVF', {
+                page_path: window.location.pathname,
+              });
+            `}
           </Script>
         )}
-      </head>
-      <body className={inter.className}>{children}</body>
+      </body>
     </html>
   );
 }

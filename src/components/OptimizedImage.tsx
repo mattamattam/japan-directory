@@ -90,6 +90,8 @@ export default function OptimizedImage({
         blurDataURL={finalBlurDataURL}
         onLoad={handleLoad}
         quality={imageConfig.quality}
+        loading={priority ? "eager" : "lazy"}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
     );
   }
@@ -119,6 +121,8 @@ export default function OptimizedImage({
         blurDataURL={finalBlurDataURL}
         onLoad={handleLoad}
         quality={imageConfig.quality}
+        loading={priority ? "eager" : "lazy"}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
     );
   }
@@ -155,6 +159,8 @@ export default function OptimizedImage({
         onError={handleError}
         onLoad={handleLoad}
         quality={imageConfig.quality}
+        loading={priority ? "eager" : "lazy"}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
 
       {/* Loading overlay */}

@@ -30,7 +30,15 @@ function CompactExchangeRate({ sharedTick }: { sharedTick: number }) {
   const [exchangeRateData, setExchangeRateData] = useState<{
     [key: string]: any;
   }>({});
+  const exchangeRateDataRef = useRef(exchangeRateData);
+  const currentCurrencyIndexRef = useRef(currentCurrencyIndex);
   const isClient = useIsClient();
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    exchangeRateDataRef.current = exchangeRateData;
+    currentCurrencyIndexRef.current = currentCurrencyIndex;
+  }, [exchangeRateData, currentCurrencyIndex]);
 
   // Use shared tick for coordinated rotation
   useEffect(() => {
@@ -41,7 +49,8 @@ function CompactExchangeRate({ sharedTick }: { sharedTick: number }) {
 
     // After fade out completes, change currency and fade in
     setTimeout(() => {
-      const nextIndex = (currentCurrencyIndex + 1) % EXCHANGE_CURRENCIES.length;
+      const nextIndex =
+        (currentCurrencyIndexRef.current + 1) % EXCHANGE_CURRENCIES.length;
       setCurrentCurrencyIndex(nextIndex);
 
       // Quick fade in
@@ -49,7 +58,7 @@ function CompactExchangeRate({ sharedTick }: { sharedTick: number }) {
         setIsTransitioning(false);
       }, 50);
     }, FADE_DURATION);
-  }, [sharedTick, isClient, currentCurrencyIndex]); // Rotate on shared tick
+  }, [sharedTick, isClient]); // Rotate on shared tick
 
   useEffect(() => {
     if (!isClient) return;
@@ -58,8 +67,8 @@ function CompactExchangeRate({ sharedTick }: { sharedTick: number }) {
     const currencyCode = currentCurrency.code;
 
     // Check if we already have data for this currency
-    if (exchangeRateData[currencyCode]) {
-      const cachedData = exchangeRateData[currencyCode];
+    if (exchangeRateDataRef.current[currencyCode]) {
+      const cachedData = exchangeRateDataRef.current[currencyCode];
       setRate(cachedData.rate);
       setTrend(cachedData.trend);
       setCurrency(cachedData.currency);
@@ -80,14 +89,16 @@ function CompactExchangeRate({ sharedTick }: { sharedTick: number }) {
         const data = await response.json();
         if (data.rate) {
           // Cache the data
-          setExchangeRateData((prev) => ({
-            ...prev,
+          const newData = {
+            ...exchangeRateDataRef.current,
             [currencyCode]: {
               rate: data.rate,
               trend: data.trend,
               currency: data.currency,
             },
-          }));
+          };
+          setExchangeRateData(newData);
+          exchangeRateDataRef.current = newData;
 
           setRate(data.rate);
           setTrend(data.trend);
@@ -100,7 +111,7 @@ function CompactExchangeRate({ sharedTick }: { sharedTick: number }) {
       }
     }
     fetchRate();
-  }, [currentCurrencyIndex, isClient, exchangeRateData]); // Only fetch when currency changes or component mounts
+  }, [currentCurrencyIndex, isClient]); // Only fetch when currency changes or component mounts
 
   if (!isClient || loading || !rate) {
     return (

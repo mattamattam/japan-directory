@@ -17,7 +17,8 @@ const sanityClient = createClient({
 
 class BuildPrefetcher {
   constructor() {
-    this.apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3002";
+    this.apiBaseUrl =
+      process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3002";
     this.buildApiKey = process.env.BUILD_API_KEY;
     this.stats = {
       totalRequests: 0,
@@ -49,7 +50,9 @@ class BuildPrefetcher {
         return await response.json();
       } else {
         this.stats.failedRequests++;
-        console.warn(`API request failed: ${response.status} ${response.statusText}`);
+        console.warn(
+          `API request failed: ${response.status} ${response.statusText}`
+        );
         return null;
       }
     } catch (error) {
@@ -72,19 +75,38 @@ class BuildPrefetcher {
 
       // Popular landmarks for each destination
       const landmarkQueries = [];
-      
-      destinations.forEach(destination => {
+
+      destinations.forEach((destination) => {
         const destName = destination.name.toLowerCase();
-        
+
         // Add destination-specific landmark queries
-        if (destName.includes('tokyo')) {
-          landmarkQueries.push('Tokyo Tower', 'Senso-ji Temple', 'Tokyo Skytree', 'Shibuya Crossing', 'Meiji Shrine');
-        } else if (destName.includes('osaka')) {
-          landmarkQueries.push('Osaka Castle', 'Dotonbori', 'Universal Studios Japan', 'Osaka Aquarium');
-        } else if (destName.includes('kyoto')) {
-          landmarkQueries.push('Fushimi Inari Shrine', 'Kinkaku-ji Golden Pavilion', 'Arashiyama Bamboo Grove');
-        } else if (destName.includes('hiroshima')) {
-          landmarkQueries.push('Hiroshima Peace Memorial Park', 'Itsukushima Shrine', 'Hiroshima Castle');
+        if (destName.includes("tokyo")) {
+          landmarkQueries.push(
+            "Tokyo Tower",
+            "Senso-ji Temple",
+            "Tokyo Skytree",
+            "Shibuya Crossing",
+            "Meiji Shrine"
+          );
+        } else if (destName.includes("osaka")) {
+          landmarkQueries.push(
+            "Osaka Castle",
+            "Dotonbori",
+            "Universal Studios Japan",
+            "Osaka Aquarium"
+          );
+        } else if (destName.includes("kyoto")) {
+          landmarkQueries.push(
+            "Fushimi Inari Shrine",
+            "Kinkaku-ji Golden Pavilion",
+            "Arashiyama Bamboo Grove"
+          );
+        } else if (destName.includes("hiroshima")) {
+          landmarkQueries.push(
+            "Hiroshima Peace Memorial Park",
+            "Itsukushima Shrine",
+            "Hiroshima Castle"
+          );
         } else {
           // Generic query for other destinations
           landmarkQueries.push(destination.name);
@@ -99,15 +121,15 @@ class BuildPrefetcher {
       const batchSize = 10; // Process in batches to avoid overwhelming the API
       for (let i = 0; i < uniqueQueries.length; i += batchSize) {
         const batch = uniqueQueries.slice(i, i + batchSize);
-        
-        const promises = batch.map(query => 
-          this.fetchWithBuildKey('/api/places', { query })
+
+        const promises = batch.map((query) =>
+          this.fetchWithBuildKey("/api/places", { query })
         );
-        
+
         await Promise.all(promises);
-        
+
         // Brief pause between batches
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       console.log(`   ✅ Completed prefetching places data`);
@@ -119,14 +141,23 @@ class BuildPrefetcher {
   async prefetchWeatherData() {
     console.log("🌤️  Prefetching weather data...");
 
-    const locations = ['Tokyo', 'Osaka', 'Kyoto', 'Hiroshima', 'Sapporo', 'Fukuoka'];
-    
+    const locations = [
+      "Tokyo",
+      "Osaka",
+      "Kyoto",
+      "Hiroshima",
+      "Sapporo",
+      "Fukuoka",
+    ];
+
     try {
       for (const location of locations) {
-        await this.fetchWithBuildKey('/api/weather', { location });
+        await this.fetchWithBuildKey("/api/weather", { location });
       }
-      
-      console.log(`   ✅ Completed prefetching weather for ${locations.length} cities`);
+
+      console.log(
+        `   ✅ Completed prefetching weather for ${locations.length} cities`
+      );
     } catch (error) {
       console.error(`   ❌ Error prefetching weather:`, error);
     }
@@ -135,14 +166,16 @@ class BuildPrefetcher {
   async prefetchExchangeRates() {
     console.log("💱 Prefetching exchange rates...");
 
-    const currencies = ['USD', 'EUR', 'GBP', 'AUD', 'CAD', 'CHF', 'KRW', 'CNY'];
-    
+    const currencies = ["USD", "EUR", "GBP", "AUD", "CAD", "CHF", "KRW", "CNY"];
+
     try {
       for (const currency of currencies) {
-        await this.fetchWithBuildKey('/api/exchange-rate', { currency });
+        await this.fetchWithBuildKey("/api/exchange-rate", { currency });
       }
-      
-      console.log(`   ✅ Completed prefetching rates for ${currencies.length} currencies`);
+
+      console.log(
+        `   ✅ Completed prefetching rates for ${currencies.length} currencies`
+      );
     } catch (error) {
       console.error(`   ❌ Error prefetching exchange rates:`, error);
     }
@@ -153,16 +186,23 @@ class BuildPrefetcher {
     console.log(`   Total API Requests: ${this.stats.totalRequests}`);
     console.log(`   Successful: ${this.stats.successfulRequests}`);
     console.log(`   Failed: ${this.stats.failedRequests}`);
-    console.log(`   Success Rate: ${((this.stats.successfulRequests / this.stats.totalRequests) * 100).toFixed(1)}%`);
+    console.log(
+      `   Success Rate: ${((this.stats.successfulRequests / this.stats.totalRequests) * 100).toFixed(1)}%`
+    );
   }
 
   async run() {
     console.log("🚀 Starting build-time data prefetching...\n");
 
     if (!this.buildApiKey) {
-      console.error("❌ BUILD_API_KEY not found. Skipping prefetch.");
-      console.log("💡 Set BUILD_API_KEY=japan-dir-build-key-no-limits in .env.local");
-      return;
+      console.log(
+        "⏭️  BUILD_API_KEY not found. Skipping prefetch (this is normal for CI/CD builds)."
+      );
+      console.log(
+        "💡 For local development: Set BUILD_API_KEY=japan-dir-build-key-no-limits in .env.local"
+      );
+      console.log("✅ Build prefetching skipped successfully!");
+      process.exit(0);
     }
 
     console.log(`📡 API Base URL: ${this.apiBaseUrl}`);
@@ -180,7 +220,7 @@ class BuildPrefetcher {
 
     console.log(`\n⏱️  Total prefetch time: ${duration}ms`);
     this.printStats();
-    
+
     console.log("\n✅ Build prefetching completed!");
     console.log("💡 Data is now cached and ready for SSG build");
   }

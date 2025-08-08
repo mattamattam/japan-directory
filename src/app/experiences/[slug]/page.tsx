@@ -26,8 +26,7 @@ import {
 import { ExperienceImage } from "@/components/OptimizedImage";
 import { GooglePlaceData } from "@/lib/places-utils";
 import PlaceInfo from "@/components/PlaceInfo";
-import { fetchBuildPlaceData } from "@/lib/build-places-data";
-import { getPlaceQuery } from "@/lib/places-utils";
+import { getStaticPlaceData } from "@/lib/static-places-data";
 
 interface ExperiencePageProps {
   params: Promise<{ slug: string }>;
@@ -117,16 +116,15 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
     notFound();
   }
 
-  // Fetch Google Places data at build time
-  const query = getPlaceQuery(experience, 'experience', experience.location);
-  const buildPlaceData = await fetchBuildPlaceData(query);
+  // Get static Google Places data from committed JSON file
+  const staticPlaceData = getStaticPlaceData(experience._id);
   
-  const placeData: GooglePlaceData | null = buildPlaceData ? {
-    rating: buildPlaceData.rating,
-    user_ratings_total: buildPlaceData.user_ratings_total,
-    name: buildPlaceData.name,
-    formatted_address: buildPlaceData.formatted_address,
-    reviews: buildPlaceData.reviews,
+  const placeData: GooglePlaceData | null = staticPlaceData ? {
+    rating: staticPlaceData.rating,
+    user_ratings_total: staticPlaceData.user_ratings_total,
+    name: staticPlaceData.name,
+    formatted_address: staticPlaceData.formatted_address,
+    reviews: staticPlaceData.reviews,
   } : null;
 
   // Check if newsletter signup should show on this page

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Pre-commit hook to fetch Google Places data
+# This ensures the places data is always up to date before commits
+
+set -e
+
+echo "🪝 Running pre-commit hook..."
+
+# Check if we have the required API key
+if [ -z "$BUILD_API_KEY" ]; then
+    echo "⚠️  BUILD_API_KEY not set in environment."
+    echo "🔍 Checking for places data file..."
+    
+    if [ -f "src/data/places-data.json" ]; then
+        echo "✅ Places data file exists, continuing with commit..."
+    else
+        echo "❌ No places data file found!"
+        echo "💡 Run 'npm run fetch-places-data' first, or set BUILD_API_KEY in your environment."
+        exit 1
+    fi
+else
+    echo "🔑 BUILD_API_KEY found, fetching latest places data..."
+    
+    # Check if API server is reachable (for local development)
+    if curl -s --connect-timeout 5 "${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3002}/api/health" > /dev/null 2>&1; then
+        echo "🌐 API server is reachable, fetching fresh data..."
+        npm run fetch-places-data || {
+            echo "⚠️  Failed to fetch places data, but continuing with existing data..."
+        }
+    else
+        echo "🔌 API server not reachable, using existing places data..."
+        
+        if [ ! -f "src/data/places-data.json" ]; then
+            echo "❌ No places data file found and API server is unreachable!"
+            echo "💡 Either start your API server or add existing places data to commit."
+            exit 1
+        fi
+    fi
+fi
+
+# Check if places data file exists and stage it
+if [ -f "src/data/places-data.json" ]; then
+    echo "📁 Staging places data file..."
+    git add src/data/places-data.json
+    echo "✅ Places data staged for commit"
+else
+    echo "⚠️  No places data file to stage"
+fi
+
+echo "🎉 Pre-commit hook completed successfully!"
+exit 0

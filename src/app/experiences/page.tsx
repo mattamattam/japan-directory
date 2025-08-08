@@ -2,7 +2,11 @@ import { Metadata } from "next";
 import { getExperiences } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import ExperienceCard from "@/components/ExperienceCard";
-import { fetchPlaceData, getPlaceQuery, getFallbackPlaceData } from "@/lib/places-utils";
+import {
+  fetchPlaceData,
+  getPlaceQuery,
+  getFallbackPlaceData,
+} from "@/lib/places-utils";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
 import {
@@ -29,22 +33,36 @@ export default async function ExperiencesPage() {
   // Fetch experiences from Sanity
   const experiences = await getExperiences();
 
-  // Fetch Google Places data for each experience
+  // Fetch Google Places data for each experience (skip in CI/CD environments)
+  const isCI =
+    process.env.CI || process.env.GITHUB_ACTIONS || process.env.VERCEL;
+
   const experiencesWithPlaceData = await Promise.all(
     experiences.map(async (experience: any) => {
-      const placeQuery = getPlaceQuery(experience, 'experience', experience.location);
       let placeData = null;
-      
-      try {
-        placeData = await fetchPlaceData(placeQuery);
-      } catch (error) {
-        console.warn(`Failed to fetch place data for ${experience.name}:`, error);
+
+      // Only fetch place data in local development
+      if (!isCI) {
+        const placeQuery = getPlaceQuery(
+          experience,
+          "experience",
+          experience.location
+        );
+
+        try {
+          placeData = await fetchPlaceData(placeQuery);
+        } catch (error) {
+          console.warn(
+            `Failed to fetch place data for ${experience.name}:`,
+            error
+          );
+        }
       }
-      
+
       if (!placeData) {
         placeData = getFallbackPlaceData(experience.name);
       }
-      
+
       return {
         ...experience,
         googleRating: placeData?.rating,

@@ -120,19 +120,23 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
     notFound();
   }
 
-  // Fetch place data for the experience
-  const placeQuery = getPlaceQuery(
-    experience,
-    "experience",
-    experience.location
-  );
+  // Fetch place data for the experience (skip in CI/CD environments)
+  const isCI =
+    process.env.CI || process.env.GITHUB_ACTIONS || process.env.VERCEL;
   let placeData: GooglePlaceData | null = null;
 
-  try {
-    placeData = await fetchPlaceData(placeQuery);
-  } catch (error) {
-    console.warn("Failed to fetch experience place data:", error);
-    placeData = getFallbackPlaceData(experience.name);
+  if (!isCI) {
+    const placeQuery = getPlaceQuery(
+      experience,
+      "experience",
+      experience.location
+    );
+
+    try {
+      placeData = await fetchPlaceData(placeQuery);
+    } catch (error) {
+      console.warn("Failed to fetch experience place data:", error);
+    }
   }
 
   if (!placeData) {

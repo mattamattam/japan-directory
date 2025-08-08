@@ -19,7 +19,12 @@ import {
   CurrencyYenIcon,
   CalendarIcon,
 } from "@heroicons/react/24/solid";
-import { fetchPlaceData, getPlaceQuery, getFallbackPlaceData, GooglePlaceData } from "@/lib/places-utils";
+import {
+  fetchPlaceData,
+  getPlaceQuery,
+  getFallbackPlaceData,
+  GooglePlaceData,
+} from "@/lib/places-utils";
 import PlaceInfo from "@/components/PlaceInfo";
 
 interface DistrictPageProps {
@@ -85,17 +90,21 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
     notFound();
   }
 
-  // Fetch place data for the district
-  const placeQuery = getPlaceQuery(district, 'district', destination.name);
+  // Fetch place data for the district (skip in CI/CD environments)
+  const isCI =
+    process.env.CI || process.env.GITHUB_ACTIONS || process.env.VERCEL;
   let placeData: GooglePlaceData | null = null;
-  
-  try {
-    placeData = await fetchPlaceData(placeQuery);
-  } catch (error) {
-    console.warn('Failed to fetch district place data:', error);
-    placeData = getFallbackPlaceData(district.name);
+
+  if (!isCI) {
+    const placeQuery = getPlaceQuery(district, "district", destination.name);
+
+    try {
+      placeData = await fetchPlaceData(placeQuery);
+    } catch (error) {
+      console.warn("Failed to fetch district place data:", error);
+    }
   }
-  
+
   if (!placeData) {
     placeData = getFallbackPlaceData(district.name);
   }
@@ -218,7 +227,7 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
               )}
 
               {/* Google Places Rating and Reviews */}
-              <PlaceInfo 
+              <PlaceInfo
                 placeData={placeData}
                 placeName={district.name}
                 showReviews={true}

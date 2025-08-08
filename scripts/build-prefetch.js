@@ -205,6 +205,18 @@ class BuildPrefetcher {
       process.exit(0);
     }
 
+    // Check if we're in a CI environment or if the API server is likely unavailable
+    const isCI =
+      process.env.CI || process.env.GITHUB_ACTIONS || process.env.VERCEL;
+    if (isCI) {
+      console.log(
+        "⏭️  CI/CD environment detected. Skipping prefetch for production build."
+      );
+      console.log("💡 Prefetch is only needed for local development builds.");
+      console.log("✅ Build prefetching skipped successfully!");
+      process.exit(0);
+    }
+
     console.log(`📡 API Base URL: ${this.apiBaseUrl}`);
     console.log(`🔑 Using Build API Key: ${this.buildApiKey.slice(0, 20)}...`);
     console.log("");

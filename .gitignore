@@ -31,4 +31,8 @@ build/
 Thumbs.db
 
 # API routes for local development only
-src/app/api/
+# Exception: Keep the places route for production proxy
+!src/app/api/places/
+!src/app/api/places/**
+src/app/api/*
+!src/app/api/places

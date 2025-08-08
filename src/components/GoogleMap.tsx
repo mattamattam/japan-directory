@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
+import { apiClient } from "@/lib/api-client";
 
 interface GoogleMapProps {
   placeName: string;
@@ -34,33 +35,16 @@ export default function GoogleMap({
       if (!placeName) return;
 
       try {
-        const response = await fetch(
-          `/api/places?query=${encodeURIComponent(placeName)}`,
-          {
-            headers: {
-              "Cache-Control": "max-age=3600",
-            },
-          }
-        );
+        const data = await apiClient.searchPlace(placeName);
 
-        if (response.ok && isMounted) {
-          const data = await response.json();
+        if (data && isMounted) {
 
           // Check for different possible location structures in the API response
           let locationData = null;
 
-          if (data.geometry?.location) {
-            // Standard Google Places API structure
-            locationData = data.geometry.location;
-          } else if (data.location) {
-            // Alternative structure
-            locationData = data.location;
-          } else if (data.lat && data.lng) {
-            // Direct lat/lng in response
-            locationData = { lat: data.lat, lng: data.lng };
-          } else if (data.latitude && data.longitude) {
-            // Alternative coordinate field names
-            locationData = { lat: data.latitude, lng: data.longitude };
+          if (data.location) {
+            // External API structure with location.latitude/longitude
+            locationData = { lat: data.location.latitude, lng: data.location.longitude };
           } else if (data.name) {
             // Fallback: Use Google Maps Geocoding for known places
             // For places like "Nara Park", we can try to geocode them
@@ -96,17 +80,15 @@ export default function GoogleMap({
             return; // Exit early for geocoding attempt
           }
 
-          if (data && !data.error && locationData && isMounted) {
+          if (locationData && isMounted) {
             setLocation({
-              lat: locationData.lat || locationData.latitude,
-              lng: locationData.lng || locationData.longitude,
+              lat: locationData.lat,
+              lng: locationData.lng,
               formatted_address: data.formatted_address,
             });
           } else if (isMounted) {
             setError("Location not found");
           }
-        } else if (isMounted) {
-          setError("Failed to fetch location");
         }
       } catch (error) {
         if (isMounted) {

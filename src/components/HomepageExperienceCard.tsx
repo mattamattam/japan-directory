@@ -5,6 +5,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { ExperienceImage } from "./OptimizedImage";
 import { useState, useEffect } from "react";
 import SimpleStarRating from "./SimpleStarRating";
+import { apiClient } from "@/lib/api-client";
 
 interface Experience {
   _id: string;
@@ -42,33 +43,21 @@ export default function HomepageExperienceCard({
     async function fetchPlaceRating() {
       if (!experience.name) return;
 
-      // Add a small random delay to stagger API requests and avoid overwhelming the server
-      const delay = Math.random() * 2000; // 0-2 seconds
+      // Add a random delay to stagger API requests and avoid overwhelming the server
+      const delay = Math.random() * 5000 + 1000; // 1-6 seconds
       await new Promise((resolve) => setTimeout(resolve, delay));
 
       if (!isMounted) return;
 
       try {
-        const response = await fetch(
-          `/api/places?query=${encodeURIComponent(experience.name)}`,
-          {
-            headers: {
-              "Cache-Control": "max-age=3600", // Cache for 1 hour
-            },
-          }
-        );
-
-        if (response.ok && isMounted) {
-          const data = await response.json();
-          if (data && !data.error && isMounted) {
-            setPlaceData({
-              rating: data.rating,
-              user_ratings_total: data.user_ratings_total,
-              isLoading: false,
-            });
-          } else if (isMounted) {
-            setPlaceData({ isLoading: false });
-          }
+        const data = await apiClient.searchPlace(experience.name);
+        
+        if (data && isMounted) {
+          setPlaceData({
+            rating: data.rating,
+            user_ratings_total: data.user_ratings_total,
+            isLoading: false,
+          });
         } else if (isMounted) {
           setPlaceData({ isLoading: false });
         }
@@ -157,3 +146,4 @@ export default function HomepageExperienceCard({
     </Link>
   );
 }
+

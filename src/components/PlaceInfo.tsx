@@ -4,6 +4,7 @@ import { GooglePlaceData } from "@/lib/places-utils";
 import SimpleStarRating from "@/components/SimpleStarRating";
 import GoogleReviews from "@/components/GoogleReviews";
 import { useState, useEffect } from "react";
+import { apiClient } from "@/lib/api-client";
 
 interface PlaceInfoProps {
   placeData: GooglePlaceData | null;
@@ -32,21 +33,11 @@ export default function PlaceInfo({
 
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `/api/places?query=${encodeURIComponent(placeName)}`,
-          {
-            headers: {
-              "Cache-Control": "no-cache",
-            },
-          }
-        );
-
-        if (response.ok && isMounted) {
-          const data = await response.json();
+        const data = await apiClient.searchPlace(placeName);
+        
+        if (data && isMounted) {
           // Only set data if it's real Google Places data (has rating and reviews)
           if (
-            data &&
-            !data.error &&
             (data.rating || data.reviews?.length) &&
             isMounted
           ) {

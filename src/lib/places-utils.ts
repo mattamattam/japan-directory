@@ -18,7 +18,7 @@ export interface GooglePlaceData {
   name?: string;
   formatted_address?: string;
   reviews?: GooglePlaceReview[];
-  fallback?: boolean;
+  error?: string;
 }
 
 /**
@@ -69,35 +69,34 @@ export function getPlaceQuery(item: { name: string }, type: 'destination' | 'dis
   
   switch (type) {
     case 'destination':
+      // For destinations, try to be more specific with landmarks
+      if (name.toLowerCase().includes('tokyo')) {
+        return 'Tokyo Tower, Tokyo, Japan';
+      } else if (name.toLowerCase().includes('kyoto')) {
+        return 'Kiyomizu-dera Temple, Kyoto, Japan';
+      } else if (name.toLowerCase().includes('osaka')) {
+        return 'Osaka Castle, Osaka, Japan';
+      }
       return `${name} Japan`;
+      
     case 'district':
-      return parentLocation ? `${name} ${parentLocation} Japan` : `${name} Japan`;
+      return parentLocation ? `${name} district, ${parentLocation}, Japan` : `${name} district, Japan`;
+      
     case 'experience':
+      // For experiences, try to make them more specific
+      if (name.toLowerCase().includes('temple') || name.toLowerCase().includes('shrine')) {
+        return parentLocation ? `${name}, ${parentLocation}, Japan` : `${name}, Japan`;
+      } else if (name.toLowerCase().includes('cherry blossom') || name.toLowerCase().includes('hanami')) {
+        return parentLocation ? `Cherry Blossom ${parentLocation} Japan` : 'Cherry Blossom viewing Japan';
+      } else if (name.toLowerCase().includes('deer')) {
+        return 'Nara Park deer, Nara, Japan';
+      } else if (name.toLowerCase().includes('castle')) {
+        return parentLocation ? `${name}, ${parentLocation}, Japan` : `${name}, Japan`;
+      }
       return parentLocation ? `${name} ${parentLocation} Japan` : `${name} Japan`;
+      
     default:
       return `${name} Japan`;
   }
 }
 
-/**
- * Fallback data when places API is not available
- */
-export function getFallbackPlaceData(name: string): GooglePlaceData {
-  // Generate consistent but varied ratings based on name
-  const hash = name.split("").reduce((a, b) => {
-    a = (a << 5) - a + b.charCodeAt(0);
-    return a & a;
-  }, 0);
-
-  const rating = 4.0 + (Math.abs(hash) % 10) / 10; // 4.0 to 4.9
-  const user_ratings_total = 100 + (Math.abs(hash) % 900); // 100 to 999
-
-  return {
-    rating: Math.round(rating * 10) / 10,
-    user_ratings_total,
-    name,
-    formatted_address: "Japan",
-    reviews: [],
-    fallback: true,
-  };
-}

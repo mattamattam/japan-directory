@@ -24,12 +24,7 @@ import {
   CurrencyYenIcon,
 } from "@heroicons/react/24/solid";
 import { ExperienceImage } from "@/components/OptimizedImage";
-import {
-  fetchPlaceData,
-  getPlaceQuery,
-  getFallbackPlaceData,
-  GooglePlaceData,
-} from "@/lib/places-utils";
+import { GooglePlaceData } from "@/lib/places-utils";
 import PlaceInfo from "@/components/PlaceInfo";
 
 interface ExperiencePageProps {
@@ -120,27 +115,8 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
     notFound();
   }
 
-  // Fetch place data for the experience (skip only during build in CI/CD environments)
-  const isBuildTime = process.env.CI || process.env.GITHUB_ACTIONS;
-  let placeData: GooglePlaceData | null = null;
-
-  if (!isBuildTime) {
-    const placeQuery = getPlaceQuery(
-      experience,
-      "experience",
-      experience.location
-    );
-
-    try {
-      placeData = await fetchPlaceData(placeQuery);
-    } catch (error) {
-      console.warn("Failed to fetch experience place data:", error);
-    }
-  }
-
-  if (!placeData) {
-    placeData = getFallbackPlaceData(experience.name);
-  }
+  // Don't fetch place data at build time - only fetch real data at runtime
+  const placeData: GooglePlaceData | null = null;
 
   // Check if newsletter signup should show on this page
   const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);

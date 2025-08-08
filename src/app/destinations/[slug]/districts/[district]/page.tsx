@@ -19,13 +19,23 @@ import {
   CurrencyYenIcon,
   CalendarIcon,
 } from "@heroicons/react/24/solid";
-import {
-  fetchPlaceData,
-  getPlaceQuery,
-  getFallbackPlaceData,
-  GooglePlaceData,
-} from "@/lib/places-utils";
-import PlaceInfo from "@/components/PlaceInfo";
+import { GooglePlaceData } from "@/lib/places-utils";
+import dynamic from "next/dynamic";
+
+// Dynamically import PlaceInfo to avoid SSR issues
+const PlaceInfo = dynamic(() => import("@/components/PlaceInfo"), {
+  ssr: false,
+  loading: () => (
+    <div className="bg-white rounded-lg shadow-sm p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        Google Reviews
+      </h3>
+      <div className="text-center py-4">
+        <p className="text-gray-600">Loading reviews...</p>
+      </div>
+    </div>
+  ),
+});
 
 interface DistrictPageProps {
   params: Promise<{
@@ -90,23 +100,8 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
     notFound();
   }
 
-  // Fetch place data for the district (skip only during build in CI/CD environments)
-  const isBuildTime = process.env.CI || process.env.GITHUB_ACTIONS;
-  let placeData: GooglePlaceData | null = null;
-
-  if (!isBuildTime) {
-    const placeQuery = getPlaceQuery(district, "district", destination.name);
-
-    try {
-      placeData = await fetchPlaceData(placeQuery);
-    } catch (error) {
-      console.warn("Failed to fetch district place data:", error);
-    }
-  }
-
-  if (!placeData) {
-    placeData = getFallbackPlaceData(district.name);
-  }
+  // Don't fetch place data at build time - only fetch real data at runtime
+  const placeData: GooglePlaceData | null = null;
 
   return (
     <Layout>

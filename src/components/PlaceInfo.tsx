@@ -1,7 +1,7 @@
 "use client";
 
 import { GooglePlaceData } from "@/lib/places-utils";
-import StarRating from "@/components/StarRating";
+import SimpleStarRating from "@/components/SimpleStarRating";
 import GoogleReviews from "@/components/GoogleReviews";
 import { useState, useEffect } from "react";
 
@@ -24,55 +24,104 @@ export default function PlaceInfo({
 
   // Fetch real place data at runtime to get reviews
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchRuntimePlaceData() {
       if (!placeName || !showReviews) return;
+      if (!isMounted) return;
 
       setIsLoading(true);
       try {
         const response = await fetch(
-          `/api/places?query=${encodeURIComponent(placeName)}`
+          `/api/places?query=${encodeURIComponent(placeName)}`,
+          {
+            headers: {
+              "Cache-Control": "no-cache",
+            },
+          }
         );
-        if (response.ok) {
+
+        if (response.ok && isMounted) {
           const data = await response.json();
-          setRuntimePlaceData(data);
+          // Only set data if it's real Google Places data (has rating and reviews)
+          if (
+            data &&
+            !data.error &&
+            (data.rating || data.reviews?.length) &&
+            isMounted
+          ) {
+            setRuntimePlaceData(data);
+          }
         }
       } catch (error) {
-        console.warn("Failed to fetch runtime place data:", error);
+        if (isMounted) {
+          console.warn("Failed to fetch runtime place data:", error);
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     }
 
-    // Only fetch if we don't have reviews or if placeData is fallback data
-    if (!placeData?.reviews?.length || placeData?.fallback) {
+    // Only fetch if we don't have real reviews yet
+    const shouldFetch =
+      !runtimePlaceData ||
+      (!runtimePlaceData.reviews?.length && !runtimePlaceData.rating);
+
+    if (shouldFetch) {
       fetchRuntimePlaceData();
     }
-  }, [placeName, showReviews, placeData]);
 
-  const displayData = runtimePlaceData || placeData;
+    return () => {
+      isMounted = false;
+    };
+  }, [placeName, showReviews, placeData, runtimePlaceData]);
 
-  if (!displayData) {
-    return null;
+  // Only show if we have real runtime data
+  const hasRealData = runtimePlaceData && !runtimePlaceData.error;
+
+  if (!hasRealData && !isLoading) {
+    return null; // Don't show anything if no real data available
   }
 
-  const { rating, user_ratings_total, reviews = [] } = displayData;
+  const rating = hasRealData ? runtimePlaceData.rating : 0;
+  const user_ratings_total = hasRealData
+    ? runtimePlaceData.user_ratings_total
+    : 0;
+  const reviews =
+    hasRealData && Array.isArray(runtimePlaceData.reviews)
+      ? runtimePlaceData.reviews
+      : [];
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* Rating Section */}
-      {rating && (
+      {/* Loading State */}
+      {isLoading && (
+        <div className="bg-blue-50 rounded-lg p-6">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            Google Reviews
+          </h3>
+          <div className="text-center py-4">
+            <p className="text-gray-600">Loading reviews...</p>
+          </div>
+        </div>
+      )}
+
+      {/* Rating Section - only show if we have real data */}
+      {hasRealData && rating && rating > 0 && (
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Google Rating
           </h3>
           <div className="flex flex-col gap-2">
-            <StarRating
+            <SimpleStarRating
               rating={rating}
               size="lg"
               showNumber={true}
               className="justify-start"
             />
-            {user_ratings_total && (
+            {user_ratings_total && user_ratings_total > 0 && (
               <p className="text-sm text-gray-600">
                 Based on {user_ratings_total.toLocaleString()} reviews
               </p>
@@ -81,8 +130,8 @@ export default function PlaceInfo({
         </div>
       )}
 
-      {/* Reviews Section */}
-      {showReviews && reviews.length > 0 && (
+      {/* Reviews Section - only show if we have real reviews */}
+      {hasRealData && showReviews && reviews.length > 0 && (
         <GoogleReviews reviews={reviews} placeName={placeName} />
       )}
     </div>

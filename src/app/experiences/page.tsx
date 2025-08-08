@@ -2,11 +2,6 @@ import { Metadata } from "next";
 import { getExperiences } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
 import ExperienceCard from "@/components/ExperienceCard";
-import {
-  fetchPlaceData,
-  getPlaceQuery,
-  getFallbackPlaceData,
-} from "@/lib/places-utils";
 import Breadcrumb from "@/components/Breadcrumb";
 import AdBanner from "@/components/AdBanner";
 import {
@@ -33,42 +28,8 @@ export default async function ExperiencesPage() {
   // Fetch experiences from Sanity
   const experiences = await getExperiences();
 
-  // Fetch Google Places data for each experience (skip only during build in CI/CD environments)
-  const isBuildTime = process.env.CI || process.env.GITHUB_ACTIONS;
-
-  const experiencesWithPlaceData = await Promise.all(
-    experiences.map(async (experience: any) => {
-      let placeData = null;
-
-      // Only fetch place data when not building in CI (allows runtime calls in production)
-      if (!isBuildTime) {
-        const placeQuery = getPlaceQuery(
-          experience,
-          "experience",
-          experience.location
-        );
-
-        try {
-          placeData = await fetchPlaceData(placeQuery);
-        } catch (error) {
-          console.warn(
-            `Failed to fetch place data for ${experience.name}:`,
-            error
-          );
-        }
-      }
-
-      if (!placeData) {
-        placeData = getFallbackPlaceData(experience.name);
-      }
-
-      return {
-        ...experience,
-        googleRating: placeData?.rating,
-        googleReviewCount: placeData?.user_ratings_total,
-      };
-    })
-  );
+  // Don't fetch Google Places data at build time - only show real data at runtime
+  const experiencesWithPlaceData = experiences;
 
   return (
     <Layout>

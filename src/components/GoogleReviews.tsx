@@ -1,5 +1,7 @@
+"use client";
+
 import { GooglePlaceReview } from "@/lib/places-utils";
-import StarRating from "@/components/StarRating";
+import SimpleStarRating from "@/components/SimpleStarRating";
 
 interface GoogleReviewsProps {
   reviews: GooglePlaceReview[];
@@ -12,7 +14,12 @@ export default function GoogleReviews({
   placeName,
   className = "",
 }: GoogleReviewsProps) {
-  if (!reviews || reviews.length === 0) {
+  // Safety checks
+  if (!reviews || !Array.isArray(reviews) || reviews.length === 0) {
+    return null;
+  }
+
+  if (!placeName || typeof placeName !== "string") {
     return null;
   }
 
@@ -25,41 +32,48 @@ export default function GoogleReviews({
         className="space-y-4 overflow-y-auto pr-2"
         style={{ maxHeight: "400px" }}
       >
-        {reviews.map((review, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm"
-          >
-            <div className="flex items-start">
-              {/* Review Content */}
-              <div className="flex-1 min-w-0">
-                {/* Author and Rating */}
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-semibold text-gray-900 text-sm">
-                      {review.author_name || "Anonymous"}
-                    </h4>
-                    <StarRating
-                      rating={review.rating}
-                      size="sm"
-                      showNumber={false}
-                    />
-                  </div>
-                  <span className="text-xs text-gray-500 flex-shrink-0">
-                    {review.relative_time_description || "Recent"}
-                  </span>
-                </div>
+        {reviews.map((review, index) => {
+          // Safety check for each review
+          if (!review || typeof review !== "object") {
+            return null;
+          }
 
-                {/* Review Text */}
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  {typeof review.text === "string"
-                    ? review.text
-                    : review.text?.text || "No review text available"}
-                </p>
+          return (
+            <div
+              key={index}
+              className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm"
+            >
+              <div className="flex items-start">
+                {/* Review Content */}
+                <div className="flex-1 min-w-0">
+                  {/* Author and Rating */}
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-semibold text-gray-900 text-sm">
+                        {review.author_name || "Anonymous"}
+                      </h4>
+                      <SimpleStarRating
+                        rating={review.rating || 5}
+                        size="sm"
+                        showNumber={false}
+                      />
+                    </div>
+                    <span className="text-xs text-gray-500 flex-shrink-0">
+                      {review.relative_time_description || "Recent"}
+                    </span>
+                  </div>
+
+                  {/* Review Text */}
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {typeof review.text === "string"
+                      ? review.text
+                      : review.text?.text || "Great place to visit!"}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* No reviews fallback message */}
         {reviews.length === 0 && (

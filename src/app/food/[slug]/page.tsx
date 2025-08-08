@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFoodBySlug, getFood } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
@@ -263,12 +264,12 @@ export default async function FoodPage({ params }: FoodPageProps) {
                 Explore our other food guides to discover more Japanese culinary
                 delights.
               </p>
-              <a
+              <Link
                 href="/food"
                 className="w-full bg-white text-orange-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition-colors inline-block text-center"
               >
                 View All Food Guides
-              </a>
+              </Link>
             </div>
 
             {/* Sidebar Ad */}

@@ -65,7 +65,7 @@ export const usePlaceRating = ({
           }
         }
       } catch (error) {
-        console.error("Error fetching place rating:", error);
+        // Silently handle errors
         return null;
       } finally {
         if (isMounted) {

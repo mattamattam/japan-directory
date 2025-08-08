@@ -22,8 +22,7 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
   },
 
-  // Compiler optimizations
-  swcMinify: true,
+  // SWC minification is enabled by default in Next.js 15
   // Compression
   compress: true,
   // Power user features for Core Web Vitals

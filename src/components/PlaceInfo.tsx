@@ -54,9 +54,7 @@ export default function PlaceInfo({
           }
         }
       } catch (error) {
-        if (isMounted) {
-          console.warn("Failed to fetch runtime place data:", error);
-        }
+        // Silently handle errors
       } finally {
         if (isMounted) {
           setIsLoading(false);

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBlogPostBySlug, getBlogPosts } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
@@ -308,12 +309,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <UserIcon className="h-4 w-4 mr-1" />
                 <span>By {post.author}</span>
               </div>
-              <a
+              <Link
                 href="/blog"
                 className="text-red-600 hover:text-red-700 font-medium transition-colors duration-200"
               >
                 ← Back to Blog
-              </a>
+              </Link>
             </div>
           </footer>
         </div>

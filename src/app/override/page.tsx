@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function OverridePage() {
+function OverridePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -48,5 +48,21 @@ export default function OverridePage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function OverridePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center p-4">
+          <div className="max-w-md mx-auto text-center text-white">
+            <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+          </div>
+        </div>
+      }
+    >
+      <OverridePageContent />
+    </Suspense>
   );
 }

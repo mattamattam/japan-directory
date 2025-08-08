@@ -22,9 +22,8 @@ import {
 import { GooglePlaceData } from "@/lib/places-utils";
 import dynamic from "next/dynamic";
 
-// Dynamically import PlaceInfo to avoid SSR issues
+// Dynamically import PlaceInfo for better performance
 const PlaceInfo = dynamic(() => import("@/components/PlaceInfo"), {
-  ssr: false,
   loading: () => (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -37,9 +36,8 @@ const PlaceInfo = dynamic(() => import("@/components/PlaceInfo"), {
   ),
 });
 
-// Dynamically import GoogleMap to avoid SSR issues
+// Dynamically import GoogleMap for better performance
 const GoogleMap = dynamic(() => import("@/components/GoogleMap"), {
-  ssr: false,
   loading: () => (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>

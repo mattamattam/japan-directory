@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Under Construction - Visit Japan HQ",
@@ -115,7 +116,7 @@ export default function MaintenancePage() {
               </svg>
               Contact Us
             </a>
-            <a
+            <Link
               href="/override?maintenance_override=YOUR_SECRET_HERE"
               className="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors duration-200"
             >
@@ -133,7 +134,7 @@ export default function MaintenancePage() {
                 />
               </svg>
               Developer Access
-            </a>
+            </Link>
           </div>
         </div>
 

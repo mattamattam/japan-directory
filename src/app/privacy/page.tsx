@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 import Layout from "@/components/Layout";
 
@@ -325,22 +326,22 @@ export default function PrivacyPolicy() {
                   </li>
                   <li>
                     <strong>Contact Form:</strong>{" "}
-                    <a
+                    <Link
                       href="/contact"
                       className="text-red-600 hover:text-red-700 underline"
                     >
                       Visit our contact page
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <strong>Data Request Form:</strong> For specific data
                     access, correction, or deletion requests, please use our{" "}
-                    <a
+                    <Link
                       href="/contact"
                       className="text-red-600 hover:text-red-700 underline"
                     >
                       contact form
-                    </a>{" "}
+                    </Link>{" "}
                     and specify your request type.
                   </li>
                 </ul>

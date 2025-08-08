@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getEssentialBySlug, getEssentials } from "@/lib/sanity-queries";
 import Layout from "@/components/Layout";
@@ -241,12 +242,12 @@ export default async function EssentialPage({ params }: EssentialPageProps) {
                 Explore our other essential guides for comprehensive Japan
                 travel planning.
               </p>
-              <a
+              <Link
                 href="/essentials"
                 className="w-full bg-white text-green-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition-colors inline-block text-center"
               >
                 View All Essentials
-              </a>
+              </Link>
             </div>
 
             {/* Sidebar Ad */}

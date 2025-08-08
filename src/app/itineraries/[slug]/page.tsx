@@ -359,12 +359,12 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
                 Explore our other itineraries to find more travel plans across
                 Japan.
               </p>
-              <a
+              <Link
                 href="/itineraries"
                 className="w-full bg-white text-green-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition-colors inline-block text-center"
               >
                 View All Itineraries
-              </a>
+              </Link>
             </div>
 
             {/* Sidebar Ad */}

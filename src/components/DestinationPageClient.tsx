@@ -30,9 +30,8 @@ import { ContentStatusPills, LastUpdatedText } from "./ContentMetadata";
 import WeatherSidebar from "./WeatherSidebar";
 import dynamic from "next/dynamic";
 
-// Dynamically import GoogleMap to avoid SSR issues
+// Dynamically import GoogleMap for better performance
 const GoogleMap = dynamic(() => import("./GoogleMap"), {
-  ssr: false,
   loading: () => (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
@@ -139,14 +138,12 @@ export default function DestinationPageClient({
     if (isMapModalOpen && selectedDistrict && mapRef.current) {
       // Check if Google Maps API is loaded
       if (!window.google || !window.google.maps) {
-        console.error("Google Maps API not loaded");
         return;
       }
 
       // Check if API key is configured
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
       if (!apiKey || apiKey === "undefined") {
-        console.error("Google Maps API key not configured");
         return;
       }
 
@@ -178,9 +175,7 @@ export default function DestinationPageClient({
         });
 
         mapInstanceRef.current = map;
-      } catch (error) {
-        console.error("Error initializing Google Maps:", error);
-      }
+      } catch (error) {}
     }
 
     // Cleanup map when modal closes

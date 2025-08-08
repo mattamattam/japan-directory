@@ -33,8 +33,6 @@ export default function GoogleMap({
     async function fetchLocationData() {
       if (!placeName) return;
 
-      console.log(`🗺️ GoogleMap: Fetching location for "${placeName}"`);
-
       try {
         const response = await fetch(
           `/api/places?query=${encodeURIComponent(placeName)}`,
@@ -45,11 +43,8 @@ export default function GoogleMap({
           }
         );
 
-        console.log(`🗺️ GoogleMap: API response status:`, response.status);
-
         if (response.ok && isMounted) {
           const data = await response.json();
-          console.log(`🗺️ GoogleMap: API response data:`, data);
 
           // Check for different possible location structures in the API response
           let locationData = null;
@@ -69,9 +64,6 @@ export default function GoogleMap({
           } else if (data.name) {
             // Fallback: Use Google Maps Geocoding for known places
             // For places like "Nara Park", we can try to geocode them
-            console.log(
-              `🗺️ GoogleMap: No coordinates found, trying geocoding for: ${data.name}`
-            );
 
             // Try geocoding the place name (wait for Google Maps API to load)
             const tryGeocoding = () => {
@@ -85,20 +77,16 @@ export default function GoogleMap({
                 {
                   address: `${data.name}, ${data.formatted_address || "Japan"}`,
                 },
-                (results, status) => {
+                (results: any, status: string) => {
                   if (status === "OK" && results && results[0] && isMounted) {
                     const geoLocation = results[0].geometry.location;
-                    console.log(`🗺️ GoogleMap: Geocoded location:`, {
-                      lat: geoLocation.lat(),
-                      lng: geoLocation.lng(),
-                    });
+
                     setLocation({
                       lat: geoLocation.lat(),
                       lng: geoLocation.lng(),
                       formatted_address: data.formatted_address,
                     });
                   } else {
-                    console.log(`🗺️ GoogleMap: Geocoding failed:`, status);
                   }
                 }
               );
@@ -109,34 +97,19 @@ export default function GoogleMap({
           }
 
           if (data && !data.error && locationData && isMounted) {
-            console.log(`🗺️ GoogleMap: Location found:`, locationData);
-            console.log(`🗺️ GoogleMap: Setting location to:`, {
-              lat: locationData.lat || locationData.latitude,
-              lng: locationData.lng || locationData.longitude,
-              formatted_address: data.formatted_address,
-            });
             setLocation({
               lat: locationData.lat || locationData.latitude,
               lng: locationData.lng || locationData.longitude,
               formatted_address: data.formatted_address,
             });
           } else if (isMounted) {
-            console.log(`🗺️ GoogleMap: No valid location data found`);
-            console.log(`🗺️ GoogleMap: Full API response:`, data);
             setError("Location not found");
           }
         } else if (isMounted) {
-          console.log(
-            `🗺️ GoogleMap: Failed to fetch location - response not ok`
-          );
           setError("Failed to fetch location");
         }
       } catch (error) {
         if (isMounted) {
-          console.warn(
-            `🗺️ GoogleMap: Failed to fetch location for ${placeName}:`,
-            error
-          );
           setError("Failed to load map");
         }
       } finally {
@@ -151,26 +124,19 @@ export default function GoogleMap({
     return () => {
       isMounted = false;
     };
-  }, [placeName]);
+  }, [placeName, viewType]);
 
   // Initialize Google Map
   useEffect(() => {
     if (!location || !mapRef.current) return;
 
-    console.log(`🗺️ GoogleMap: Initializing map for location:`, location);
-
     // Wait for Google Maps API to load
     const initializeMap = () => {
       if (!window.google?.maps) {
-        console.log(
-          `🗺️ GoogleMap: Google Maps API not loaded yet, retrying...`
-        );
         // If Google Maps is not loaded yet, wait and try again
         setTimeout(initializeMap, 100);
         return;
       }
-
-      console.log(`🗺️ GoogleMap: Google Maps API loaded, creating map...`);
 
       try {
         // Set zoom level based on view type
@@ -194,8 +160,6 @@ export default function GoogleMap({
           ],
         });
 
-        console.log(`🗺️ GoogleMap: Map created successfully`);
-
         // Add marker (only for place view, not city view)
         if (viewType === "place") {
           new window.google.maps.Marker({
@@ -211,15 +175,11 @@ export default function GoogleMap({
               strokeWeight: 2,
             },
           });
-
-          console.log(`🗺️ GoogleMap: Marker added successfully`);
         } else {
-          console.log(`🗺️ GoogleMap: City view - no marker added`);
         }
 
         mapInstanceRef.current = map;
       } catch (error) {
-        console.error("🗺️ GoogleMap: Error initializing Google Maps:", error);
         setError("Failed to initialize map");
       }
     };
@@ -231,7 +191,7 @@ export default function GoogleMap({
         mapInstanceRef.current = null;
       }
     };
-  }, [location, placeName]);
+  }, [location, placeName, viewType]);
 
   // Don't render if no location or error
   if (isLoading) {

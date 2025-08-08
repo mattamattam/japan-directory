@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import Layout from "@/components/Layout";
 import Breadcrumb from "@/components/Breadcrumb";
 
@@ -214,12 +215,12 @@ export default function AffiliateDisclosure() {
                 <p className="mt-4">
                   For more details about how we handle your information, please
                   review our{" "}
-                  <a
+                  <Link
                     href="/privacy"
                     className="text-red-600 hover:text-red-800 underline"
                   >
                     Privacy Policy
-                  </a>
+                  </Link>
                   .
                 </p>
               </div>

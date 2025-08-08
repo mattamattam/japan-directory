@@ -15,11 +15,10 @@ import { Button } from "@/components/ui/Button";
 import DestinationCard from "@/components/DestinationCard";
 import dynamic from "next/dynamic";
 
-// Dynamically import HomepageExperienceCard to avoid SSR issues with client components
+// Dynamically import HomepageExperienceCard for better performance
 const HomepageExperienceCard = dynamic(
   () => import("@/components/HomepageExperienceCard"),
   {
-    ssr: false,
     loading: () => (
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden animate-pulse">
         <div className="h-48 bg-gray-200"></div>

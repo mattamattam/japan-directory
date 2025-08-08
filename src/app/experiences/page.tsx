@@ -33,7 +33,7 @@ export default async function ExperiencesPage() {
   const placesDataMap = await fetchExperiencesPlacesData(experiences);
   
   // Add places data to experiences
-  const experiencesWithPlaceData = experiences.map(experience => ({
+  const experiencesWithPlaceData = experiences.map((experience: any) => ({
     ...experience,
     googleRating: placesDataMap.get(experience._id)?.rating,
     googleReviewCount: placesDataMap.get(experience._id)?.user_ratings_total,

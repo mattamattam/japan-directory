@@ -138,6 +138,70 @@ class BuildPrefetcher {
     }
   }
 
+  async prefetchExperiencePlaces() {
+    console.log("🎌 Prefetching experiences place data...");
+
+    try {
+      // Get all experiences from Sanity
+      const experiences = await sanityClient.fetch(
+        '*[_type == "experience" && !(_id in path("drafts.**"))] { _id, name, location, category }'
+      );
+
+      console.log(`   Found ${experiences.length} experiences to prefetch`);
+
+      if (experiences.length === 0) {
+        console.log("   ⚠️  No experiences found to prefetch");
+        return;
+      }
+
+      // Generate place queries for experiences
+      const experienceQueries = experiences.map((experience) => {
+        let query = experience.name;
+        
+        // Add location context if available
+        if (experience.location) {
+          query += ` ${experience.location}`;
+        }
+        
+        // Add Japan to help with search accuracy
+        if (!query.toLowerCase().includes('japan')) {
+          query += ' Japan';
+        }
+        
+        return query;
+      });
+
+      console.log(`   Prefetching ${experienceQueries.length} experience place queries`);
+
+      // Batch prefetch with build key (no rate limits)
+      const batchSize = 8; // Slightly smaller batches for experiences
+      for (let i = 0; i < experienceQueries.length; i += batchSize) {
+        const batch = experienceQueries.slice(i, i + batchSize);
+
+        const promises = batch.map((query) =>
+          this.fetchWithBuildKey("/api/places", { query })
+        );
+
+        const results = await Promise.all(promises);
+        
+        // Log successful results
+        results.forEach((result, index) => {
+          if (result && result.rating) {
+            const query = batch[index];
+            console.log(`   📍 ${query}: ${result.rating}⭐ (${result.user_ratings_total || 0} reviews)`);
+          }
+        });
+
+        // Brief pause between batches
+        await new Promise((resolve) => setTimeout(resolve, 150));
+      }
+
+      console.log(`   ✅ Completed prefetching experiences places data`);
+    } catch (error) {
+      console.error(`   ❌ Error prefetching experiences places:`, error);
+    }
+  }
+
   async prefetchWeatherData() {
     console.log("🌤️  Prefetching weather data...");
 
@@ -225,6 +289,7 @@ class BuildPrefetcher {
 
     // Run all prefetch operations
     await this.prefetchDestinationPlaces();
+    await this.prefetchExperiencePlaces();
     await this.prefetchWeatherData();
     await this.prefetchExchangeRates();
 

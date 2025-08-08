@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "build:with-prefetch": "npm run build:prefetch && next build",
+    "build": "npm run build:prefetch && next build",
+    "build:no-prefetch": "next build",
     "build:prefetch": "node scripts/build-prefetch.js",
     "start": "next start",
     "lint": "next lint",

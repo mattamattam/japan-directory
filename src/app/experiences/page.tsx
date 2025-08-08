@@ -10,6 +10,7 @@ import {
   CurrencyYenIcon,
   ClockIcon,
 } from "@heroicons/react/24/solid";
+import { fetchExperiencesPlacesData, serializePlacesData, deserializePlacesData } from "@/lib/build-places-data";
 
 export const metadata: Metadata = {
   title: "Japan Experiences - Unique Activities & Cultural Tours",
@@ -28,8 +29,17 @@ export default async function ExperiencesPage() {
   // Fetch experiences from Sanity
   const experiences = await getExperiences();
 
-  // Don't fetch Google Places data at build time - only show real data at runtime
-  const experiencesWithPlaceData = experiences;
+  // Fetch Google Places data at build time
+  const placesDataMap = await fetchExperiencesPlacesData(experiences);
+  
+  // Add places data to experiences
+  const experiencesWithPlaceData = experiences.map(experience => ({
+    ...experience,
+    googleRating: placesDataMap.get(experience._id)?.rating,
+    googleReviewCount: placesDataMap.get(experience._id)?.user_ratings_total,
+    placeName: placesDataMap.get(experience._id)?.name,
+    placeAddress: placesDataMap.get(experience._id)?.formatted_address,
+  }));
 
   return (
     <Layout>

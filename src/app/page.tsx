@@ -10,6 +10,7 @@ import {
   getLodging,
   getItineraries,
 } from "@/lib/sanity-queries";
+import { fetchPlaceData, getPlaceQuery, getFallbackPlaceData } from "@/lib/places-utils";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/Button";
 import DestinationCard from "@/components/DestinationCard";
@@ -35,11 +36,24 @@ import {
 import type { Destination } from "@/types";
 
 export const metadata: Metadata = {
-  title: "Visit Japan HQ - Your Complete Guide to Japan Travel",
+  title: "Visit Japan HQ - Ultimate Japan Travel Guide 2025 | Hotels, Tours & Cultural Experiences",
   description:
-    "Discover the best destinations, hotels, and experiences in Japan. Plan your perfect trip with our comprehensive travel guide.",
-  keywords:
-    "Japan travel, Japan tourism, Tokyo, Kyoto, Osaka, Japan hotels, Japan tours, Japan destinations",
+    "Plan your perfect Japan trip with our expert travel guide. Discover Tokyo, Kyoto, Osaka attractions, authentic experiences, best hotels & restaurants. Cherry blossom 2025 guide included!",
+  keywords: [
+    "Japan travel guide 2025",
+    "best time to visit Japan",
+    "Tokyo travel guide", 
+    "Kyoto temples",
+    "Japan itinerary",
+    "JR Pass guide",
+    "cherry blossom season 2025",
+    "Japanese cultural experiences",
+    "Japan hotels booking",
+    "traditional Japanese food tours",
+    "Tokyo attractions",
+    "Kyoto shrines",
+    "Osaka food guide"
+  ].join(", "),
   alternates: {
     canonical: "https://visitjapanhq.com",
   },
@@ -85,8 +99,32 @@ export const revalidate = 3600; // Revalidate every hour
 export default async function Home() {
   // Fetch data from Sanity - get all items for carousel display
   const allDestinations = await getDestinations();
-  const allExperiences = await getExperiences();
+  const rawExperiences = await getExperiences();
   const essentials = await getEssentials();
+
+  // Fetch Google Places data for experiences
+  const allExperiences = await Promise.all(
+    rawExperiences.map(async (experience: any) => {
+      const placeQuery = getPlaceQuery(experience, 'experience', experience.location);
+      let placeData = null;
+      
+      try {
+        placeData = await fetchPlaceData(placeQuery);
+      } catch (error) {
+        console.warn(`Failed to fetch place data for ${experience.name}:`, error);
+      }
+      
+      if (!placeData) {
+        placeData = getFallbackPlaceData(experience.name);
+      }
+      
+      return {
+        ...experience,
+        googleRating: placeData?.rating,
+        googleReviewCount: placeData?.user_ratings_total,
+      };
+    })
+  );
   const foodGuides = await getFood();
   const lodging = await getLodging();
   const itineraries = await getItineraries();
@@ -152,12 +190,12 @@ export default async function Home() {
       {/* Hero Section */}
       <HeroMontage>
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-          Discover the Magic of Japan
+          Ultimate Japan Travel Guide 2025
         </h1>
         <p className="mt-6 text-lg leading-8 text-red-100">
-          Your ultimate guide to Japan tourism. Find the best hotels,
-          attractions, restaurants, and travel tips for an unforgettable
-          Japanese adventure.
+          Plan your perfect Japan trip with expert guides to Tokyo, Kyoto, and Osaka. 
+          Discover authentic experiences, best hotels, traditional food tours, and 
+          cherry blossom season 2025 insights for an unforgettable Japanese adventure.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Link href="/destinations">

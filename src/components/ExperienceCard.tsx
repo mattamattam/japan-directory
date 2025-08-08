@@ -15,6 +15,8 @@ interface Experience {
   location: string;
   duration: string;
   category: string;
+  googleRating?: number;
+  googleReviewCount?: number;
 }
 
 interface ExperienceCardProps {
@@ -58,35 +60,15 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
           {experience.description}
         </p>
 
-        {/* Location and Duration */}
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-          <div className="flex items-center">
-            <MapPinIcon className="h-4 w-4 mr-1" />
-            <span>{experience.location || "Location TBD"}</span>
-          </div>
-          <div className="flex items-center">
-            <ClockIcon className="h-4 w-4 mr-1" />
-            <span>{experience.duration || "Duration TBD"}</span>
-          </div>
-        </div>
-
-        {/* Rating and Price */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <StarIcon className="h-4 w-4 text-yellow-400 mr-1" />
-            <span className="text-sm font-medium text-gray-900">
-              {experience.rating || "N/A"}
-            </span>
-            <span className="text-sm text-gray-500 ml-1">
-              ({experience.reviewCount || 0} reviews)
-            </span>
-          </div>
-          <div className="text-lg font-semibold text-red-600">
-            ¥
-            {experience.price
-              ? experience.price.toLocaleString()
-              : "Contact for pricing"}
-          </div>
+        {/* Rating Only */}
+        <div className="flex items-center">
+          <StarIcon className="h-4 w-4 text-yellow-400 mr-1" />
+          <span className="text-sm font-medium text-gray-900">
+            {experience.googleRating || experience.rating || "N/A"}
+          </span>
+          <span className="text-sm text-gray-500 ml-1">
+            ({experience.googleReviewCount || experience.reviewCount || 0} reviews)
+          </span>
         </div>
       </div>
     </Link>

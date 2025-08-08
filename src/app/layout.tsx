@@ -11,12 +11,45 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://visitjapanhq.com'),
-  title: "Japan Travel Guide - Your Complete Guide to Japan",
+  title: {
+    default: "Visit Japan HQ - Ultimate Japan Travel Guide 2025 | Hotels, Tours & Culture",
+    template: "%s | Visit Japan HQ"
+  },
   description:
-    "Discover the best of Japan with our comprehensive travel guide. From Tokyo to Kyoto, get insider tips, cultural insights, and practical advice for your Japan adventure.",
-  keywords:
-    "Japan travel, Tokyo guide, Kyoto travel, Japan tourism, Japanese culture, travel tips",
+    "Plan your perfect Japan trip with our expert travel guides. Discover Tokyo, Kyoto, Osaka attractions, authentic experiences, best hotels & restaurants. Updated 2025.",
+  keywords: [
+    "Japan travel guide 2025",
+    "best time to visit Japan",
+    "Tokyo attractions",
+    "Kyoto temples",
+    "Japan itinerary",
+    "JR Pass guide",
+    "Japanese culture experiences",
+    "Japan hotels booking",
+    "cherry blossom season",
+    "Japan food tours",
+    "traditional Japanese experiences",
+    "Tokyo food guide",
+    "Osaka travel tips"
+  ].join(", "),
+  authors: [{ name: "Visit Japan HQ" }],
+  creator: "Visit Japan HQ",
+  publisher: "Visit Japan HQ",
+  category: "Travel",
+  classification: "Travel Guide",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   alternates: {
+    canonical: "https://visitjapanhq.com",
     languages: {
       'en': 'https://visitjapanhq.com',
       'en-US': 'https://visitjapanhq.com',
@@ -25,6 +58,33 @@ export const metadata: Metadata = {
       'en-CA': 'https://visitjapanhq.com',
       'x-default': 'https://visitjapanhq.com',
     },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://visitjapanhq.com',
+    siteName: 'Visit Japan HQ',
+    title: 'Visit Japan HQ - Ultimate Japan Travel Guide 2025',
+    description: 'Plan your perfect Japan trip with our expert travel guides. Discover Tokyo, Kyoto, Osaka attractions, authentic experiences, best hotels & restaurants.',
+    images: [
+      {
+        url: '/images/og-japan-travel-guide.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Visit Japan HQ - Your Ultimate Japan Travel Guide',
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Visit Japan HQ - Ultimate Japan Travel Guide 2025',
+    description: 'Plan your perfect Japan trip with our expert travel guides. Discover attractions, experiences, hotels & restaurants.',
+    images: ['/images/twitter-japan-travel.jpg'],
+    creator: '@visitjapanhq',
+    site: '@visitjapanhq',
+  },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
   },
 };
 

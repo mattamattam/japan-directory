@@ -19,6 +19,8 @@ import {
   CurrencyYenIcon,
   CalendarIcon,
 } from "@heroicons/react/24/solid";
+import { fetchPlaceData, getPlaceQuery, getFallbackPlaceData, GooglePlaceData } from "@/lib/places-utils";
+import PlaceInfo from "@/components/PlaceInfo";
 
 interface DistrictPageProps {
   params: Promise<{
@@ -81,6 +83,21 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
 
   if (!district || !destination) {
     notFound();
+  }
+
+  // Fetch place data for the district
+  const placeQuery = getPlaceQuery(district, 'district', destination.name);
+  let placeData: GooglePlaceData | null = null;
+  
+  try {
+    placeData = await fetchPlaceData(placeQuery);
+  } catch (error) {
+    console.warn('Failed to fetch district place data:', error);
+    placeData = getFallbackPlaceData(district.name);
+  }
+  
+  if (!placeData) {
+    placeData = getFallbackPlaceData(district.name);
   }
 
   return (
@@ -199,6 +216,13 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
                   </div>
                 </div>
               )}
+
+              {/* Google Places Rating and Reviews */}
+              <PlaceInfo 
+                placeData={placeData}
+                placeName={district.name}
+                showReviews={true}
+              />
 
               {/* Related Links */}
               <div className="bg-gray-50 p-6 rounded-lg">

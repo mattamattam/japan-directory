@@ -103,6 +103,7 @@ export default async function DestinationPage({
     notFound();
   }
 
+
   // Fetch districts for this destination
   const districts = await getDistrictsByDestination(resolvedParams.slug);
 

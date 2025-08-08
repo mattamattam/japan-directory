@@ -15,13 +15,70 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+    // Optimize image loading for Core Web Vitals
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    formats: ["image/webp", "image/avif"],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+  },
+
+  // Compiler optimizations
+  swcMinify: true,
+  // Compression
+  compress: true,
+  // Power user features for Core Web Vitals
+  poweredByHeader: false,
+  reactStrictMode: true,
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          // Security headers
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "origin-when-cross-origin",
+          },
+          // Cache control for static assets
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/images/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
   },
   async redirects() {
     return [
       // Remove trailing slashes from non-root paths
       {
-        source: '/:path+/',
-        destination: '/:path+',
+        source: "/:path+/",
+        destination: "/:path+",
         permanent: true,
       },
     ];

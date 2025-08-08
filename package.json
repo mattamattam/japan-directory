@@ -4,13 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run build:prefetch && next build",
+    "build:no-prefetch": "next build",
+    "build:prefetch": "node scripts/build-prefetch.js",
     "start": "next start",
     "lint": "next lint",
     "delete-blog-posts": "node delete-blog-posts.js",
     "test-sanity": "node scripts/test-sanity-connection.js",
     "upload-images": "node scripts/upload-images-to-sanity.js",
-    "show-images": "node scripts/add-sample-images.js"
+    "show-images": "node scripts/add-sample-images.js",
+    "test-build-api": "node scripts/test-secure-api.js"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

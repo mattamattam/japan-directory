@@ -24,6 +24,13 @@ import {
   CurrencyYenIcon,
 } from "@heroicons/react/24/solid";
 import { ExperienceImage } from "@/components/OptimizedImage";
+import {
+  fetchPlaceData,
+  getPlaceQuery,
+  getFallbackPlaceData,
+  GooglePlaceData,
+} from "@/lib/places-utils";
+import PlaceInfo from "@/components/PlaceInfo";
 
 interface ExperiencePageProps {
   params: Promise<{ slug: string }>;
@@ -113,6 +120,25 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
     notFound();
   }
 
+  // Fetch place data for the experience
+  const placeQuery = getPlaceQuery(
+    experience,
+    "experience",
+    experience.location
+  );
+  let placeData: GooglePlaceData | null = null;
+
+  try {
+    placeData = await fetchPlaceData(placeQuery);
+  } catch (error) {
+    console.warn("Failed to fetch experience place data:", error);
+    placeData = getFallbackPlaceData(experience.name);
+  }
+
+  if (!placeData) {
+    placeData = getFallbackPlaceData(experience.name);
+  }
+
   // Check if newsletter signup should show on this page
   const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);
 
@@ -192,10 +218,13 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
               </div>
 
               {/* Last Updated at bottom of article */}
-              <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
                 <LastUpdatedText
                   lastUpdated={experience._updatedAt || new Date()}
                 />
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                  {experience.category}
+                </span>
               </div>
             </section>
 
@@ -228,53 +257,6 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Quick Info */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Experience Details
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center">
-                  <MapPinIcon className="h-5 w-5 text-gray-400 mr-3" />
-                  <span className="text-gray-700">
-                    {experience.location || "Location TBD"}
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <ClockIcon className="h-5 w-5 text-gray-400 mr-3" />
-                  <span className="text-gray-700">
-                    {experience.duration || "Duration TBD"}
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <CurrencyYenIcon className="h-5 w-5 text-gray-400 mr-3" />
-                  <span className="text-gray-700">
-                    ¥
-                    {experience.price
-                      ? experience.price.toLocaleString()
-                      : "Contact for pricing"}
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <StarIcon className="h-5 w-5 text-yellow-400 mr-3" />
-                  <span className="text-gray-700">
-                    {experience.rating || "N/A"} ({experience.reviewCount || 0}{" "}
-                    reviews)
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Category */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Category
-              </h3>
-              <span className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
-                {experience.category}
-              </span>
-            </div>
-
             {/* Highlights */}
             {experience.highlights && experience.highlights.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm p-6">
@@ -295,6 +277,13 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
                 </div>
               </div>
             )}
+
+            {/* Google Places Rating and Reviews */}
+            <PlaceInfo
+              placeData={placeData}
+              placeName={experience.name}
+              showReviews={true}
+            />
 
             {/* CTA - Hidden until affiliates are ready */}
             {/* <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white">

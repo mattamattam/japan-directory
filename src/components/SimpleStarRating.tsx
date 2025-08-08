@@ -44,7 +44,20 @@ export default function SimpleStarRating({
 
         {/* Partial star */}
         {hasPartialStar && (
-          <span style={{ fontSize: starSize, color: "#fbbf24" }}>★</span>
+          <div className="relative inline-block" style={{ fontSize: starSize }}>
+            {/* Empty star background */}
+            <span style={{ color: "#d1d5db" }}>★</span>
+            {/* Filled portion overlay */}
+            <span
+              className="absolute top-0 left-0 overflow-hidden"
+              style={{
+                color: "#fbbf24",
+                width: `${(rating % 1) * 100}%`,
+              }}
+            >
+              ★
+            </span>
+          </div>
         )}
 
         {/* Empty stars */}

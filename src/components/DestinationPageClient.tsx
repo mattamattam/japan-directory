@@ -28,6 +28,18 @@ import FAQSection, {
 } from "./FAQSection";
 import { ContentStatusPills, LastUpdatedText } from "./ContentMetadata";
 import WeatherSidebar from "./WeatherSidebar";
+import dynamic from "next/dynamic";
+
+// Dynamically import GoogleMap to avoid SSR issues
+const GoogleMap = dynamic(() => import("./GoogleMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="bg-white rounded-lg shadow-sm p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
+      <div className="h-48 bg-gray-200 rounded-lg animate-pulse"></div>
+    </div>
+  ),
+});
 
 // Add Google Maps types
 declare global {
@@ -402,6 +414,9 @@ export default function DestinationPageClient({
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Google Map */}
+              <GoogleMap placeName={destination.name} viewType="city" />
+
               {/* Highlights Section */}
               {destination.highlights && destination.highlights.length > 0 && (
                 <div className="bg-white rounded-lg shadow-sm p-6">

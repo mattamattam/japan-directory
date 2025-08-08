@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPinIcon, StarIcon } from "@heroicons/react/24/solid";
+import { StarIcon } from "@heroicons/react/24/solid";
 import { ExperienceImage } from "./OptimizedImage";
 
 interface Experience {
@@ -65,7 +65,7 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
             <div className="flex items-center">
               <StarIcon className="h-4 w-4 text-yellow-400 mr-1" />
               <span className="text-sm font-medium text-gray-900">
-                {experience.googleRating?.toFixed(1) || 'N/A'}
+                {experience.googleRating?.toFixed(1) || "N/A"}
               </span>
               {experience.googleReviewCount && (
                 <span className="text-sm text-gray-500 ml-1">
@@ -76,12 +76,8 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
           </div>
         )}
 
-        {/* Experience Details */}
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <div className="flex items-center">
-            <MapPinIcon className="h-4 w-4 mr-1" />
-            <span>{experience.location || "Japan"}</span>
-          </div>
+        {/* Action Link */}
+        <div className="flex justify-end">
           <span className="text-red-600 font-medium group-hover:text-red-700">
             Explore →
           </span>

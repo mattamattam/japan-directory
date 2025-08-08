@@ -37,6 +37,17 @@ const PlaceInfo = dynamic(() => import("@/components/PlaceInfo"), {
   ),
 });
 
+// Dynamically import GoogleMap to avoid SSR issues
+const GoogleMap = dynamic(() => import("@/components/GoogleMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="bg-white rounded-lg shadow-sm p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
+      <div className="h-48 bg-gray-200 rounded-lg animate-pulse"></div>
+    </div>
+  ),
+});
+
 interface DistrictPageProps {
   params: Promise<{
     slug: string;
@@ -180,6 +191,12 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Google Map */}
+              <GoogleMap
+                placeName={`${district.name}, ${destination.name}`}
+                viewType="city"
+              />
+
               {/* Quick Info */}
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold mb-4">Quick Info</h3>

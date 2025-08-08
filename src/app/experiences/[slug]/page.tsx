@@ -27,6 +27,18 @@ import { ExperienceImage } from "@/components/OptimizedImage";
 import { GooglePlaceData } from "@/lib/places-utils";
 import PlaceInfo from "@/components/PlaceInfo";
 import { getStaticPlaceData } from "@/lib/static-places-data";
+import dynamic from "next/dynamic";
+
+// Dynamically import GoogleMap to avoid SSR issues
+const GoogleMap = dynamic(() => import("@/components/GoogleMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="bg-white rounded-lg shadow-sm p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Location</h3>
+      <div className="h-48 bg-gray-200 rounded-lg animate-pulse"></div>
+    </div>
+  ),
+});
 
 interface ExperiencePageProps {
   params: Promise<{ slug: string }>;
@@ -118,14 +130,16 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
 
   // Get static Google Places data from committed JSON file
   const staticPlaceData = getStaticPlaceData(experience._id);
-  
-  const placeData: GooglePlaceData | null = staticPlaceData ? {
-    rating: staticPlaceData.rating,
-    user_ratings_total: staticPlaceData.user_ratings_total,
-    name: staticPlaceData.name,
-    formatted_address: staticPlaceData.formatted_address,
-    reviews: staticPlaceData.reviews,
-  } : null;
+
+  const placeData: GooglePlaceData | null = staticPlaceData
+    ? {
+        rating: staticPlaceData.rating,
+        user_ratings_total: staticPlaceData.user_ratings_total,
+        name: staticPlaceData.name,
+        formatted_address: staticPlaceData.formatted_address,
+        reviews: staticPlaceData.reviews,
+      }
+    : null;
 
   // Check if newsletter signup should show on this page
   const showNewsletterSignup = shouldShowNewsletterSignup(resolvedParams.slug);
@@ -145,6 +159,9 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
     <Layout>
       {/* Structured Data */}
       {generateStructuredDataScript([experienceData, breadcrumbData])}
+
+      {/* Temporary Debug Component */}
+
       {/* Breadcrumb */}
       <Breadcrumb
         items={[
@@ -245,6 +262,9 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Google Map */}
+            <GoogleMap placeName={experience.name} />
+
             {/* Highlights */}
             {experience.highlights && experience.highlights.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm p-6">

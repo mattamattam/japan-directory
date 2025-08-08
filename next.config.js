@@ -31,8 +31,28 @@ const nextConfig = {
   reactStrictMode: true,
   async headers() {
     return [
+      // Static assets - long cache
       {
-        source: "/(.*)",
+        source: "/_next/static/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/images/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      // SSG pages - short cache with revalidation
+      {
+        source: "/((?!api|_next/static|_next/image|favicon.ico|images).*)",
         headers: [
           // Security headers
           {
@@ -55,19 +75,10 @@ const nextConfig = {
             key: "Referrer-Policy",
             value: "origin-when-cross-origin",
           },
-          // Cache control for static assets
+          // Cache control for pages - allows revalidation
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/images/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: "public, max-age=60, stale-while-revalidate=86400",
           },
         ],
       },

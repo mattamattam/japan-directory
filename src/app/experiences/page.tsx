@@ -33,16 +33,15 @@ export default async function ExperiencesPage() {
   // Fetch experiences from Sanity
   const experiences = await getExperiences();
 
-  // Fetch Google Places data for each experience (skip in CI/CD environments)
-  const isCI =
-    process.env.CI || process.env.GITHUB_ACTIONS || process.env.VERCEL;
+  // Fetch Google Places data for each experience (skip only during build in CI/CD environments)
+  const isBuildTime = process.env.CI || process.env.GITHUB_ACTIONS;
 
   const experiencesWithPlaceData = await Promise.all(
     experiences.map(async (experience: any) => {
       let placeData = null;
 
-      // Only fetch place data in local development
-      if (!isCI) {
+      // Only fetch place data when not building in CI (allows runtime calls in production)
+      if (!isBuildTime) {
         const placeQuery = getPlaceQuery(
           experience,
           "experience",

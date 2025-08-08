@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { StarIcon, MapPinIcon } from "@heroicons/react/24/solid";
+
 import type { Destination } from "@/types";
 import { DestinationImage } from "./OptimizedImage";
 
@@ -56,17 +56,8 @@ export default function DestinationCard({
           {destination.description}
         </p>
 
-        {/* Rating and Reviews */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <StarIcon className="h-4 w-4 text-yellow-400 mr-1" />
-            <span className="text-sm font-medium text-gray-900">
-              {destination.rating || "N/A"}
-            </span>
-            <span className="text-sm text-gray-500 ml-1">
-              ({destination.reviewCount || 0} reviews)
-            </span>
-          </div>
+        {/* Action Link */}
+        <div className="flex justify-end">
           <span className="text-sm text-red-600 font-medium group-hover:text-red-700">
             Explore →
           </span>

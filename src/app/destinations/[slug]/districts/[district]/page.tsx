@@ -90,12 +90,11 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
     notFound();
   }
 
-  // Fetch place data for the district (skip in CI/CD environments)
-  const isCI =
-    process.env.CI || process.env.GITHUB_ACTIONS || process.env.VERCEL;
+  // Fetch place data for the district (skip only during build in CI/CD environments)
+  const isBuildTime = process.env.CI || process.env.GITHUB_ACTIONS;
   let placeData: GooglePlaceData | null = null;
 
-  if (!isCI) {
+  if (!isBuildTime) {
     const placeQuery = getPlaceQuery(district, "district", destination.name);
 
     try {

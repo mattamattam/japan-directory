@@ -114,16 +114,15 @@ export default async function Home() {
   const rawExperiences = await getExperiences();
   const essentials = await getEssentials();
 
-  // Fetch Google Places data for experiences (skip in CI/CD environments)
-  const isCI =
-    process.env.CI || process.env.GITHUB_ACTIONS || process.env.VERCEL;
+  // Fetch Google Places data for experiences (skip only during build in CI/CD environments)
+  const isBuildTime = process.env.CI || process.env.GITHUB_ACTIONS;
 
   const allExperiences = await Promise.all(
     rawExperiences.map(async (experience: any) => {
       let placeData = null;
 
-      // Only fetch place data in local development (when API server might be available)
-      if (!isCI) {
+      // Only fetch place data when not building in CI (allows runtime calls in production)
+      if (!isBuildTime) {
         const placeQuery = getPlaceQuery(
           experience,
           "experience",

@@ -17,9 +17,16 @@ import Breadcrumb from "./Breadcrumb";
 import AdBanner from "./AdBanner";
 import SidebarAd from "./SidebarAd";
 import NewsletterSignup from "./NewsletterSignup";
-import { getContextualLinks, InternalLinkSuggestions } from "@/lib/internal-linking";
-import FAQSection, { JAPAN_TRAVEL_FAQS, TOKYO_FAQS, KYOTO_FAQS } from "./FAQSection";
-import ContentMetadata from "./ContentMetadata";
+import {
+  getContextualLinks,
+  InternalLinkSuggestions,
+} from "@/lib/internal-linking";
+import FAQSection, {
+  JAPAN_TRAVEL_FAQS,
+  TOKYO_FAQS,
+  KYOTO_FAQS,
+} from "./FAQSection";
+import { ContentStatusPills, LastUpdatedText } from "./ContentMetadata";
 import WeatherSidebar from "./WeatherSidebar";
 
 // Add Google Maps types
@@ -227,25 +234,17 @@ export default function DestinationPageClient({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
-              {/* Content Metadata */}
-              <ContentMetadata 
-                lastUpdated={destination._updatedAt || new Date()}
-                publishedAt={destination.publishedAt || destination._createdAt}
-                factChecked={true}
-                sources={[
-                  "Japan National Tourism Organization",
-                  "Local Tourism Boards",
-                  "Transportation Companies",
-                  "Cultural Sites Official Websites"
-                ]}
-                className="mb-8"
-              />
-
               {/* About Section */}
               <section className="bg-white rounded-lg shadow-sm p-8 mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  About {destination.name}
-                </h2>
+                <div className="flex items-start justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    About {destination.name}
+                  </h2>
+                  <ContentStatusPills
+                    lastUpdated={destination._updatedAt || new Date()}
+                    factChecked={true}
+                  />
+                </div>
                 <div className="prose prose-lg text-gray-600">
                   {destination.longDescription ? (
                     <PortableText content={destination.longDescription} />
@@ -270,17 +269,35 @@ export default function DestinationPageClient({
                     </>
                   )}
                 </div>
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <LastUpdatedText
+                    lastUpdated={destination._updatedAt || new Date()}
+                  />
+                </div>
               </section>
 
               {/* Internal Links */}
               {(() => {
-                const slug = typeof destination.slug === 'string' ? destination.slug : destination.slug?.current || '';
-                const content = destination.longDescription ? 
-                  (Array.isArray(destination.longDescription) ? 
-                    destination.longDescription.map(block => block.children?.map((child: any) => child.text).join(' ')).join(' ') : 
-                    destination.description
-                  ) : destination.description;
-                const contextualLinks = getContextualLinks('destination', slug, content);
+                const slug =
+                  typeof destination.slug === "string"
+                    ? destination.slug
+                    : destination.slug?.current || "";
+                const content = destination.longDescription
+                  ? Array.isArray(destination.longDescription)
+                    ? destination.longDescription
+                        .map((block) =>
+                          block.children
+                            ?.map((child: any) => child.text)
+                            .join(" ")
+                        )
+                        .join(" ")
+                    : destination.description
+                  : destination.description;
+                const contextualLinks = getContextualLinks(
+                  "destination",
+                  slug,
+                  content
+                );
                 return <InternalLinkSuggestions links={contextualLinks} />;
               })()}
 
@@ -362,17 +379,20 @@ export default function DestinationPageClient({
 
               {/* FAQ Section */}
               {(() => {
-                const slug = typeof destination.slug === 'string' ? destination.slug : destination.slug?.current || '';
+                const slug =
+                  typeof destination.slug === "string"
+                    ? destination.slug
+                    : destination.slug?.current || "";
                 let faqs = JAPAN_TRAVEL_FAQS;
-                
-                if (slug.toLowerCase().includes('tokyo')) {
+
+                if (slug.toLowerCase().includes("tokyo")) {
                   faqs = [...TOKYO_FAQS, ...JAPAN_TRAVEL_FAQS.slice(0, 2)];
-                } else if (slug.toLowerCase().includes('kyoto')) {
+                } else if (slug.toLowerCase().includes("kyoto")) {
                   faqs = [...KYOTO_FAQS, ...JAPAN_TRAVEL_FAQS.slice(0, 2)];
                 }
-                
+
                 return (
-                  <FAQSection 
+                  <FAQSection
                     title={`${destination.name} Travel FAQ`}
                     faqs={faqs.slice(0, 6)}
                   />
@@ -382,29 +402,6 @@ export default function DestinationPageClient({
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Quick Info */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Quick Info
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center text-sm">
-                    <ClockIcon className="h-4 w-4 mr-2 text-gray-400" />
-                    <span>
-                      Best Time: {destination.bestTime || "Year-round"}
-                    </span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <CurrencyYenIcon className="h-4 w-4 mr-2 text-gray-400" />
-                    <span>Budget: Varies</span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <CloudIcon className="h-4 w-4 mr-2 text-gray-400" />
-                    <span>Weather: Seasonal</span>
-                  </div>
-                </div>
-              </div>
-
               {/* Highlights Section */}
               {destination.highlights && destination.highlights.length > 0 && (
                 <div className="bg-white rounded-lg shadow-sm p-6">

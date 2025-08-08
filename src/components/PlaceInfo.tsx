@@ -1,6 +1,9 @@
+"use client";
+
 import { GooglePlaceData } from "@/lib/places-utils";
 import StarRating from "@/components/StarRating";
 import GoogleReviews from "@/components/GoogleReviews";
+import { useState, useEffect } from "react";
 
 interface PlaceInfoProps {
   placeData: GooglePlaceData | null;
@@ -15,11 +18,44 @@ export default function PlaceInfo({
   className = "",
   showReviews = true,
 }: PlaceInfoProps) {
-  if (!placeData) {
+  const [runtimePlaceData, setRuntimePlaceData] =
+    useState<GooglePlaceData | null>(placeData);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch real place data at runtime to get reviews
+  useEffect(() => {
+    async function fetchRuntimePlaceData() {
+      if (!placeName || !showReviews) return;
+
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `/api/places?query=${encodeURIComponent(placeName)}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setRuntimePlaceData(data);
+        }
+      } catch (error) {
+        console.warn("Failed to fetch runtime place data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    // Only fetch if we don't have reviews or if placeData is fallback data
+    if (!placeData?.reviews?.length || placeData?.fallback) {
+      fetchRuntimePlaceData();
+    }
+  }, [placeName, showReviews, placeData]);
+
+  const displayData = runtimePlaceData || placeData;
+
+  if (!displayData) {
     return null;
   }
 
-  const { rating, user_ratings_total, reviews = [] } = placeData;
+  const { rating, user_ratings_total, reviews = [] } = displayData;
 
   return (
     <div className={`space-y-6 ${className}`}>

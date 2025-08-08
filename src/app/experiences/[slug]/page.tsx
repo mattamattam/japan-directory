@@ -120,12 +120,11 @@ export default async function ExperiencePage({ params }: ExperiencePageProps) {
     notFound();
   }
 
-  // Fetch place data for the experience (skip in CI/CD environments)
-  const isCI =
-    process.env.CI || process.env.GITHUB_ACTIONS || process.env.VERCEL;
+  // Fetch place data for the experience (skip only during build in CI/CD environments)
+  const isBuildTime = process.env.CI || process.env.GITHUB_ACTIONS;
   let placeData: GooglePlaceData | null = null;
 
-  if (!isCI) {
+  if (!isBuildTime) {
     const placeQuery = getPlaceQuery(
       experience,
       "experience",

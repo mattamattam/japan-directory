@@ -34,14 +34,6 @@ export default function DestinationCard({
           </div>
         )}
 
-        {/* Price Badge */}
-        {destination.price && (
-          <div className="absolute top-3 right-3">
-            <span className="px-2 py-1 bg-white bg-opacity-90 text-gray-900 text-xs font-medium rounded-full">
-              ¥{destination.price.toLocaleString()}
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Destination Content */}
@@ -52,7 +44,7 @@ export default function DestinationCard({
           </h3>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        <p className="text-gray-600 text-sm mb-4">
           {destination.description}
         </p>
 

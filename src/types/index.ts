@@ -111,4 +111,7 @@ export interface Experience {
   _createdAt?: string;
   _updatedAt?: string;
   publishedAt?: string;
+  // Google Places data (fetched at build time)
+  googleRating?: number;
+  googleReviewCount?: number;
 }

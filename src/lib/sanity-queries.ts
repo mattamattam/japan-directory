@@ -1,4 +1,5 @@
 import { sanity } from "./sanity";
+import { getPlaceDataById } from "./places-data";
 
 // TypeScript interfaces for Sanity data
 interface SanityImage {
@@ -436,10 +437,20 @@ export async function getExperiences() {
 
   try {
     const experiences = await sanity.fetch(query);
-    return experiences.map((experience: any) => ({
-      ...experience,
-      image: imageUrlBuilder(experience.image, 800, 600),
-    }));
+    return experiences.map((experience: any) => {
+      // Get places data if available
+      const placesData = getPlaceDataById(experience._id);
+      
+      return {
+        ...experience,
+        image: imageUrlBuilder(experience.image, 800, 600),
+        // Override rating and reviewCount with Google Places data if available
+        rating: placesData?.rating || experience.rating,
+        reviewCount: placesData?.user_ratings_total || experience.reviewCount,
+        googleRating: placesData?.rating || undefined,
+        googleReviewCount: placesData?.user_ratings_total || undefined,
+      };
+    });
   } catch (error) {
     console.error("Error fetching experiences:", error);
     return [];
@@ -467,10 +478,21 @@ export async function getFeaturedExperiences(limit: number = 6) {
 
   try {
     const experiences = await sanity.fetch(query);
-    return experiences.map((experience: any) => ({
-      ...experience,
-      image: imageUrlBuilder(experience.image, 800, 600),
-    }));
+    return experiences.map((experience: any) => {
+      // Get places data if available
+      const placesData = getPlaceDataById(experience._id);
+      
+      
+      return {
+        ...experience,
+        image: imageUrlBuilder(experience.image, 800, 600),
+        // Override rating and reviewCount with Google Places data if available
+        rating: placesData?.rating || experience.rating,
+        reviewCount: placesData?.user_ratings_total || experience.reviewCount,
+        googleRating: placesData?.rating || undefined,
+        googleReviewCount: placesData?.user_ratings_total || undefined,
+      };
+    });
   } catch (error) {
     console.error("Error fetching featured experiences:", error);
     return [];

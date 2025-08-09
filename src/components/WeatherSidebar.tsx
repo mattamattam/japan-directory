@@ -26,20 +26,32 @@ export default function WeatherSidebar({
     async function fetchWeather() {
       try {
         setLoading(true);
-        const response = await fetch("/api/weather");
+        // Use destination name in query parameter
+        let url = "/api/weather";
+        if (destinationName) {
+          url += `?location=${encodeURIComponent(destinationName)}`;
+        }
+        
+        const response = await fetch(url);
         if (!response.ok) throw new Error("Weather API failed");
         const data = await response.json();
 
         if (data.cities) {
           // Find weather for the destination or default to Tokyo
-          let targetCity = "Tokyo";
-          if (destinationName) {
-            const cityMatch = data.cities.find(
-              (city: any) =>
-                city.city.toLowerCase() === destinationName.toLowerCase()
-            );
-            if (cityMatch && cityMatch.weather && cityMatch.weather.current) {
-              setWeatherData({
+          const targetCity = destinationName || "Tokyo";
+          const cityMatch = data.cities.find(
+            (city: any) =>
+              city.city.toLowerCase() === targetCity.toLowerCase()
+          ) || data.cities.find((city: any) => city.city === "Tokyo");
+
+          if (cityMatch && cityMatch.weather) {
+            
+            // Handle different weather data structures
+            let weatherData;
+            
+            if (cityMatch.weather.current) {
+              // Format: { weather: { current: { temp, feels_like, humidity, weather } } }
+              weatherData = {
                 city: cityMatch.city,
                 main: {
                   temp: cityMatch.weather.current.temp,
@@ -49,27 +61,26 @@ export default function WeatherSidebar({
                 weather: cityMatch.weather.current.weather || [
                   { id: 800, description: "clear" },
                 ],
-              });
-              return;
+              };
+            } else if (cityMatch.weather.main && cityMatch.weather.weather) {
+              // Standard OpenWeatherMap format: { weather: { main: {temp, ...}, weather: [...] } }
+              weatherData = {
+                city: cityMatch.city,
+                main: cityMatch.weather.main,
+                weather: cityMatch.weather.weather,
+              };
+            } else {
+              // Fallback: assume it's direct OpenWeatherMap format
+              weatherData = {
+                city: cityMatch.city,
+                main: cityMatch.weather,
+                weather: cityMatch.weather?.weather || [
+                  { id: 800, description: "clear" },
+                ],
+              };
             }
-          }
 
-          // Fallback to Tokyo
-          const tokyoData = data.cities.find(
-            (city: any) => city.city === "Tokyo"
-          );
-          if (tokyoData && tokyoData.weather && tokyoData.weather.current) {
-            setWeatherData({
-              city: tokyoData.city,
-              main: {
-                temp: tokyoData.weather.current.temp,
-                feels_like: tokyoData.weather.current.feels_like,
-                humidity: tokyoData.weather.current.humidity,
-              },
-              weather: tokyoData.weather.current.weather || [
-                { id: 800, description: "clear" },
-              ],
-            });
+            setWeatherData(weatherData);
           }
         }
       } catch (error) {

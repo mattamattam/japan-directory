@@ -33,7 +33,6 @@ export default function DestinationCard({
             </span>
           </div>
         )}
-
       </div>
 
       {/* Destination Content */}
@@ -44,9 +43,7 @@ export default function DestinationCard({
           </h3>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4">
-          {destination.description}
-        </p>
+        <p className="text-gray-600 text-sm mb-4">{destination.description}</p>
 
         {/* Action Link */}
         <div className="flex justify-end">

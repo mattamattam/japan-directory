@@ -1,5 +1,30 @@
 {
-  "rewrites": [],
+  "rewrites": [
+    {
+      "source": "/api/weather",
+      "destination": "https://japan-directory-api.vercel.app/api/weather"
+    },
+    {
+      "source": "/api/weather/(.*)",
+      "destination": "https://japan-directory-api.vercel.app/api/weather/$1"
+    },
+    {
+      "source": "/api/exchange-rate",
+      "destination": "https://japan-directory-api.vercel.app/api/exchange-rate"
+    },
+    {
+      "source": "/api/exchange-rate/(.*)",
+      "destination": "https://japan-directory-api.vercel.app/api/exchange-rate/$1"
+    },
+    {
+      "source": "/api/contact",
+      "destination": "https://japan-directory-api.vercel.app/api/contact"
+    },
+    {
+      "source": "/api/newsletter",
+      "destination": "https://japan-directory-api.vercel.app/api/newsletter"
+    }
+  ],
   "redirects": [],
   "headers": [
     {

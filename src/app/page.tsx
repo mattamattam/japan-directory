@@ -125,86 +125,101 @@ export default async function Home() {
   const essentials = await getEssentials();
 
   // Fallback experiences data if Sanity is empty (based on places data)
-  const fallbackExperiences = rawExperiences.length > 0 ? rawExperiences : [
-    {
-      _id: "experience-arashiyama-monkeys",
-      name: "Visiting Monkeys in Kyoto",
-      slug: { current: "arashiyama-monkeys" },
-      description: "Experience the famous monkeys of Arashiyama with stunning views of Kyoto from the mountain park.",
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
-      rating: 4.5,
-      reviewCount: 12624,
-      price: 500,
-      location: "Kyoto",
-      duration: "2-3 hours",
-      category: "Nature & Wildlife"
-    },
-    {
-      _id: "experience-cherry-blossoms",
-      name: "Cherry Blossoms (Hanami) Guide",
-      slug: { current: "cherry-blossoms-hanami" },
-      description: "Discover the best spots for cherry blossom viewing in Japan during the spring season.",
-      image: "https://images.unsplash.com/photo-1522383225653-ed111181a951?w=800&h=600&fit=crop",
-      rating: 4.3,
-      reviewCount: 32039,
-      price: 0,
-      location: "Various Locations",
-      duration: "Seasonal",
-      category: "Cultural Experience"
-    },
-    {
-      _id: "experience-nara-bowing-deer",
-      name: "Bowing Deer of Nara",
-      slug: { current: "nara-bowing-deer" },
-      description: "Meet the famous bowing deer of Nara Park and explore the historic temples nearby.",
-      image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&h=600&fit=crop",
-      rating: 4.5,
-      reviewCount: 66801,
-      price: 300,
-      location: "Nara",
-      duration: "Half day",
-      category: "Nature & Wildlife"
-    },
-    {
-      _id: "experience-himeji-castle",
-      name: "Himeji Castle",
-      slug: { current: "himeji-castle" },
-      description: "Visit Japan's most spectacular original castle, a UNESCO World Heritage site.",
-      image: "https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800&h=600&fit=crop",
-      rating: 4.6,
-      reviewCount: 53975,
-      price: 1000,
-      location: "Himeji",
-      duration: "3-4 hours",
-      category: "Historical Sites"
-    },
-    {
-      _id: "experience-miyajima-floating-torii",
-      name: "The Floating Torii of Miyajima",
-      slug: { current: "miyajima-floating-torii" },
-      description: "Witness the iconic floating torii gate of Itsukushima Shrine on Miyajima Island.",
-      image: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&h=600&fit=crop",
-      rating: 4.6,
-      reviewCount: 32550,
-      price: 500,
-      location: "Miyajima",
-      duration: "Full day",
-      category: "Cultural Experience"
-    },
-    {
-      _id: "experience-tokyo-shopping",
-      name: "Shopping Experiences in Tokyo",
-      slug: { current: "tokyo-shopping" },
-      description: "Explore Tokyo's diverse shopping districts from traditional markets to modern malls.",
-      image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&h=600&fit=crop",
-      rating: 4.2,
-      reviewCount: 30974,
-      price: 0,
-      location: "Tokyo",
-      duration: "Full day",
-      category: "Shopping & Entertainment"
-    }
-  ];
+  const fallbackExperiences =
+    rawExperiences.length > 0
+      ? rawExperiences
+      : [
+          {
+            _id: "experience-arashiyama-monkeys",
+            name: "Visiting Monkeys in Kyoto",
+            slug: { current: "arashiyama-monkeys" },
+            description:
+              "Experience the famous monkeys of Arashiyama with stunning views of Kyoto from the mountain park.",
+            image:
+              "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop",
+            rating: 4.5,
+            reviewCount: 12624,
+            price: 500,
+            location: "Kyoto",
+            duration: "2-3 hours",
+            category: "Nature & Wildlife",
+          },
+          {
+            _id: "experience-cherry-blossoms",
+            name: "Cherry Blossoms (Hanami) Guide",
+            slug: { current: "cherry-blossoms-hanami" },
+            description:
+              "Discover the best spots for cherry blossom viewing in Japan during the spring season.",
+            image:
+              "https://images.unsplash.com/photo-1522383225653-ed111181a951?w=800&h=600&fit=crop",
+            rating: 4.3,
+            reviewCount: 32039,
+            price: 0,
+            location: "Various Locations",
+            duration: "Seasonal",
+            category: "Cultural Experience",
+          },
+          {
+            _id: "experience-nara-bowing-deer",
+            name: "Bowing Deer of Nara",
+            slug: { current: "nara-bowing-deer" },
+            description:
+              "Meet the famous bowing deer of Nara Park and explore the historic temples nearby.",
+            image:
+              "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&h=600&fit=crop",
+            rating: 4.5,
+            reviewCount: 66801,
+            price: 300,
+            location: "Nara",
+            duration: "Half day",
+            category: "Nature & Wildlife",
+          },
+          {
+            _id: "experience-himeji-castle",
+            name: "Himeji Castle",
+            slug: { current: "himeji-castle" },
+            description:
+              "Visit Japan's most spectacular original castle, a UNESCO World Heritage site.",
+            image:
+              "https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800&h=600&fit=crop",
+            rating: 4.6,
+            reviewCount: 53975,
+            price: 1000,
+            location: "Himeji",
+            duration: "3-4 hours",
+            category: "Historical Sites",
+          },
+          {
+            _id: "experience-miyajima-floating-torii",
+            name: "The Floating Torii of Miyajima",
+            slug: { current: "miyajima-floating-torii" },
+            description:
+              "Witness the iconic floating torii gate of Itsukushima Shrine on Miyajima Island.",
+            image:
+              "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&h=600&fit=crop",
+            rating: 4.6,
+            reviewCount: 32550,
+            price: 500,
+            location: "Miyajima",
+            duration: "Full day",
+            category: "Cultural Experience",
+          },
+          {
+            _id: "experience-tokyo-shopping",
+            name: "Shopping Experiences in Tokyo",
+            slug: { current: "tokyo-shopping" },
+            description:
+              "Explore Tokyo's diverse shopping districts from traditional markets to modern malls.",
+            image:
+              "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&h=600&fit=crop",
+            rating: 4.2,
+            reviewCount: 30974,
+            price: 0,
+            location: "Tokyo",
+            duration: "Full day",
+            category: "Shopping & Entertainment",
+          },
+        ];
 
   const allExperiences = fallbackExperiences;
   const foodGuides = await getFood();

@@ -38,13 +38,15 @@ export default function GoogleMap({
         const data = await apiClient.searchPlace(placeName);
 
         if (data && isMounted) {
-
           // Check for different possible location structures in the API response
           let locationData = null;
 
           if (data.location) {
             // External API structure with location.latitude/longitude
-            locationData = { lat: data.location.latitude, lng: data.location.longitude };
+            locationData = {
+              lat: data.location.latitude,
+              lng: data.location.longitude,
+            };
           } else if (data.name) {
             // Fallback: Use Google Maps Geocoding for known places
             // For places like "Nara Park", we can try to geocode them

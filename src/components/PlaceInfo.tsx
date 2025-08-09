@@ -34,13 +34,10 @@ export default function PlaceInfo({
       setIsLoading(true);
       try {
         const data = await apiClient.searchPlace(placeName);
-        
+
         if (data && isMounted) {
           // Only set data if it's real Google Places data (has rating and reviews)
-          if (
-            (data.rating || data.reviews?.length) &&
-            isMounted
-          ) {
+          if ((data.rating || data.reviews?.length) && isMounted) {
             setRuntimePlaceData(data);
           }
         }

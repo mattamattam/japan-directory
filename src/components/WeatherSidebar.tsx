@@ -32,7 +32,12 @@ export default function WeatherSidebar({
           url += `?location=${encodeURIComponent(destinationName)}`;
         }
         
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
+          },
+        });
         if (!response.ok) throw new Error("Weather API failed");
         const data = await response.json();
 

@@ -82,7 +82,13 @@ function CompactExchangeRate({ sharedTick }: { sharedTick: number }) {
       try {
         // Fetch from our proxy API
         const response = await fetch(
-          `/api/exchange-rate?currency=${currencyCode}`
+          `/api/exchange-rate?currency=${currencyCode}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
+            },
+          }
         );
         if (!response.ok) throw new Error("Exchange rate API failed");
 
@@ -234,7 +240,12 @@ function WeatherWidget({ sharedTick }: { sharedTick: number }) {
         setLoading(true);
 
         // Fetch all weather data from our proxy API
-        const response = await fetch("/api/weather");
+        const response = await fetch("/api/weather", {
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
+          },
+        });
 
         if (!response.ok) throw new Error("Weather API failed");
 

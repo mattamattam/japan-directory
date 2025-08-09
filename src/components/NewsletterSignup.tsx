@@ -65,6 +65,7 @@ export default function NewsletterSignup() {
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-Token": csrfToken,
+          "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
         },
         body: JSON.stringify({
           email: sanitizedEmail,
